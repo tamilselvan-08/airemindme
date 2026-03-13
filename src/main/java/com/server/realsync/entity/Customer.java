@@ -11,11 +11,12 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "customer", uniqueConstraints = {
         @UniqueConstraint(name = "uk_customer_account_mobile", columnNames = { "account_id", "mobile" }),
-        @UniqueConstraint(name = "uk_customer_email_mobile", columnNames = { "email", "mobile" })
+        
 })
 public class Customer {
 
@@ -47,8 +48,13 @@ public class Customer {
     @Column(length = 50)
     private String country;
 
+    @Column(name = "channel")
+    private String channel;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "wedding_date")
     private LocalDate weddingDate;
 
@@ -175,4 +181,13 @@ public class Customer {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
 }

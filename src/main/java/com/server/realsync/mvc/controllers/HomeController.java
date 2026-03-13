@@ -2,10 +2,12 @@ package com.server.realsync.mvc.controllers;
 
 import java.util.Optional;
 import java.util.List;
+import java.lang.Throwable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,35 +78,74 @@ public class HomeController {
 		return "remindmeui/home";
 	}
 
+	// ===============================
+	// CUSTOMER LIST PAGE
+	// ===============================
 	@GetMapping("/customers.html")
-	public String getCustomers(Model model) {
+	public String getCustomers(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(required = false) String segment,
+			@RequestParam(required = false) String search,
+			Model model) {
+
 		Account account = SecurityUtil.getCurrentAccountId();
 
-		List<Customer> customers = customerService.getAllByAccount(account.getId());
+		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
+		long totalCustomers = customerService.getTotalCustomers(account.getId());
 
-		model.addAttribute("customers", customers);
+		Page<Customer> customers;
+
+		Integer groupId = null;
+
+		if (segment != null && !segment.isBlank()) {
+			groupId = switch (segment) {
+				case "vip" -> 1;
+				case "regular" -> 2;
+				case "new" -> 3;
+				case "inactive" -> 4;
+				default -> null;
+			};
+		}
+
+		if (search != null && !search.isBlank()) {
+
+			if (groupId != null) {
+				customers = customerService.searchByAccountAndGroup(
+						account.getId(), groupId, search, pageable);
+			} else {
+				customers = customerService.searchByAccount(
+						account.getId(), search, pageable);
+			}
+
+		} else {
+
+			if (groupId != null) {
+				customers = customerService.getByAccountAndGroup(
+						account.getId(), groupId, pageable);
+			} else {
+				customers = customerService.getByAccount(
+						account.getId(), pageable);
+			}
+
+		}
+
+		model.addAttribute("customers", customers.getContent());
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", customers.getTotalPages());
+		model.addAttribute("totalCustomers", totalCustomers);
+		model.addAttribute("search", search);
+		model.addAttribute("selectedSegment", segment);
+
 		return "remindmeui/customers";
 	}
-
-	@PostMapping("/api/customers")
-	@ResponseBody
-	public Customer createCustomer(@RequestBody Customer customer) {
-		Account account = SecurityUtil.getCurrentAccountId();
-		customer.setAccountId(account.getId());
-
-		return customerService.save(customer);
-	}
+	// ===============================
+	// CUSTOMER DETAIL PAGE
+	// ===============================
 
 	@GetMapping("/customer-detail.html")
 	public String getCustomerDetail(Model model) {
 
 		return "remindmeui/customer-detail";
-	}
-
-	@GetMapping("/engagement.html")
-	public String getEngagement(Model model) {
-
-		return "remindmeui/engagement";
 	}
 
 	@GetMapping("/promotions.html")

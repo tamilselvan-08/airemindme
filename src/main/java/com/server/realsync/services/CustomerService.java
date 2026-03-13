@@ -1,10 +1,11 @@
 package com.server.realsync.services;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.server.realsync.entity.Customer;
 import com.server.realsync.repo.CustomerRepository;
@@ -26,8 +27,8 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public List<Customer> getAllByAccount(Integer accountId) {
-        return customerRepository.findByAccountId(accountId);
+    public Page<Customer> getByAccountAndGroup(Integer accountId, Integer groupId, Pageable pageable) {
+        return customerRepository.findByAccountIdAndCustomerGroupId(accountId, groupId, pageable);
     }
 
     public Optional<Customer> getById(Integer id) {
@@ -36,6 +37,26 @@ public class CustomerService {
 
     public Optional<Customer> findByMobile(Integer accountId, String mobile) {
         return customerRepository.findByAccountIdAndMobile(accountId, mobile);
+    }
+
+    public Page<Customer> getByAccount(Integer accountId, Pageable pageable) {
+        return customerRepository.findByAccountId(accountId, pageable);
+    }
+
+    public long getTotalCustomers(Integer accountId) {
+        return customerRepository.countByAccountId(accountId);
+    }
+
+    public long getCustomersByGroup(Integer accountId, Integer groupId) {
+        return customerRepository.countByAccountIdAndCustomerGroupId(accountId, groupId);
+    }
+
+    public Page<Customer> searchByAccount(Integer accountId, String search, Pageable pageable) {
+        return customerRepository.searchByAccount(accountId, search, pageable);
+    }
+
+    public Page<Customer> searchByAccountAndGroup(Integer accountId,Integer groupId,String search,Pageable pageable) {
+        return customerRepository.searchByAccountAndGroup(accountId, groupId, search, pageable);
     }
 
     public void delete(Integer id) {
