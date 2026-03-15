@@ -1,305 +1,620 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Reminder Me</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link
-	href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-	rel="stylesheet">
-<style>
-body {
-	font-family: 'Inter', sans-serif;
-	background: #f8f9fb;
-}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard - Reminder Me</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
+	<link rel="stylesheet" th:href="@{/css/theme.css}">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		body {
+			font-family: 'Inter', sans-serif;
+			background: #f8f9fb;
+		}
 
-::-webkit-scrollbar {
-	width: 4px;
-}
+		::-webkit-scrollbar {
+			width: 4px;
+		}
 
-::-webkit-scrollbar-track {
-	background: transparent;
-}
+		::-webkit-scrollbar-track {
+			background: transparent;
+		}
 
-::-webkit-scrollbar-thumb {
-	background: #e2e8f0;
-	border-radius: 4px;
-}
-</style>
+		::-webkit-scrollbar-thumb {
+			background: #e2e8f0;
+			border-radius: 4px;
+		}
+
+		/* ── STAT CARD GRADIENTS in dark mode ── */
+		[data-theme="dark"] .stat-card-1 {
+			background: linear-gradient(135deg, #0f2239 0%, #161616 100%) !important;
+			border-color: #1e3a5f !important;
+		}
+
+		[data-theme="dark"] .stat-card-2 {
+			background: linear-gradient(135deg, #052e16 0%, #161616 100%) !important;
+			border-color: #166534 !important;
+		}
+
+		[data-theme="dark"] .stat-card-3 {
+			background: linear-gradient(135deg, #1a0e00 0%, #161616 100%) !important;
+			border-color: #431407 !important;
+		}
+
+		[data-theme="dark"] .stat-card-4 {
+			background: linear-gradient(135deg, #180d2e 0%, #161616 100%) !important;
+			border-color: #4c1d95 !important;
+		}
+
+		/* Light mode stat cards — subtle gradient */
+		.stat-card-1 {
+			background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%) !important;
+		}
+
+		.stat-card-2 {
+			background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 60%) !important;
+		}
+
+		.stat-card-3 {
+			background: linear-gradient(135deg, #fff7ed 0%, #ffffff 60%) !important;
+		}
+
+		.stat-card-4 {
+			background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 60%) !important;
+		}
+
+		/* ── CHART container dark background ── */
+		[data-theme="dark"] #chartWrapper {
+			background: #0d0d0d !important;
+			border-radius: 12px;
+			padding: 4px;
+		}
+
+		/* ── RECENT MESSAGES — dark hover ── */
+		[data-theme="dark"] #recentMsgList>div:hover {
+			background: #1a1a1a !important;
+		}
+
+		/* ── QUICK ACTION grid cards dark ── */
+		[data-theme="dark"] .quick-action-card {
+			background: #1a1a1a !important;
+			border: 1px solid #2a2a2a !important;
+		}
+
+		[data-theme="dark"] .quick-action-card:hover {
+			background: #222 !important;
+			border-color: #3b82f6 !important;
+		}
+
+		/* ── UPCOMING items dark ── */
+		[data-theme="dark"] .upcoming-item {
+			border-color: #1e1e1e !important;
+		}
+
+		[data-theme="dark"] .upcoming-item:hover {
+			background: #1a1a1a !important;
+		}
+
+		/* ── BADGE PILLS on stat cards ── */
+		[data-theme="dark"] .stat-badge-green {
+			background: rgba(74, 222, 128, 0.15) !important;
+			color: #4ade80 !important;
+			border: 1px solid rgba(74, 222, 128, 0.2) !important;
+		}
+
+		[data-theme="dark"] .stat-badge-orange {
+			background: rgba(251, 146, 60, 0.15) !important;
+			color: #fb923c !important;
+			border: 1px solid rgba(251, 146, 60, 0.2) !important;
+		}
+
+		[data-theme="dark"] .stat-badge-violet {
+			background: rgba(167, 139, 250, 0.15) !important;
+			color: #a78bfa !important;
+			border: 1px solid rgba(167, 139, 250, 0.2) !important;
+		}
+
+		/* ── NUMBER in stat card ── */
+		[data-theme="dark"] .stat-number {
+			color: #ffffff !important;
+		}
+
+		/* ── HEADER ── */
+		[data-theme="dark"] .dash-header {
+			background: #161616 !important;
+			border-color: #232323 !important;
+		}
+
+		/* ── Animated number counter ── */
+		@keyframes countUp {
+			from {
+				opacity: 0;
+				transform: translateY(8px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.stat-number {
+			animation: countUp 0.5s ease both;
+		}
+
+		.stat-card-1 .stat-number {
+			animation-delay: 0.1s;
+		}
+
+		.stat-card-2 .stat-number {
+			animation-delay: 0.15s;
+		}
+
+		.stat-card-3 .stat-number {
+			animation-delay: 0.2s;
+		}
+
+		.stat-card-4 .stat-number {
+			animation-delay: 0.25s;
+		}
+
+		/* ── Stat card hover ── */
+		.stat-card-1,
+		.stat-card-2,
+		.stat-card-3,
+		.stat-card-4 {
+			transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+		}
+
+		.stat-card-1:hover,
+		.stat-card-2:hover,
+		.stat-card-3:hover,
+		.stat-card-4:hover {
+			transform: translateY(-3px) !important;
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1) !important;
+		}
+
+		[data-theme="dark"] .stat-card-1:hover {
+			box-shadow: 0 10px 28px rgba(59, 130, 246, 0.15) !important;
+		}
+
+		[data-theme="dark"] .stat-card-2:hover {
+			box-shadow: 0 10px 28px rgba(74, 222, 128, 0.12) !important;
+		}
+
+		[data-theme="dark"] .stat-card-3:hover {
+			box-shadow: 0 10px 28px rgba(251, 146, 60, 0.12) !important;
+		}
+
+		[data-theme="dark"] .stat-card-4:hover {
+			box-shadow: 0 10px 28px rgba(167, 139, 250, 0.12) !important;
+		}
+
+		/* ── Upcoming item animation ── */
+		@keyframes slideInRight {
+			from {
+				opacity: 0;
+				transform: translateX(12px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		.upcoming-item {
+			animation: slideInRight 0.35s ease both;
+		}
+
+		.upcoming-item:nth-child(1) {
+			animation-delay: 0.1s;
+		}
+
+		.upcoming-item:nth-child(2) {
+			animation-delay: 0.18s;
+		}
+
+		.upcoming-item:nth-child(3) {
+			animation-delay: 0.26s;
+		}
+
+		/* ── Chart fade in ── */
+		@keyframes chartFade {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		#chartWrapper {
+			animation: chartFade 0.6s 0.3s ease both;
+		}
+
+		/* ── Recent message rows ── */
+		@keyframes msgSlideIn {
+			from {
+				opacity: 0;
+				transform: translateY(6px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		#recentMsgList>div {
+			animation: msgSlideIn 0.3s ease both;
+		}
+
+		#recentMsgList>div:nth-child(1) {
+			animation-delay: 0.05s;
+		}
+
+		#recentMsgList>div:nth-child(2) {
+			animation-delay: 0.10s;
+		}
+
+		#recentMsgList>div:nth-child(3) {
+			animation-delay: 0.15s;
+		}
+
+		#recentMsgList>div:nth-child(4) {
+			animation-delay: 0.20s;
+		}
+
+		#recentMsgList>div:nth-child(5) {
+			animation-delay: 0.25s;
+		}
+
+		/* ── Quick action cards ── */
+		.quick-action-card {
+			transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
+		}
+
+		.quick-action-card:hover {
+			transform: translateY(-2px) !important;
+		}
+
+		/* ── Legend dots pulse ── */
+		@keyframes dotPulse {
+
+			0%,
+			100% {
+				transform: scale(1);
+				opacity: 1;
+			}
+
+			50% {
+				transform: scale(1.3);
+				opacity: 0.8;
+			}
+		}
+
+		.legend-dot {
+			animation: dotPulse 2s ease-in-out infinite;
+		}
+
+		.legend-dot:nth-child(2) {
+			animation-delay: 0.3s;
+		}
+
+		.legend-dot:nth-child(3) {
+			animation-delay: 0.6s;
+		}
+
+		/* ── THEME TOGGLE ── */
+		.theme-toggle-btn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 34px;
+			height: 34px;
+			border-radius: 10px;
+			border: 1px solid #e5e7eb;
+			background: #f3f4f6;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			color: #6b7280;
+			flex-shrink: 0;
+		}
+
+		.theme-toggle-btn:hover {
+			background: #e5e7eb;
+			transform: scale(1.08) rotate(12deg);
+		}
+
+		[data-theme="dark"] .theme-toggle-btn {
+			background: #1e1e1e !important;
+			border-color: #2d2d2d !important;
+			color: #a0a0a0 !important;
+		}
+
+		[data-theme="dark"] .theme-toggle-btn:hover {
+			background: #252525 !important;
+			border-color: #3b82f6 !important;
+		}
+
+		[data-theme="dark"] .theme-toggle-btn svg {
+			stroke: #a0a0a0 !important;
+		}
+
+		[data-theme="dark"] .theme-toggle-btn:hover svg {
+			stroke: #60a5fa !important;
+		}
+
+		[data-theme="light"] .icon-sun {
+			display: none;
+		}
+
+		[data-theme="light"] .icon-moon {
+			display: block;
+		}
+
+		[data-theme="dark"] .icon-sun {
+			display: block;
+		}
+
+		[data-theme="dark"] .icon-moon {
+			display: none;
+		}
+	</style>
 </head>
+
 <body class="bg-gray-50">
 
 	<!-- Sidebar -->
-	<div
-		class="hidden md:flex fixed left-0 top-0 h-screen w-56 bg-white border-r border-gray-100 flex-col z-30">
+	<div class="hidden md:flex fixed left-0 top-0 h-screen w-56 bg-white border-r border-gray-100 flex-col z-30">
 		<div class="px-4 pt-5 pb-3">
 			<div class="flex items-center gap-2.5">
-				<div
-					class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm">
-					<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-						stroke-width="2" viewBox="0 0 24 24">
+				<div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm">
+					<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+						viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round"
-							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+					</svg>
 				</div>
 				<div>
-					<p class="text-sm font-bold text-gray-900 leading-none">Reminder
-						Me</p>
+					<p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
 					<p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
 				</div>
 			</div>
 		</div>
 		<nav class="flex-1 px-3 py-2 overflow-y-auto">
-			<a href="home.html"
-				class="flex items-center gap-3 px-3 py-3 rounded-xl bg-indigo-600 text-white mb-1">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+			<a href="home.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-indigo-600 text-white mb-1">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+				</svg>
 				<span class="text-sm font-semibold">Home</span>
-			</a> <a href="customers.html"
-				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-				<span class="text-sm font-medium">Customers</span>
-			</a> <a href="engagement.html"
-				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> <span
-				class="text-sm font-medium">Engage</span>
-			</a> <a href="promotions.html"
-				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-				<span class="text-sm font-medium">Promotions</span>
-			</a> <a href="settings.html"
-				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> <span
-				class="text-sm font-medium">Settings</span>
 			</a>
-
-			<!-- Quick Actions -->
+			<a href="customers.html"
+				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+				</svg>
+				<span class="text-sm font-medium">Customers</span>
+			</a>
+			<a href="engagement.html"
+				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 10V3L4 14h7v7l9-11h-7z" />
+				</svg>
+				<span class="text-sm font-medium">Engage</span>
+			</a>
+			<a href="promotions.html"
+				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+				</svg>
+				<span class="text-sm font-medium">Promotions</span>
+			</a>
+			<a href="settings.html"
+				class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg>
+				<span class="text-sm font-medium">Settings</span>
+			</a>
 			<div class="mt-6">
-				<p
-					class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Quick
-					Actions</p>
+				<p class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Quick Actions</p>
 				<button onclick="window.location.href='engagement.html'"
 					class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
-					<div
-						class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-						<svg class="w-3.5 h-3.5 text-blue-600" fill="none"
-							stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2.5"
-								d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-					</div>
+					<div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"><svg
+							class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+								d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg></div>
 					<span class="text-sm">Create Reminder</span>
 				</button>
 				<button onclick="window.location.href='engagement.html'"
 					class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
-					<div
-						class="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
-						<svg class="w-3.5 h-3.5 text-pink-600" fill="none"
-							stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2.5"
-								d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-					</div>
+					<div class="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0"><svg
+							class="w-3.5 h-3.5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+								d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+						</svg></div>
 					<span class="text-sm">Send Greeting</span>
 				</button>
 				<button onclick="window.location.href='promotions.html'"
 					class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
-					<div
-						class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-						<svg class="w-3.5 h-3.5 text-orange-600" fill="none"
-							stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2.5"
-								d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-					</div>
+					<div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0"><svg
+							class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+								d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+						</svg></div>
 					<span class="text-sm">Create Promotion</span>
 				</button>
 				<button onclick="window.location.href='customers.html'"
 					class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
-					<div
-						class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-						<svg class="w-3.5 h-3.5 text-green-600" fill="none"
-							stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2.5"
-								d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-					</div>
+					<div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><svg
+							class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+								d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+						</svg></div>
 					<span class="text-sm">Add Customer</span>
 				</button>
 			</div>
 		</nav>
-		<!-- User Profile -->
 		<div class="px-4 py-4 border-t border-gray-100">
 			<div class="flex items-center gap-3 mb-3">
-				<div
-					class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
-					<span class="text-white text-sm font-bold">A</span>
-				</div>
+				<div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+						class="text-white text-sm font-bold">A</span></div>
 				<div class="flex-1 min-w-0">
-					<p
-						class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun
-						Sharma</p>
-					<p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial
-						Services</p>
+					<p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+					<p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial Services</p>
 				</div>
 			</div>
-			<button onclick="window.location.href='login.html'"
-				class="flex items-center gap-2 px-1 py-1 text-gray-500 hover:text-red-600 transition">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-				<span class="text-sm font-medium">Sign Out</span>
-			</button>
+			<!-- Theme toggle + sign out -->
+			<div class="flex items-center gap-2">
+				<button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle dark mode">
+					<svg class="icon-moon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+						viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round"
+							d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+					</svg>
+					<svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+						style="display:none">
+						<path stroke-linecap="round" stroke-linejoin="round"
+							d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+					</svg>
+				</button>
+				<button onclick="window.location.href='login.html'"
+					class="flex items-center gap-2 px-1 py-1 text-gray-500 hover:text-red-600 transition">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+					</svg>
+					<span class="text-sm font-medium">Sign Out</span>
+				</button>
+			</div>
 		</div>
 	</div>
 
-	<!-- ===== MOBILE HEADER ===== -->
+	<!-- MOBILE HEADER -->
 	<div
 		class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-40 h-14 flex items-center justify-between px-4 shadow-sm">
 		<button onclick="openMobileNav()"
 			class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 transition">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+			</svg>
 		</button>
 		<div class="flex items-center gap-2">
-			<div
-				class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm">
-				<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
-					stroke-width="2" viewBox="0 0 24 24">
+			<div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+					class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round"
-						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-			</div>
+						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+				</svg></div>
 			<span class="text-sm font-bold text-gray-900">Reminder Me</span>
 		</div>
-		<button onclick="window.location.href='login.html'"
-			class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500 transition">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2"
-					d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-		</button>
+		<div class="flex items-center gap-1">
+			<button onclick="toggleTheme()" class="theme-toggle-btn">
+				<svg class="icon-moon w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round"
+						d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+				</svg>
+				<svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+					style="display:none">
+					<path stroke-linecap="round" stroke-linejoin="round"
+						d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+				</svg>
+			</button>
+			<button onclick="window.location.href='login.html'"
+				class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500 transition">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+				</svg>
+			</button>
+		</div>
 	</div>
-	<div id="mobileNavBg"
-		class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
+	<div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
 		onclick="closeMobileNav()"></div>
 	<div id="mobileNavDrawer"
 		class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300"
-		style="transform: translateX(-100%)">
-		<div
-			class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+		style="transform:translateX(-100%)">
+		<div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
 			<div class="flex items-center gap-2.5">
-				<div
-					class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm">
-					<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-						stroke-width="2" viewBox="0 0 24 24">
+				<div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+						class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+						viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round"
-							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-				</div>
+							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+					</svg></div>
 				<div>
-					<p class="text-sm font-bold text-gray-900 leading-none">Reminder
-						Me</p>
+					<p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
 					<p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
 				</div>
 			</div>
 			<button onclick="closeMobileNav()"
-				class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-			</button>
+				class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+					class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</svg></button>
 		</div>
 		<nav class="flex-1 px-3 py-3 overflow-y-auto space-y-0.5">
-			<a href="home.html"
-				class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg
-					class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span
-				class="text-sm font-semibold">Home</span></a> <a href="customers.html"
+			<a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg
+					class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+				</svg><span class="text-sm font-semibold">Home</span></a>
+			<a href="customers.html"
 				class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-					class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg><span
-				class="text-sm font-semibold">Customers</span></a> <a
-				href="engagement.html"
+					class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+				</svg><span class="text-sm font-semibold">Customers</span></a>
+			<a href="engagement.html"
 				class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-					class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg><span
-				class="text-sm font-semibold">Engage</span></a> <a
-				href="promotions.html"
+					class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 10V3L4 14h7v7l9-11h-7z" />
+				</svg><span class="text-sm font-semibold">Engage</span></a>
+			<a href="promotions.html"
 				class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-					class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg><span
-				class="text-sm font-semibold">Promotions</span></a> <a
-				href="settings.html"
+					class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+				</svg><span class="text-sm font-semibold">Promotions</span></a>
+			<a href="settings.html"
 				class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-					class="w-5 h-5" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
+					class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 						d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span
-				class="text-sm font-semibold">Settings</span></a>
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg><span class="text-sm font-semibold">Settings</span></a>
 		</nav>
 		<div class="px-3 py-3 border-t border-gray-100 flex-shrink-0">
 			<div class="flex items-center gap-2.5 px-2 py-1.5">
-				<div
-					class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
-					<span class="text-white text-xs font-bold">A</span>
-				</div>
+				<div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+						class="text-white text-xs font-bold">A</span></div>
 				<div class="flex-1 min-w-0">
-					<p
-						class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun
-						Sharma</p>
-					<p class="text-[10px] text-gray-400 truncate mt-0.5">Acme
-						Financial Services</p>
+					<p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+					<p class="text-[10px] text-gray-400 truncate mt-0.5">Acme Financial Services</p>
 				</div>
 			</div>
 			<button onclick="window.location.href='login.html'"
-				class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2"
-						d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-				<span class="text-sm font-medium">Sign Out</span>
-			</button>
+				class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition"><svg
+					class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+				</svg><span class="text-sm font-medium">Sign Out</span></button>
 		</div>
 	</div>
 
@@ -307,27 +622,22 @@ body {
 	<div class="md:ml-56 min-h-screen pt-14 md:pt-0">
 		<!-- Top Header -->
 		<div
-			class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 flex items-center justify-between sticky top-14 md:top-0 z-20">
+			class="dash-header bg-white border-b border-gray-100 px-4 md:px-6 py-4 flex items-center justify-between sticky top-14 md:top-0 z-20">
 			<div>
 				<p class="text-sm text-gray-500">Good morning 👋</p>
-				<h1 class="text-xl font-bold text-gray-900">Acme Financial
-					Services</h1>
+				<h1 class="text-xl font-bold text-gray-900">Acme Financial Services</h1>
 			</div>
 			<div class="flex items-center gap-3">
 				<button
-					class="relative w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50">
-					<svg class="w-4 h-4 text-gray-600" fill="none"
-						stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round"
-							stroke-width="2"
-							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-					<span
-						class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+					class="relative w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
+					<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+					</svg>
+					<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
 				</button>
-				<div
-					class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center">
-					<span class="text-white text-sm font-bold">A</span>
-				</div>
+				<div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center"><span
+						class="text-white text-sm font-bold">A</span></div>
 			</div>
 		</div>
 
@@ -335,74 +645,75 @@ body {
 		<div class="p-4 md:p-6">
 			<div class="max-w-6xl mx-auto">
 
-				<!-- Stats Row -->
+				<!-- Stats Row — gradient cards -->
 				<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-					<div
-						class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+					<!-- Customers -->
+					<div class="stat-card-1 rounded-2xl p-4 border border-gray-100 shadow-sm cursor-pointer"
+						onclick="window.location.href='customers.html'">
 						<div class="flex items-center justify-between mb-3">
-							<div
-								class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-								<svg class="w-4 h-4 text-blue-600" fill="none"
-									stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2"
-										d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+							<div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+								<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+								</svg>
 							</div>
 							<span
-								class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+12%</span>
+								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+12%</span>
 						</div>
-						<p class="text-2xl font-bold text-gray-900">17</p>
+						<p class="stat-number text-2xl font-bold text-gray-900" th:text="${totalCustomers}">17</p>
 						<p class="text-xs text-gray-500 mt-0.5">Customers</p>
 					</div>
-					<div
-						class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+					<!-- Sent Today -->
+					<div class="stat-card-2 rounded-2xl p-4 border border-gray-100 shadow-sm">
 						<div class="flex items-center justify-between mb-3">
-							<div
-								class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
-								<svg class="w-4 h-4 text-emerald-600" fill="none"
-									stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+							<div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
+								<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+								</svg>
 							</div>
 							<span
-								class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+8%</span>
+								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+8%</span>
 						</div>
-						<p class="text-2xl font-bold text-gray-900">47</p>
+						<p class="stat-number text-2xl font-bold text-gray-900">47</p>
 						<p class="text-xs text-gray-500 mt-0.5">Sent Today</p>
 					</div>
-					<div
-						class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+					<!-- Promotions -->
+					<div class="stat-card-3 rounded-2xl p-4 border border-gray-100 shadow-sm cursor-pointer"
+						onclick="window.location.href='promotions.html'">
 						<div class="flex items-center justify-between mb-3">
-							<div
-								class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
-								<svg class="w-4 h-4 text-orange-500" fill="none"
-									stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+							<div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
+								<svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										d="M13 10V3L4 14h7v7l9-11h-7z" />
+								</svg>
 							</div>
 							<span
-								class="text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full font-medium">3
+								class="stat-badge-orange text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full font-medium">3
 								active</span>
 						</div>
-						<p class="text-2xl font-bold text-gray-900">5</p>
+						<p class="stat-number text-2xl font-bold text-gray-900">5</p>
 						<p class="text-xs text-gray-500 mt-0.5">Promotions</p>
 					</div>
-					<div
-						class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+					<!-- Reminders -->
+					<div class="stat-card-4 rounded-2xl p-4 border border-gray-100 shadow-sm cursor-pointer"
+						onclick="window.location.href='engagement.html'">
 						<div class="flex items-center justify-between mb-3">
-							<div
-								class="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center">
-								<svg class="w-4 h-4 text-violet-600" fill="none"
-									stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="2"
-										d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+							<div class="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center">
+								<svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+								</svg>
 							</div>
 							<span
-								class="text-xs text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full font-medium">9
+								class="stat-badge-violet text-xs text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full font-medium">9
 								greetings</span>
 						</div>
-						<p class="text-2xl font-bold text-gray-900">11</p>
+						<p class="stat-number text-2xl font-bold text-gray-900">11</p>
 						<p class="text-xs text-gray-500 mt-0.5">Reminders</p>
 					</div>
 				</div>
@@ -412,25 +723,22 @@ body {
 					<!-- Left Col -->
 					<div class="lg:col-span-2 space-y-5">
 						<!-- Chart -->
-						<div
-							class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+						<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
 							<div class="flex items-center justify-between mb-4">
 								<div>
-									<h3 class="text-sm font-semibold text-gray-900">Message
-										Activity</h3>
-									<p class="text-xs text-gray-400 mt-0.5">712 messages this
-										week</p>
+									<h3 class="text-sm font-semibold text-gray-900">Message Activity</h3>
+									<p class="text-xs text-gray-400 mt-0.5">712 messages this week</p>
 								</div>
 								<div class="flex items-center gap-4 text-xs text-gray-500">
-									<span class="flex items-center gap-1"><span
-										class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>WhatsApp</span>
-									<span class="flex items-center gap-1"><span
-										class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>SMS</span>
-									<span class="flex items-center gap-1"><span
-										class="w-2 h-2 rounded-full bg-violet-400 inline-block"></span>Email</span>
+									<span class="flex items-center gap-1.5"><span
+											class="legend-dot w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>WhatsApp</span>
+									<span class="flex items-center gap-1.5"><span
+											class="legend-dot w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>SMS</span>
+									<span class="flex items-center gap-1.5"><span
+											class="legend-dot w-2.5 h-2.5 rounded-full bg-violet-400 inline-block"></span>Email</span>
 								</div>
 							</div>
-							<div style="position: relative; height: 180px; width: 100%">
+							<div id="chartWrapper" style="position:relative; height:200px; width:100%">
 								<canvas id="msgChart"></canvas>
 							</div>
 						</div>
@@ -438,15 +746,13 @@ body {
 						<!-- Recent Messages -->
 						<div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
 							<div class="flex items-center justify-between px-5 pt-4 pb-3">
-								<h3 class="text-sm font-semibold text-gray-900">Recent
-									Messages</h3>
+								<h3 class="text-sm font-semibold text-gray-900">Recent Messages</h3>
 								<a href="engagement.html"
 									class="text-xs text-indigo-600 font-medium flex items-center gap-1 hover:text-indigo-700">View
-									all <svg class="w-3 h-3" fill="none" stroke="currentColor"
-										viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round"
-											stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-								</a>
+									all <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+											d="M9 5l7 7-7 7" />
+									</svg></a>
 							</div>
 							<div id="recentMsgList" class="divide-y divide-gray-50"></div>
 						</div>
@@ -460,67 +766,63 @@ body {
 								<h3 class="text-sm font-semibold text-gray-900">Upcoming</h3>
 								<a href="engagement.html"
 									class="text-xs text-indigo-600 font-medium flex items-center gap-1 hover:text-indigo-700">See
-									all <svg class="w-3 h-3" fill="none" stroke="currentColor"
-										viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round"
-											stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-								</a>
+									all <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+											d="M9 5l7 7-7 7" />
+									</svg></a>
 							</div>
 							<div class="divide-y divide-gray-50">
-								<div class="flex items-center gap-3 px-4 py-3">
+								<div
+									class="upcoming-item flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition cursor-pointer">
 									<div
 										class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-										<svg class="w-4 h-4 text-blue-500" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-									</div>
+										<svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+										</svg></div>
 									<div class="flex-1 min-w-0">
-										<p class="text-sm font-medium text-gray-800 truncate">Loan
-											EMI Payment Due</p>
+										<p class="text-sm font-medium text-gray-800 truncate">Loan EMI Payment Due</p>
 										<p class="text-xs text-gray-400">Rajesh Kumar</p>
 									</div>
 									<div class="text-right flex-shrink-0">
-										<p class="text-xs font-medium text-gray-700">15 Mar</p>
+										<p class="text-xs font-semibold text-gray-700">15 Mar</p>
 										<p class="text-[10px] text-gray-400">09:00 am</p>
 									</div>
 								</div>
-								<div class="flex items-center gap-3 px-4 py-3">
+								<div
+									class="upcoming-item flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition cursor-pointer">
 									<div
-										class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-										<svg class="w-4 h-4 text-blue-500" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-									</div>
+										class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+										<svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+										</svg></div>
 									<div class="flex-1 min-w-0">
-										<p class="text-sm font-medium text-gray-800 truncate">Policy
-											Renewal</p>
+										<p class="text-sm font-medium text-gray-800 truncate">Policy Renewal</p>
 										<p class="text-xs text-gray-400">Mohammed Ibrahim</p>
 									</div>
 									<div class="text-right flex-shrink-0">
-										<p class="text-xs font-medium text-gray-700">18 Mar</p>
+										<p class="text-xs font-semibold text-gray-700">18 Mar</p>
 										<p class="text-[10px] text-gray-400">10:00 am</p>
 									</div>
 								</div>
-								<div class="flex items-center gap-3 px-4 py-3">
+								<div
+									class="upcoming-item flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition cursor-pointer">
 									<div
 										class="w-8 h-8 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0">
-										<svg class="w-4 h-4 text-pink-500" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-									</div>
+										<svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+										</svg></div>
 									<div class="flex-1 min-w-0">
-										<p class="text-sm font-medium text-gray-800 truncate">birthday
-											greeting</p>
+										<p class="text-sm font-medium text-gray-800 truncate">Birthday Greeting</p>
 										<p class="text-xs text-gray-400">Rajesh Kumar</p>
 									</div>
 									<div class="text-right flex-shrink-0">
-										<p class="text-xs font-medium text-gray-700">15 Mar</p>
+										<p class="text-xs font-semibold text-gray-700">15 Mar</p>
 										<p class="text-[10px] text-gray-400">09:00 am</p>
 									</div>
 								</div>
@@ -528,50 +830,52 @@ body {
 						</div>
 
 						<!-- Quick Actions -->
-						<div
-							class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-							<h3 class="text-sm font-semibold text-gray-900 mb-3">Quick
-								Actions</h3>
+						<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+							<h3 class="text-sm font-semibold text-gray-900 mb-3">Quick Actions</h3>
 							<div class="grid grid-cols-2 gap-2">
 								<a href="customers.html"
-									class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
+									class="quick-action-card flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
 									<div
 										class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-										<svg class="w-3.5 h-3.5 text-blue-600" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-									</div> <span class="text-sm font-medium text-gray-700">Customers</span>
-								</a> <a href="promotions.html"
-									class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
+										<svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+										</svg></div>
+									<span class="text-sm font-medium text-gray-700">Customers</span>
+								</a>
+								<a href="promotions.html"
+									class="quick-action-card flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
 									<div
 										class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-										<svg class="w-3.5 h-3.5 text-orange-600" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-									</div> <span class="text-sm font-medium text-gray-700">Promotions</span>
-								</a> <a href="engagement.html"
-									class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
+										<svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+										</svg></div>
+									<span class="text-sm font-medium text-gray-700">Promotions</span>
+								</a>
+								<a href="engagement.html"
+									class="quick-action-card flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
 									<div
 										class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-										<svg class="w-3.5 h-3.5 text-violet-600" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-									</div> <span class="text-sm font-medium text-gray-700">Engagement</span>
-								</a> <a href="engagement.html"
-									class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
+										<svg class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M13 10V3L4 14h7v7l9-11h-7z" />
+										</svg></div>
+									<span class="text-sm font-medium text-gray-700">Engagement</span>
+								</a>
+								<a href="engagement.html"
+									class="quick-action-card flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
 									<div
 										class="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-										<svg class="w-3.5 h-3.5 text-green-600" fill="none"
-											stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round"
-												stroke-width="2"
-												d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-									</div> <span class="text-sm font-medium text-gray-700">Schedule</span>
+										<svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor"
+											viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+												d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+										</svg></div>
+									<span class="text-sm font-medium text-gray-700">Schedule</span>
 								</a>
 							</div>
 						</div>
@@ -584,110 +888,156 @@ body {
 	<!-- Bottom Nav Mobile -->
 	<div
 		class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-1 pb-2 pt-1 flex items-end justify-around z-30">
-		<a href="home.html"
-			class="flex flex-col items-center gap-0.5 text-indigo-600 px-2 py-1">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2"
-					d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-			<span class="text-[10px] font-medium">Home</span>
-		</a> <a href="customers.html"
-			class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-			<span class="text-[10px] font-medium">Customers</span>
-		</a>
-		<!-- FAB Center -->
-		<div class="relative flex flex-col items-center"
-			style="margin-bottom: 8px">
+		<a href="home.html" class="flex flex-col items-center gap-0.5 text-indigo-600 px-2 py-1"><svg class="w-5 h-5"
+				fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+			</svg><span class="text-[10px] font-medium">Home</span></a>
+		<a href="customers.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+				fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+			</svg><span class="text-[10px] font-medium">Customers</span></a>
+		<div class="relative flex flex-col items-center" style="margin-bottom:8px">
 			<a href="engagement.html"
-				class="w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-300 -mt-5 transition-transform active:scale-95">
-				<svg class="w-6 h-6" fill="none" stroke="currentColor"
-					viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-			</a> <span class="text-[10px] font-medium text-indigo-600 mt-0.5">Engage</span>
+				class="w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-300 -mt-5 transition-transform active:scale-95"><svg
+					class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 10V3L4 14h7v7l9-11h-7z" />
+				</svg></a>
+			<span class="text-[10px] font-medium text-indigo-600 mt-0.5">Engage</span>
 		</div>
-		<a href="catalog.html"
-			class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2"
-					d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-			<span class="text-[10px] font-medium">Catalog</span>
-		</a> <a href="settings.html"
-			class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1">
-			<svg class="w-5 h-5" fill="none" stroke="currentColor"
-				viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2"
+		<a href="catalog.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+				fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+			</svg><span class="text-[10px] font-medium">Catalog</span></a>
+		<a href="settings.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+				fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 					d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-				<path stroke-linecap="round" stroke-linejoin="round"
-					stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> <span
-			class="text-[10px] font-medium">Settings</span>
-		</a>
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+			</svg><span class="text-[10px] font-medium">Settings</span></a>
 	</div>
 
+	<script th:src="@{/js/theme.js}"></script>
 	<script>
-    // Chart
-    const ctx = document.getElementById('msgChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          { label: 'WhatsApp', data: [40, 55, 48, 70, 60, 65, 72], borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.08)', tension: 0.4, fill: true, borderWidth: 2, pointRadius: 0 },
-          { label: 'SMS', data: [22, 28, 25, 35, 30, 36, 40], borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.06)', tension: 0.4, fill: true, borderWidth: 2, pointRadius: 0 },
-          { label: 'Email', data: [15, 18, 16, 22, 20, 24, 28], borderColor: '#a78bfa', backgroundColor: 'transparent', tension: 0.4, fill: false, borderWidth: 2, pointRadius: 0 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: { backgroundColor: '#fff', titleColor: '#111', bodyColor: '#64748b', borderColor: '#e2e8f0', borderWidth: 1, padding: 10, cornerRadius: 8 }
-        },
-        scales: {
-          y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9', drawBorder: false }, ticks: { color: '#94a3b8', font: { size: 10 } } },
-          x: { grid: { display: false, drawBorder: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
-        }
-      }
-    });
+		// ── THEME TOGGLE ──
+		function toggleTheme() {
+			var cur = document.documentElement.getAttribute('data-theme') || 'light';
+			var next = cur === 'dark' ? 'light' : 'dark';
+			document.documentElement.setAttribute('data-theme', next);
+			localStorage.setItem('rm_theme', next);
+			syncIcons(next);
+			updateChartTheme(next);
+		}
+		function syncIcons(theme) {
+			document.querySelectorAll('.icon-sun').forEach(function (el) { el.style.display = theme === 'dark' ? 'block' : 'none'; });
+			document.querySelectorAll('.icon-moon').forEach(function (el) { el.style.display = theme === 'dark' ? 'none' : 'block'; });
+		}
+		(function () { syncIcons(localStorage.getItem('rm_theme') || 'light'); })();
 
-    // Recent Messages
-    const msgs = [
-      { name: 'Rajesh Kumar', preview: 'Loan EMI due March 15th......', channel: 'whatsapp', status: 'read' },
-      { name: 'Anjali Singh', preview: 'Happy Holi......', channel: 'whatsapp', status: 'delivered' },
-      { name: 'Amit Gupta', preview: 'Happy Holi from Acme......', channel: 'whatsapp', status: 'read' },
-      { name: 'Mohammed Ibrahim', preview: 'Policy renewal due......', channel: 'sms', status: 'sent' },
-      { name: 'Vikram Nair', preview: 'Your investment update......', channel: 'email', status: 'delivered' },
-    ];
-    const channelColors = { whatsapp: 'bg-green-100', sms: 'bg-blue-100', email: 'bg-violet-100' };
-    const list = document.getElementById('recentMsgList');
-    msgs.forEach(m => {
-      list.innerHTML += `
-        <div class="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition cursor-pointer">
-          <div class="w-8 h-8 rounded-xl ${channelColors[m.channel]} flex items-center justify-center flex-shrink-0">
-            <svg class="w-3.5 h-3.5 ${m.channel==='whatsapp'?'text-green-600':m.channel==='sms'?'text-blue-600':'text-violet-600'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-gray-900 truncate">${m.name}</p>
-            <p class="text-xs text-gray-400 truncate">${m.preview}</p>
-          </div>
-          <div class="flex flex-col items-end gap-0.5 flex-shrink-0">
-            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <p class="text-[10px] text-gray-400">${m.status}</p>
-          </div>
-        </div>`;
-    });
-    function openMobileNav(){document.getElementById('mobileNavDrawer').style.transform='translateX(0)';document.getElementById('mobileNavBg').classList.remove('hidden');document.body.style.overflow='hidden';}
-    function closeMobileNav(){document.getElementById('mobileNavDrawer').style.transform='translateX(-100%)';document.getElementById('mobileNavBg').classList.add('hidden');document.body.style.overflow='';}
-  </script>
+		// ── CHART — dark/light aware ──
+		var msgChartInstance = null;
+
+		function getChartOptions(isDark) {
+			return {
+				responsive: true,
+				maintainAspectRatio: false,
+				interaction: { mode: 'index', intersect: false },
+				plugins: {
+					legend: { display: false },
+					tooltip: {
+						backgroundColor: isDark ? '#1a1a1a' : '#fff',
+						titleColor: isDark ? '#f0f0f0' : '#111',
+						bodyColor: isDark ? '#909090' : '#64748b',
+						borderColor: isDark ? '#2a2a2a' : '#e2e8f0',
+						borderWidth: 1, padding: 10, cornerRadius: 8
+					}
+				},
+				scales: {
+					y: {
+						beginAtZero: true, max: 100,
+						grid: { color: isDark ? '#1e1e1e' : '#f1f5f9', drawBorder: false },
+						ticks: { color: isDark ? '#444' : '#94a3b8', font: { size: 10 } }
+					},
+					x: {
+						grid: { display: false, drawBorder: false },
+						ticks: { color: isDark ? '#444' : '#94a3b8', font: { size: 10 } }
+					}
+				}
+			};
+		}
+
+		function buildChart(isDark) {
+			if (msgChartInstance) { msgChartInstance.destroy(); }
+			var ctx = document.getElementById('msgChart').getContext('2d');
+			msgChartInstance = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+					datasets: [
+						{
+							label: 'WhatsApp',
+							data: [40, 55, 48, 70, 60, 65, 72],
+							borderColor: '#22c55e',
+							backgroundColor: isDark ? 'rgba(34,197,94,0.06)' : 'rgba(34,197,94,0.08)',
+							tension: 0.4, fill: true, borderWidth: 2.5, pointRadius: 0
+						},
+						{
+							label: 'SMS',
+							data: [22, 28, 25, 35, 30, 36, 40],
+							borderColor: '#60a5fa',
+							backgroundColor: isDark ? 'rgba(96,165,250,0.05)' : 'rgba(96,165,250,0.06)',
+							tension: 0.4, fill: true, borderWidth: 2.5, pointRadius: 0
+						},
+						{
+							label: 'Email',
+							data: [15, 18, 16, 22, 20, 24, 28],
+							borderColor: '#a78bfa',
+							backgroundColor: 'transparent',
+							tension: 0.4, fill: false, borderWidth: 2.5, pointRadius: 0
+						}
+					]
+				},
+				options: getChartOptions(isDark)
+			});
+		}
+
+		function updateChartTheme(theme) {
+			buildChart(theme === 'dark');
+		}
+
+		// Build chart on load
+		var initTheme = localStorage.getItem('rm_theme') || 'light';
+		buildChart(initTheme === 'dark');
+
+		// ── RECENT MESSAGES ──
+		var msgs = [
+			{ name: 'Rajesh Kumar', preview: 'Loan EMI due March 15th......', channel: 'whatsapp', status: 'read' },
+			{ name: 'Anjali Singh', preview: 'Happy Holi......', channel: 'whatsapp', status: 'delivered' },
+			{ name: 'Amit Gupta', preview: 'Happy Holi from Acme......', channel: 'whatsapp', status: 'read' },
+			{ name: 'Mohammed Ibrahim', preview: 'Policy renewal due......', channel: 'sms', status: 'sent' },
+			{ name: 'Vikram Nair', preview: 'Your investment update......', channel: 'email', status: 'delivered' },
+		];
+		var chBg = { whatsapp: 'bg-green-100', sms: 'bg-blue-100', email: 'bg-violet-100' };
+		var chTxt = { whatsapp: 'text-green-600', sms: 'text-blue-600', email: 'text-violet-600' };
+		var list = document.getElementById('recentMsgList');
+		msgs.forEach(function (m) {
+			list.innerHTML += '<div class="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition cursor-pointer">'
+				+ '<div class="w-8 h-8 rounded-xl ' + chBg[m.channel] + ' flex items-center justify-center flex-shrink-0">'
+				+ '<svg class="w-3.5 h-3.5 ' + chTxt[m.channel] + '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>'
+				+ '</div>'
+				+ '<div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate">' + m.name + '</p><p class="text-xs text-gray-400 truncate">' + m.preview + '</p></div>'
+				+ '<div class="flex flex-col items-end gap-0.5 flex-shrink-0"><svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><p class="text-[10px] text-gray-400">' + m.status + '</p></div>'
+				+ '</div>';
+		});
+
+		// ── MOBILE NAV ──
+		function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+		function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
+	</script>
 </body>
+
 </html>

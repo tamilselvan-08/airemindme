@@ -1,0 +1,1409 @@
+/* ============================================================
+   REMINDER ME — Dark Mode Theme v2
+   Clean black & white, blue accents, smooth animations
+   ============================================================ */
+
+/* ================================================================
+   DARK MODE
+   ================================================================ */
+
+/* ── Base backgrounds ── */
+[data-theme="dark"] body,
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-slate-50 {
+    background-color: #0d0d0d !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: #161616 !important;
+}
+
+[data-theme="dark"] .bg-gray-100 {
+    background-color: #1e1e1e !important;
+}
+
+/* ── Borders ── */
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-slate-100,
+[data-theme="dark"] .border-slate-200 {
+    border-color: #2a2a2a !important;
+}
+
+[data-theme="dark"] .border-r,
+[data-theme="dark"] .border-t,
+[data-theme="dark"] .border-b,
+[data-theme="dark"] .border-y {
+    border-color: #232323 !important;
+}
+
+/* ── TEXT — crisp and bright ── */
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-slate-900 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .text-gray-800,
+[data-theme="dark"] .text-slate-800 {
+    color: #f0f0f0 !important;
+}
+
+[data-theme="dark"] .text-gray-700,
+[data-theme="dark"] .text-slate-700 {
+    color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-slate-600 {
+    color: #b0b0b0 !important;
+}
+
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"] .text-slate-500 {
+    color: #888888 !important;
+}
+
+[data-theme="dark"] .text-gray-400,
+[data-theme="dark"] .text-slate-400 {
+    color: #606060 !important;
+}
+
+[data-theme="dark"] .text-gray-300,
+[data-theme="dark"] .text-slate-300 {
+    color: #484848 !important;
+}
+
+/* Force white on bold/semibold text (customer names, headings) */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] p.font-bold,
+[data-theme="dark"] p.font-semibold,
+[data-theme="dark"] span.font-bold,
+[data-theme="dark"] span.font-semibold {
+    color: #ffffff !important;
+}
+
+/* ── Accent colors stay vibrant ── */
+[data-theme="dark"] .text-emerald-500,
+[data-theme="dark"] .text-emerald-600,
+[data-theme="dark"] .text-emerald-700 {
+    color: #4ade80 !important;
+}
+
+[data-theme="dark"] .text-blue-600,
+[data-theme="dark"] .text-blue-700 {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .text-indigo-600,
+[data-theme="dark"] .text-indigo-700 {
+    color: #818cf8 !important;
+}
+
+[data-theme="dark"] .text-amber-500,
+[data-theme="dark"] .text-amber-600 {
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .text-orange-500,
+[data-theme="dark"] .text-orange-600 {
+    color: #fb923c !important;
+}
+
+[data-theme="dark"] .text-pink-600 {
+    color: #f472b6 !important;
+}
+
+[data-theme="dark"] .text-violet-600,
+[data-theme="dark"] .text-violet-700 {
+    color: #a78bfa !important;
+}
+
+[data-theme="dark"] .text-green-600,
+[data-theme="dark"] .text-green-700 {
+    color: #4ade80 !important;
+}
+
+[data-theme="dark"] .text-red-400,
+[data-theme="dark"] .text-red-500,
+[data-theme="dark"] .text-red-600 {
+    color: #f87171 !important;
+}
+
+[data-theme="dark"] .text-white {
+    color: #ffffff !important;
+}
+
+/* ── SIDEBAR NAV ── */
+/* Active nav — blue left border style */
+[data-theme="dark"] nav .bg-indigo-600,
+[data-theme="dark"] nav a.bg-indigo-600 {
+    background-color: #0f2239 !important;
+    border-left: 3px solid #3b82f6 !important;
+    border-radius: 12px !important;
+}
+
+[data-theme="dark"] nav .bg-indigo-600 span,
+[data-theme="dark"] nav .bg-indigo-600 svg,
+[data-theme="dark"] nav a.bg-indigo-600 span,
+[data-theme="dark"] nav a.bg-indigo-600 svg {
+    color: #93c5fd !important;
+    stroke: #93c5fd !important;
+}
+
+[data-theme="dark"] .hover\:bg-gray-50:hover {
+    background-color: #1c1c1c !important;
+}
+
+[data-theme="dark"] .hover\:bg-gray-100:hover {
+    background-color: #222 !important;
+}
+
+/* ── LOGO AVATAR ── */
+[data-theme="dark"] .bg-indigo-600.rounded-xl,
+[data-theme="dark"] .bg-indigo-600.rounded-full,
+[data-theme="dark"] .bg-indigo-600.rounded-2xl,
+[data-theme="dark"] .bg-indigo-600.rounded-lg {
+    background-color: #0f2239 !important;
+    border: 1px solid #1e3a5f !important;
+}
+
+[data-theme="dark"] .bg-indigo-600.rounded-xl svg,
+[data-theme="dark"] .bg-indigo-600.rounded-full svg,
+[data-theme="dark"] .bg-indigo-600.rounded-2xl svg,
+[data-theme="dark"] .bg-indigo-600.rounded-lg svg {
+    stroke: #93c5fd !important;
+}
+
+[data-theme="dark"] .bg-indigo-600.rounded-full span,
+[data-theme="dark"] .bg-indigo-600.rounded-2xl span {
+    color: #93c5fd !important;
+}
+
+/* ── CUSTOMER AVATAR CIRCLES ── */
+[data-theme="dark"] .bg-indigo-100 {
+    background-color: #0f2239 !important;
+}
+
+[data-theme="dark"] .text-indigo-700 {
+    color: #93c5fd !important;
+}
+
+/* ── ACTION BUTTONS ── */
+/* Blue primary buttons */
+[data-theme="dark"] button.bg-indigo-600:not(nav *),
+[data-theme="dark"] a.bg-indigo-600:not(nav *) {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+[data-theme="dark"] button.bg-indigo-600:not(nav *):hover,
+[data-theme="dark"] a.bg-indigo-600:not(nav *):hover,
+[data-theme="dark"] .hover\:bg-indigo-700:hover {
+    background-color: #1d4ed8 !important;
+}
+
+[data-theme="dark"] button.bg-indigo-600:not(nav *) svg,
+[data-theme="dark"] a.bg-indigo-600:not(nav *) svg {
+    stroke: #ffffff !important;
+}
+
+/* ── FILTER PILLS ── */
+/* Active "All" */
+[data-theme="dark"] button#f-all.bg-indigo-600,
+[data-theme="dark"] button.bg-indigo-600.rounded-full {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* Inactive pills */
+[data-theme="dark"] button.border.border-gray-200.rounded-full,
+[data-theme="dark"] button.rounded-full.border.border-gray-200 {
+    background-color: #1a1a1a !important;
+    border-color: #333 !important;
+    color: #d0d0d0 !important;
+}
+
+[data-theme="dark"] button.border.border-gray-200.rounded-full:hover {
+    background-color: #222 !important;
+    border-color: #3b82f6 !important;
+    color: #fff !important;
+}
+
+/* Count badge inside pill */
+[data-theme="dark"] button .bg-gray-100,
+[data-theme="dark"] .rounded-full .bg-gray-100 {
+    background-color: #2a2a2a !important;
+    color: #888 !important;
+}
+
+[data-theme="dark"] .bg-white\/25 {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ── CUSTOMER CARDS ── */
+[data-theme="dark"] .bg-white.rounded-2xl,
+[data-theme="dark"] .bg-white.rounded-xl {
+    background-color: #161616 !important;
+    border-color: #252525 !important;
+}
+
+/* ── EDIT BUTTON ── */
+[data-theme="dark"] .bg-indigo-50.text-indigo-600,
+[data-theme="dark"] button.bg-indigo-50 {
+    background-color: #0f2239 !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .hover\:bg-indigo-100:hover {
+    background-color: #1e3a5f !important;
+    color: #bfdbfe !important;
+}
+
+/* ── CHANNEL & STATUS BADGES ── */
+[data-theme="dark"] .bg-green-100.text-green-700,
+[data-theme="dark"] span.bg-green-100 {
+    background-color: #052e16 !important;
+    color: #4ade80 !important;
+    border: 1px solid #166534 !important;
+}
+
+[data-theme="dark"] .bg-blue-100.text-blue-700,
+[data-theme="dark"] span.bg-blue-100 {
+    background-color: #0c1a2e !important;
+    color: #60a5fa !important;
+    border: 1px solid #1e40af !important;
+}
+
+[data-theme="dark"] .bg-purple-100.text-purple-700,
+[data-theme="dark"] span.bg-purple-100 {
+    background-color: #180d2e !important;
+    color: #c084fc !important;
+    border: 1px solid #6b21a8 !important;
+}
+
+[data-theme="dark"] .bg-emerald-100.text-emerald-700,
+[data-theme="dark"] .bg-emerald-50.text-emerald-700 {
+    background-color: #052e16 !important;
+    color: #4ade80 !important;
+}
+
+[data-theme="dark"] .bg-amber-50.text-amber-600,
+[data-theme="dark"] .bg-amber-100.text-amber-700 {
+    background-color: #1c1000 !important;
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .bg-yellow-100.text-yellow-700 {
+    background-color: #1a1200 !important;
+    color: #fde68a !important;
+}
+
+[data-theme="dark"] .bg-indigo-100.text-indigo-600,
+[data-theme="dark"] .bg-indigo-100.text-indigo-700,
+[data-theme="dark"] .bg-indigo-50.text-indigo-600,
+[data-theme="dark"] .bg-indigo-50.text-indigo-700 {
+    background-color: #0f2239 !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .bg-violet-50.text-violet-700,
+[data-theme="dark"] .bg-violet-100.text-violet-700 {
+    background-color: #180d2e !important;
+    color: #c084fc !important;
+}
+
+[data-theme="dark"] .bg-orange-50.text-orange-600 {
+    background-color: #1a0e00 !important;
+    color: #fb923c !important;
+}
+
+[data-theme="dark"] .bg-blue-50.text-blue-700 {
+    background-color: #0c1a2e !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .bg-green-50.text-green-700 {
+    background-color: #052e16 !important;
+    color: #4ade80 !important;
+}
+
+/* ── INPUTS ── */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background-color: #1a1a1a !important;
+    border-color: #2d2d2d !important;
+    color: #f0f0f0 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: #4a4a4a !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+[data-theme="dark"] input[readonly] {
+    background-color: #111 !important;
+    color: #555 !important;
+}
+
+/* ── TOGGLE SWITCHES ── */
+[data-theme="dark"] input.sr-only.peer:checked~div {
+    background-color: #2563eb !important;
+}
+
+[data-theme="dark"] .bg-gray-200 {
+    background-color: #2a2a2a !important;
+}
+
+/* ── MODAL ── */
+[data-theme="dark"] .bg-black\/40,
+[data-theme="dark"] .bg-black\/50 {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-theme="dark"] .shadow-2xl {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* ── GREEN → BLUE in dark mode ── */
+/* Channel toggle button active */
+[data-theme="dark"] .bg-green-500 {
+    background-color: #2563eb !important;
+    color: #fff !important;
+}
+
+/* Submit / save buttons */
+[data-theme="dark"] .bg-emerald-700,
+[data-theme="dark"] .bg-emerald-600 {
+    background-color: #2563eb !important;
+    color: #fff !important;
+}
+
+[data-theme="dark"] .hover\:bg-emerald-800:hover,
+[data-theme="dark"] .hover\:bg-emerald-700:hover {
+    background-color: #1d4ed8 !important;
+}
+
+
+
+/* ── LIGHT MODE — force dark text everywhere ── */
+/* ── LIGHT MODE — force dark text everywhere ── */
+[data-theme="light"] body {
+    color: #111111;
+}
+
+[data-theme="light"] .text-gray-900 {
+    color: #0a0a0a !important;
+}
+
+[data-theme="light"] .text-gray-800 {
+    color: #1a1a1a !important;
+}
+
+[data-theme="light"] .text-gray-700 {
+    color: #2a2a2a !important;
+}
+
+[data-theme="light"] .text-gray-600 {
+    color: #3a3a3a !important;
+}
+
+[data-theme="light"] .text-gray-500 {
+    color: #555555 !important;
+}
+
+[data-theme="light"] .text-gray-400 {
+    color: #777777 !important;
+}
+
+/* ── Headings ── */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+    color: #0a0a0a !important;
+}
+
+/* ── Nav text ── */
+[data-theme="light"] nav a span,
+[data-theme="light"] nav button span {
+    color: #1a1a1a !important;
+}
+
+/* ── Active nav item stays white ── */
+[data-theme="light"] nav .bg-indigo-600 span,
+[data-theme="light"] nav a.bg-indigo-600 span {
+    color: #ffffff !important;
+}
+
+/* ── Card text ── */
+[data-theme="light"] p.font-semibold,
+[data-theme="light"] p.font-bold,
+[data-theme="light"] span.font-semibold,
+[data-theme="light"] span.font-bold {
+    color: #111111 !important;
+}
+
+/* ── Sidebar user name ── */
+[data-theme="light"] .text-sm.font-semibold.text-gray-900 {
+    color: #0a0a0a !important;
+}
+
+/* ── Table / list text ── */
+[data-theme="light"] td,
+[data-theme="light"] th {
+    color: #1a1a1a !important;
+}
+
+/* ── Input labels ── */
+[data-theme="light"] label {
+    color: #1a1a1a !important;
+}
+
+
+
+[data-theme="dark"] .shadow-emerald-300 {
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35) !important;
+}
+
+[data-theme="dark"] .shadow-indigo-300 {
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* Mark paid button */
+[data-theme="dark"] .bg-emerald-600.text-white.px-2\.5 {
+    background-color: #2563eb !important;
+}
+
+/* Emerald hover buttons */
+[data-theme="dark"] button.bg-emerald-50.text-emerald-700,
+[data-theme="dark"] button.bg-emerald-50 {
+    background-color: #0f2239 !important;
+    color: #60a5fa !important;
+    border-color: #1e40af !important;
+}
+
+[data-theme="dark"] .hover\:bg-emerald-100:hover {
+    background-color: #1e3a5f !important;
+}
+
+/* ── STICKY / FIXED ── */
+[data-theme="dark"] .sticky {
+    background-color: #161616 !important;
+}
+
+[data-theme="dark"] .fixed.top-0 {
+    background-color: #161616 !important;
+    border-color: #232323 !important;
+}
+
+[data-theme="dark"] .fixed.bottom-0 {
+    background-color: #161616 !important;
+    border-color: #232323 !important;
+}
+
+[data-theme="dark"] #mobileNavDrawer {
+    background-color: #161616 !important;
+}
+
+[data-theme="dark"] #mobileNavBg {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ── CUSTOMER DETAIL ── */
+[data-theme="dark"] .from-indigo-500.to-purple-600 {
+    background: linear-gradient(135deg, #0f2239, #1e0a3c) !important;
+}
+
+[data-theme="dark"] .border-b-2.border-indigo-600 {
+    border-color: #3b82f6 !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .bg-emerald-50.border-b.border-emerald-100 {
+    background-color: #052e16 !important;
+    border-color: #166534 !important;
+}
+
+[data-theme="dark"] .bg-emerald-50.rounded-xl {
+    background-color: #071e0f !important;
+    border-color: #166534 !important;
+}
+
+[data-theme="dark"] .text-emerald-800 {
+    color: #4ade80 !important;
+}
+
+/* ── QUICK ACTIONS icon circles ── */
+[data-theme="dark"] .bg-blue-100 {
+    background-color: #0c1a2e !important;
+}
+
+[data-theme="dark"] .bg-pink-100 {
+    background-color: #1a0812 !important;
+}
+
+[data-theme="dark"] .bg-orange-100 {
+    background-color: #1a0e00 !important;
+}
+
+[data-theme="dark"] .bg-green-100 {
+    background-color: #052e16 !important;
+}
+
+/* ── IMPORT modal ── */
+[data-theme="dark"] .drop-zone {
+    border-color: #2d2d2d !important;
+    background-color: #111 !important;
+}
+
+[data-theme="dark"] .drop-zone:hover,
+[data-theme="dark"] .drop-zone.drag-over {
+    border-color: #3b82f6 !important;
+    background-color: #0c1a2e !important;
+}
+
+[data-theme="dark"] .bg-indigo-50.border-indigo-100 {
+    background-color: #0c1a2e !important;
+    border-color: #1e3a5f !important;
+}
+
+[data-theme="dark"] .text-indigo-800 {
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .text-indigo-500 {
+    color: #6ea8fe !important;
+}
+
+[data-theme="dark"] .bg-emerald-50.border-emerald-200 {
+    background-color: #052e16 !important;
+    border-color: #166534 !important;
+}
+
+[data-theme="dark"] table th {
+    color: #909090 !important;
+}
+
+[data-theme="dark"] table td {
+    color: #d0d0d0 !important;
+}
+
+[data-theme="dark"] thead tr {
+    background-color: #1a1a1a !important;
+}
+
+/* ── ERROR zone ── */
+[data-theme="dark"] .bg-red-50 {
+    background-color: #1a0808 !important;
+}
+
+[data-theme="dark"] .border-red-200 {
+    border-color: #7f1d1d !important;
+}
+
+[data-theme="dark"] .text-red-700 {
+    color: #fca5a5 !important;
+}
+
+/* ── PAGINATION ── */
+[data-theme="dark"] #pagination button {
+    background-color: #1e1e1e !important;
+    border-color: #2d2d2d !important;
+    color: #d0d0d0 !important;
+}
+
+[data-theme="dark"] #pagination button.bg-indigo-600 {
+    background-color: #2563eb !important;
+    color: #fff !important;
+}
+
+/* ── STAT CARDS — gradient backgrounds for visual pop ── */
+[data-theme="dark"] .grid .bg-white.rounded-2xl:nth-child(1),
+[data-theme="dark"] .grid .bg-white.rounded-2xl:nth-child(2),
+[data-theme="dark"] .grid .bg-white.rounded-2xl:nth-child(3),
+[data-theme="dark"] .grid .bg-white.rounded-2xl:nth-child(4) {
+    border-color: #2a2a2a !important;
+}
+
+/* Subtle left-border color on each stat card */
+[data-theme="dark"] .grid.grid-cols-2>div:nth-child(1),
+[data-theme="dark"] .grid.lg\:grid-cols-4>div:nth-child(1) {
+    border-left: 3px solid #6366f1 !important;
+}
+
+[data-theme="dark"] .grid.grid-cols-2>div:nth-child(2),
+[data-theme="dark"] .grid.lg\:grid-cols-4>div:nth-child(2) {
+    border-left: 3px solid #f59e0b !important;
+}
+
+[data-theme="dark"] .grid.grid-cols-2>div:nth-child(3),
+[data-theme="dark"] .grid.lg\:grid-cols-4>div:nth-child(3) {
+    border-left: 3px solid #f97316 !important;
+}
+
+[data-theme="dark"] .grid.grid-cols-2>div:nth-child(4),
+[data-theme="dark"] .grid.lg\:grid-cols-4>div:nth-child(4) {
+    border-left: 3px solid #ec4899 !important;
+}
+
+/* ── CATALOG banner badges — fix washed out middle badge ── */
+[data-theme="dark"] .bg-violet-50.border.border-violet-100 {
+    background-color: #180d2e !important;
+    border-color: #4c1d95 !important;
+}
+
+[data-theme="dark"] .bg-violet-50.border.border-violet-100 span,
+[data-theme="dark"] .bg-violet-50.border.border-violet-100 svg {
+    color: #c084fc !important;
+    stroke: #c084fc !important;
+}
+
+[data-theme="dark"] .bg-emerald-50.border.border-emerald-100 {
+    background-color: #052e16 !important;
+    border-color: #166534 !important;
+}
+
+[data-theme="dark"] .bg-emerald-50.border.border-emerald-100 span,
+[data-theme="dark"] .bg-emerald-50.border.border-emerald-100 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+/* ── Border misc ── */
+[data-theme="dark"] .border.border-gray-200 {
+    border-color: #2a2a2a !important;
+}
+
+[data-theme="dark"] .border-t.border-gray-50,
+[data-theme="dark"] .border-b.border-gray-50,
+[data-theme="dark"] .border-t.border-slate-50 {
+    border-color: #1e1e1e !important;
+}
+
+/* ── Hover misc ── */
+[data-theme="dark"] .hover\:bg-red-50:hover {
+    background-color: #1a0808 !important;
+}
+
+[data-theme="dark"] .hover\:text-red-600:hover {
+    color: #f87171 !important;
+}
+
+[data-theme="dark"] .hover\:text-indigo-600:hover {
+    color: #60a5fa !important;
+}
+
+/* ── Scrollbar ── */
+[data-theme="dark"] ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ================================================================
+   COLORED ICONS — universal fix using text-* color inheritance
+   Works by targeting SVG text color classes directly
+   ================================================================ */
+
+/* ── The core trick: SVG uses currentColor via stroke/fill ──
+   Tailwind sets color via .text-* → SVG inherits as currentColor
+   We force the stroke to match that color in dark mode          ── */
+
+/* All SVGs — use currentColor for stroke so text-* classes work */
+svg {
+    stroke: currentColor;
+}
+
+/* ── NAV ICONS — colored via text-* classes ── */
+/* In dark mode, inactive nav items have .text-gray-500 on the <a>
+   We override that per-link using the href attribute             */
+
+/* Home — sky blue */
+[data-theme="dark"] nav a[href*="home"] svg {
+    color: #38bdf8 !important;
+    stroke: #38bdf8 !important;
+}
+
+/* Customers — violet */
+[data-theme="dark"] nav a[href*="customer"] svg {
+    color: #a78bfa !important;
+    stroke: #a78bfa !important;
+}
+
+/* Engage — amber */
+[data-theme="dark"] nav a[href*="engagement"] svg {
+    color: #fbbf24 !important;
+    stroke: #fbbf24 !important;
+}
+
+/* Promotions — orange */
+[data-theme="dark"] nav a[href*="promotion"] svg {
+    color: #fb923c !important;
+    stroke: #fb923c !important;
+}
+
+/* Settings — slate */
+[data-theme="dark"] nav a[href*="setting"] svg {
+    color: #94a3b8 !important;
+    stroke: #94a3b8 !important;
+}
+
+/* Active nav item — bright blue */
+[data-theme="dark"] nav .bg-indigo-600 svg,
+[data-theme="dark"] nav a.bg-indigo-600 svg {
+    color: #93c5fd !important;
+    stroke: #93c5fd !important;
+}
+
+/* Light mode nav — subtle tinted */
+nav a[href*="home"] svg {
+    color: #0ea5e9;
+    stroke: #0ea5e9;
+}
+
+nav a[href*="customer"] svg {
+    color: #7c3aed;
+    stroke: #7c3aed;
+}
+
+nav a[href*="engagement"] svg {
+    color: #d97706;
+    stroke: #d97706;
+}
+
+nav a[href*="promotion"] svg {
+    color: #ea580c;
+    stroke: #ea580c;
+}
+
+nav a[href*="setting"] svg {
+    color: #64748b;
+    stroke: #64748b;
+}
+
+/* Active nav light mode — keep white */
+nav .bg-indigo-600 svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ── ICON CONTAINER BACKGROUNDS → force SVG color ──
+   Every colored .bg-*-50 / .bg-*-100 circle/square
+   gets its SVG stroked in the matching color            ── */
+
+/* INDIGO family */
+.bg-indigo-50 svg,
+.bg-indigo-100 svg {
+    color: #6366f1;
+    stroke: #6366f1;
+}
+
+[data-theme="dark"] .bg-indigo-50 svg,
+[data-theme="dark"] .bg-indigo-100 svg {
+    color: #818cf8 !important;
+    stroke: #818cf8 !important;
+}
+
+/* BLUE family */
+.bg-blue-50 svg,
+.bg-blue-100 svg {
+    color: #3b82f6;
+    stroke: #3b82f6;
+}
+
+[data-theme="dark"] .bg-blue-50 svg,
+[data-theme="dark"] .bg-blue-100 svg {
+    color: #60a5fa !important;
+    stroke: #60a5fa !important;
+}
+
+/* EMERALD / GREEN family */
+.bg-emerald-50 svg,
+.bg-emerald-100 svg {
+    color: #10b981;
+    stroke: #10b981;
+}
+
+.bg-green-50 svg,
+.bg-green-100 svg {
+    color: #16a34a;
+    stroke: #16a34a;
+}
+
+[data-theme="dark"] .bg-emerald-50 svg,
+[data-theme="dark"] .bg-emerald-100 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+[data-theme="dark"] .bg-green-50 svg,
+[data-theme="dark"] .bg-green-100 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+/* AMBER family */
+.bg-amber-50 svg,
+.bg-amber-100 svg {
+    color: #f59e0b;
+    stroke: #f59e0b;
+}
+
+[data-theme="dark"] .bg-amber-50 svg,
+[data-theme="dark"] .bg-amber-100 svg {
+    color: #fbbf24 !important;
+    stroke: #fbbf24 !important;
+}
+
+/* ORANGE family */
+.bg-orange-50 svg,
+.bg-orange-100 svg {
+    color: #f97316;
+    stroke: #f97316;
+}
+
+[data-theme="dark"] .bg-orange-50 svg,
+[data-theme="dark"] .bg-orange-100 svg {
+    color: #fb923c !important;
+    stroke: #fb923c !important;
+}
+
+/* PINK family */
+.bg-pink-50 svg,
+.bg-pink-100 svg {
+    color: #ec4899;
+    stroke: #ec4899;
+}
+
+[data-theme="dark"] .bg-pink-50 svg,
+[data-theme="dark"] .bg-pink-100 svg {
+    color: #f472b6 !important;
+    stroke: #f472b6 !important;
+}
+
+/* VIOLET / PURPLE family */
+.bg-violet-50 svg,
+.bg-violet-100 svg {
+    color: #8b5cf6;
+    stroke: #8b5cf6;
+}
+
+.bg-purple-50 svg,
+.bg-purple-100 svg {
+    color: #a855f7;
+    stroke: #a855f7;
+}
+
+[data-theme="dark"] .bg-violet-50 svg,
+[data-theme="dark"] .bg-violet-100 svg {
+    color: #a78bfa !important;
+    stroke: #a78bfa !important;
+}
+
+[data-theme="dark"] .bg-purple-50 svg,
+[data-theme="dark"] .bg-purple-100 svg {
+    color: #c084fc !important;
+    stroke: #c084fc !important;
+}
+
+/* RED family */
+.bg-red-50 svg,
+.bg-red-100 svg {
+    color: #ef4444;
+    stroke: #ef4444;
+}
+
+[data-theme="dark"] .bg-red-50 svg,
+[data-theme="dark"] .bg-red-100 svg {
+    color: #f87171 !important;
+    stroke: #f87171 !important;
+}
+
+/* YELLOW family */
+.bg-yellow-50 svg,
+.bg-yellow-100 svg {
+    color: #eab308;
+    stroke: #eab308;
+}
+
+[data-theme="dark"] .bg-yellow-50 svg,
+[data-theme="dark"] .bg-yellow-100 svg {
+    color: #fde68a !important;
+    stroke: #fde68a !important;
+}
+
+/* EXCEPTION: Logo/brand avatar — always white icon */
+.bg-indigo-600 svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+[data-theme="dark"] .bg-indigo-600 svg {
+    color: #93c5fd !important;
+    stroke: #93c5fd !important;
+}
+
+/* But nav active stays blue-tinted */
+[data-theme="dark"] nav .bg-indigo-600 svg {
+    color: #93c5fd !important;
+    stroke: #93c5fd !important;
+}
+
+/* ── STAT CARD ICON CIRCLES — explicit override ── */
+/* These are the rounded divs INSIDE stat cards */
+[data-theme="dark"] .w-10.h-10.rounded-xl svg,
+[data-theme="dark"] .w-10.h-10.rounded-2xl svg,
+[data-theme="dark"] .w-9.h-9.rounded-xl svg,
+[data-theme="dark"] .w-9.h-9.rounded-2xl svg {
+    /* color inherited from parent bg-* classes above */
+    opacity: 1 !important;
+}
+
+/* ── MOBILE BOTTOM NAV — active icon color ── */
+[data-theme="dark"] .fixed.bottom-0 a svg {
+    color: #555 !important;
+    stroke: #555 !important;
+}
+
+[data-theme="dark"] .fixed.bottom-0 a.text-indigo-600 svg {
+    color: #60a5fa !important;
+    stroke: #60a5fa !important;
+}
+
+[data-theme="dark"] .fixed.bottom-0 a.text-emerald-600 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+/* ── TAB ICONS in customer detail ── */
+[data-theme="dark"] [id^="tab-"] svg {
+    color: #555 !important;
+    stroke: #555 !important;
+}
+
+[data-theme="dark"] [id^="tab-"].text-indigo-600 svg,
+[data-theme="dark"] [id^="tab-"].border-indigo-600 svg {
+    color: #60a5fa !important;
+    stroke: #60a5fa !important;
+}
+
+/* ── QUICK ACTION buttons in sidebar ── */
+[data-theme="dark"] nav button .bg-blue-100 svg {
+    color: #60a5fa !important;
+    stroke: #60a5fa !important;
+}
+
+[data-theme="dark"] nav button .bg-pink-100 svg {
+    color: #f472b6 !important;
+    stroke: #f472b6 !important;
+}
+
+[data-theme="dark"] nav button .bg-orange-100 svg {
+    color: #fb923c !important;
+    stroke: #fb923c !important;
+}
+
+[data-theme="dark"] nav button .bg-green-100 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+/* ── HOME PAGE — catalog/quick action grid icons ── */
+[data-theme="dark"] .grid svg.text-indigo-600 {
+    color: #818cf8 !important;
+    stroke: #818cf8 !important;
+}
+
+[data-theme="dark"] .grid svg.text-orange-500 {
+    color: #fb923c !important;
+    stroke: #fb923c !important;
+}
+
+[data-theme="dark"] .grid svg.text-emerald-600 {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+[data-theme="dark"] .grid svg.text-violet-600 {
+    color: #a78bfa !important;
+    stroke: #a78bfa !important;
+}
+
+/* ── UPCOMING list — bell icons ── */
+[data-theme="dark"] .bg-indigo-100.rounded-full svg {
+    color: #818cf8 !important;
+    stroke: #818cf8 !important;
+}
+
+[data-theme="dark"] .bg-pink-100.rounded-full svg {
+    color: #f472b6 !important;
+    stroke: #f472b6 !important;
+}
+
+[data-theme="dark"] .bg-yellow-100.rounded-full svg {
+    color: #fde68a !important;
+    stroke: #fde68a !important;
+}
+
+[data-theme="dark"] .bg-amber-100.rounded-full svg {
+    color: #fbbf24 !important;
+    stroke: #fbbf24 !important;
+}
+
+[data-theme="dark"] .bg-blue-100.rounded-full svg {
+    color: #60a5fa !important;
+    stroke: #60a5fa !important;
+}
+
+/* ── CATALOG page badges ── */
+/* Active plans badge — indigo */
+[data-theme="dark"] .bg-indigo-50.border.border-indigo-100 svg {
+    color: #818cf8 !important;
+    stroke: #818cf8 !important;
+}
+
+/* Active products badge — violet */
+[data-theme="dark"] .bg-violet-50.border.border-violet-100 svg {
+    color: #a78bfa !important;
+    stroke: #a78bfa !important;
+}
+
+/* Templates badge — emerald */
+[data-theme="dark"] .bg-emerald-50.border.border-emerald-100 svg {
+    color: #4ade80 !important;
+    stroke: #4ade80 !important;
+}
+
+/* ================================================================
+   THEME TOGGLE BUTTON (both modes)
+   ================================================================ */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+    background: #e5e7eb;
+    transform: scale(1.08) rotate(12deg);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+    background: #1e1e1e !important;
+    border-color: #2d2d2d !important;
+    color: #a0a0a0 !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background: #252525 !important;
+    border-color: #3b82f6 !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn svg {
+    stroke: #a0a0a0 !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover svg {
+    stroke: #60a5fa !important;
+}
+
+[data-theme="light"] .icon-sun {
+    display: none;
+}
+
+[data-theme="light"] .icon-moon {
+    display: block;
+}
+
+[data-theme="dark"] .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .icon-moon {
+    display: none;
+}
+
+/* ================================================================
+   ANIMATIONS — both light & dark
+   ================================================================ */
+
+/* ── Customer card staggered entrance ── */
+@keyframes cardFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#customerGrid>div {
+    animation: cardFadeUp 0.38s ease both;
+}
+
+#customerGrid>div:nth-child(1) {
+    animation-delay: 0.04s;
+}
+
+#customerGrid>div:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+#customerGrid>div:nth-child(3) {
+    animation-delay: 0.12s;
+}
+
+#customerGrid>div:nth-child(4) {
+    animation-delay: 0.16s;
+}
+
+#customerGrid>div:nth-child(5) {
+    animation-delay: 0.20s;
+}
+
+#customerGrid>div:nth-child(6) {
+    animation-delay: 0.24s;
+}
+
+#customerGrid>div:nth-child(7) {
+    animation-delay: 0.28s;
+}
+
+#customerGrid>div:nth-child(8) {
+    animation-delay: 0.32s;
+}
+
+#customerList>div {
+    animation: cardFadeUp 0.3s ease both;
+}
+
+#customerList>div:nth-child(n) {
+    animation-delay: calc(0.04s * var(--i, 1));
+}
+
+/* ── Card hover lift ── */
+#customerGrid>div,
+#customerList>div {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+    will-change: transform;
+}
+
+#customerGrid>div:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.13) !important;
+    border-color: #a5b4fc !important;
+}
+
+[data-theme="dark"] #customerGrid>div:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7) !important;
+    border-color: #1e3a5f !important;
+}
+
+/* ── Avatar scale on card hover ── */
+#customerGrid>div:hover .w-11.h-11 {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* ── Stat cards pop in ── */
+@keyframes statPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.grid.lg\:grid-cols-4>div:nth-child(1) {
+    animation: statPop 0.3s 0.05s ease both;
+}
+
+.grid.lg\:grid-cols-4>div:nth-child(2) {
+    animation: statPop 0.3s 0.10s ease both;
+}
+
+.grid.lg\:grid-cols-4>div:nth-child(3) {
+    animation: statPop 0.3s 0.15s ease both;
+}
+
+.grid.lg\:grid-cols-4>div:nth-child(4) {
+    animation: statPop 0.3s 0.20s ease both;
+}
+
+.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(1) {
+    animation: statPop 0.3s 0.05s ease both;
+}
+
+.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(2) {
+    animation: statPop 0.3s 0.10s ease both;
+}
+
+.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(3) {
+    animation: statPop 0.3s 0.15s ease both;
+}
+
+.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(4) {
+    animation: statPop 0.3s 0.20s ease both;
+}
+
+/* ── Page title slide in ── */
+@keyframes titleIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sticky h1 {
+    animation: titleIn 0.3s ease both;
+}
+
+/* ── Sidebar nav items ── */
+nav a,
+nav button {
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
+}
+
+nav a:hover:not(.bg-indigo-600) {
+    transform: translateX(3px);
+}
+
+/* ── Button press ── */
+button {
+    transition: transform 0.1s ease !important;
+}
+
+button:active {
+    transform: scale(0.96) !important;
+}
+
+/* ── Modal slide up ── */
+@keyframes modalUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#addCustomerModal .relative.bg-white,
+#importModal .relative.bg-white {
+    animation: modalUp 0.28s ease both;
+}
+
+/* ── FAB — deep purple with white icon ── */
+.rounded-full.bg-indigo-600 {
+    background: #6001d2 !important;
+    box-shadow: 0 8px 28px rgba(96, 1, 210, 0.5) !important;
+}
+
+.rounded-full.bg-indigo-600:hover {
+    background: #7209d4 !important;
+}
+
+.rounded-full.bg-indigo-600 svg {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* ── FAB pulse — deep purple glow ── */
+@keyframes fabGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 16px rgba(96, 1, 210, 0.45);
+    }
+
+    50% {
+        box-shadow: 0 4px 32px rgba(96, 1, 210, 0.75);
+    }
+}
+
+.rounded-full.bg-indigo-600 {
+    animation: fabGlow 2.5s ease-in-out infinite !important;
+}
+
+/* Dark mode same color */
+[data-theme="dark"] .rounded-full.bg-indigo-600 {
+    background: #6001d2 !important;
+    box-shadow: 0 8px 32px rgba(96, 1, 210, 0.6) !important;
+}
+
+[data-theme="dark"] .rounded-full.bg-indigo-600 svg {
+    stroke: #ffffff !important;
+}
+
+/* ── Tab underline transition ── */
+[id^="tab-"] {
+    transition: color 0.15s ease, border-color 0.15s ease !important;
+}
+
+[id^="st-"] {
+    transition: color 0.15s ease, border-color 0.15s ease !important;
+}
+
+/* ── Channel badge pop ── */
+span.rounded,
+span.rounded-full {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ── Edit button lift ── */
+button.bg-indigo-50,
+button.text-indigo-600 {
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
+}
+
+button.bg-indigo-50:hover {
+    transform: translateY(-1px);
+}

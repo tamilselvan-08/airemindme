@@ -35,6 +35,10 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
+    public Optional<Customer> getById(Integer accountId, Integer id) {
+        return customerRepository.findByIdAndAccountId(id, accountId);
+    }
+
     public Optional<Customer> findByMobile(Integer accountId, String mobile) {
         return customerRepository.findByAccountIdAndMobile(accountId, mobile);
     }
@@ -55,7 +59,8 @@ public class CustomerService {
         return customerRepository.searchByAccount(accountId, search, pageable);
     }
 
-    public Page<Customer> searchByAccountAndGroup(Integer accountId,Integer groupId,String search,Pageable pageable) {
+    public Page<Customer> searchByAccountAndGroup(Integer accountId, Integer groupId, String search,
+            Pageable pageable) {
         return customerRepository.searchByAccountAndGroup(accountId, groupId, search, pageable);
     }
 

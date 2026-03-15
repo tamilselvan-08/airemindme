@@ -26,6 +26,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByAccountIdAndMobile(Integer accountId, String mobile);
 
+    Optional<Customer> findByIdAndAccountId(Integer id, Integer accountId);
 
     long countByAccountId(Integer accountId);
 
@@ -50,6 +51,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             OR LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%'))
             )
             """)
-    Page<Customer> searchByAccountAndGroup(Integer accountId,Integer groupId,String search,Pageable pageable);
+    Page<Customer> searchByAccountAndGroup(Integer accountId, Integer groupId, String search, Pageable pageable);
 
 }

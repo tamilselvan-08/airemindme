@@ -1,4 +1,5 @@
 package com.server.realsync.entity;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -15,47 +16,48 @@ import jakarta.persistence.Table;
 @Table(name = "account")
 public class Account {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @Column(nullable = false, length = 50)
-    private String name;
+	@Column(nullable = false, length = 50)
+	private String name;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String email;
+	@Column(nullable = false, length = 100, unique = true)
+	private String email;
 
-    @Column(nullable = false, length = 12, unique = true)
-    private String mobile;
+	@Column(nullable = false, length = 12, unique = true)
+	private String mobile;
 
-    @Column(length = 100)
-    private String address;
+	@Column(length = 100)
+	private String address;
 
-    @Column(length = 100)
-    private String upi;
-    
-    @Column(length = 50)
-    private String category;
-    
-    @Column(length = 50)
-    private String subcategory;
+	@Column(length = 100)
+	private String upi;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+	@Column(length = 50)
+	private String category;
 
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
-    
-    
+	@Column(length = 50)
+	private String subcategory;
 
-    // Getters and Setters
-    public Integer getId() {
-        return id;
-    }
+	@Column(name = "created_date")
+	private LocalDateTime createdDate;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@Column(name = "updated_date")
+	private LocalDateTime updatedDate;
+
+	@Column(name = "business_name", length = 50)
+	private String businessName;
+
+	// Getters and Setters
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -96,17 +98,17 @@ public class Account {
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	
-    @PreUpdate
-    protected void onUpdate() {
-        updatedDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
-    }
-    
-    @PrePersist
-    protected void onCreate() {
-        createdDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
-        updatedDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
-    }
+
+	@PreUpdate
+	protected void onUpdate() {
+		updatedDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		createdDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+		updatedDate = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+	}
 
 	public String getAddress() {
 		return address;
@@ -138,6 +140,14 @@ public class Account {
 
 	public void setSubcategory(String subcategory) {
 		this.subcategory = subcategory;
+	}
+
+	public String getBusinessName() {
+		return businessName;
+	}
+
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
 	}
 
 }

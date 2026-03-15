@@ -7,6 +7,11 @@
   <title>Customers - Reminder Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Prevent flash before CSS loads -->
+  <script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" th:href="@{/css/theme.css}">
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -331,41 +336,71 @@
         <div id="customerGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-5">
 
           <div th:each="customer : ${customers}"
-            class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition" data-customer
-            th:attr="data-name=${customer.name},
-              data-phone=${customer.mobile},
-              data-segment=${customer.customerGroupId}">
+            class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition cursor-pointer"
+            data-customer th:attr="
+            data-id=${customer.id},
+       data-name=${customer.name},
+       data-phone=${customer.mobile},
+       data-email=${customer.email},
+       data-group=${customer.customerGroupId},
+       data-channel=${customer.channel}"
+            th:onclick="'window.location.href=\'/customer-detail.html?id=' + ${customer.id} + '\''">
 
             <div class="flex items-center gap-3">
 
-              <div class="w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center font-bold">
+              <div
+                class="text-white text-xl font-bold w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center font-bold">
                 <span th:text="${#strings.substring(customer.name,0,1)}"></span>
               </div>
 
               <div>
                 <p class="text-sm font-semibold" th:text="${customer.name}"></p>
-
                 <p class="text-xs text-gray-500" th:text="${customer.mobile}"></p>
-
                 <p class="text-xs text-gray-400" th:text="${customer.email}"></p>
+                <div class="flex gap-1 mt-1">
+
+                  <span th:if="${customer.channel != null and #strings.contains(customer.channel,'1')}"
+                    class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                    WA
+                  </span>
+
+                  <span th:if="${customer.channel != null and #strings.contains(customer.channel,'2')}"
+                    class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                    SMS
+                  </span>
+
+                  <span th:if="${customer.channel != null and #strings.contains(customer.channel,'3')}"
+                    class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                    Email
+                  </span>
+
+                </div>
               </div>
 
             </div>
+
             <div class="flex justify-end mt-3">
-              <button th:attr="
-    data-id=${customer.id},
-    data-name=${customer.name},
-    data-phone=${customer.mobile},
-    data-email=${customer.email},
-    data-group=${customer.customerGroupId}" onclick="openEditCustomer(
-    this.dataset.id,
-    this.dataset.name,
-    this.dataset.phone,
-    this.dataset.email,
-    this.dataset.group
-  )" class="text-xs px-3 py-1 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100">
+
+              <button onclick="event.stopPropagation(); openEditCustomer(
+          this.dataset.id,
+          this.dataset.name,
+          this.dataset.phone,
+          this.dataset.email,
+          this.dataset.group,
+          this.dataset.channel
+        )" th:attr="
+          data-id=${customer.id},
+          data-name=${customer.name},
+          data-phone=${customer.mobile},
+          data-email=${customer.email},
+          data-group=${customer.customerGroupId},
+          data-channel=${customer.channel}"
+                class="text-xs px-3 py-1 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100">
+
                 Edit
+
               </button>
+
             </div>
 
           </div>
@@ -373,6 +408,70 @@
         </div>
       </div>
       <div id="customerList" class="hidden flex flex-col gap-3 mb-5">
+        <div th:each="customer : ${customers}"
+          class="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3 flex items-center justify-between hover:shadow-md transition cursor-pointer"
+          th:onclick="'window.location.href=\'/customer-detail.html?id=' + ${customer.id} + '\''">
+
+          <div class="flex items-center gap-3">
+
+            <div
+              class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-semibold text-indigo-700">
+              <span th:text="${#strings.substring(customer.name,0,1)}"></span>
+            </div>
+
+            <div>
+              <p class="text-sm font-semibold text-gray-900" th:text="${customer.name}"></p>
+              <p class="text-xs text-gray-500" th:text="${customer.mobile}"></p>
+              <p class="text-xs text-gray-400" th:text="${customer.email}"></p>
+
+              <div class="flex gap-1 mt-1">
+
+                <span th:if="${customer.channel != null and #strings.contains(customer.channel,'1')}"
+                  class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                  WA
+                </span>
+
+                <span th:if="${customer.channel != null and #strings.contains(customer.channel,'2')}"
+                  class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                  SMS
+                </span>
+
+                <span th:if="${customer.channel != null and #strings.contains(customer.channel,'3')}"
+                  class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                  Email
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-3">
+
+            <button onclick="event.stopPropagation(); openEditCustomer(
+          this.dataset.id,
+          this.dataset.name,
+          this.dataset.phone,
+          this.dataset.email,
+          this.dataset.group,
+          this.dataset.channel
+        )" th:attr="
+          data-id=${customer.id},
+          data-name=${customer.name},
+          data-phone=${customer.mobile},
+          data-email=${customer.email},
+          data-group=${customer.customerGroupId},
+          data-channel=${customer.channel}"
+              class="text-xs px-3 py-1 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100">
+
+              Edit
+
+            </button>
+
+          </div>
+
+        </div>
+
+
       </div>
       <div class="flex items-center justify-between">
         <p class="text-sm text-gray-500">
@@ -473,12 +572,18 @@
         <div>
           <label class="text-sm font-medium text-gray-700 mb-2 block">Messaging Channels</label>
           <div class="flex gap-2">
-            <button type="button" onclick="toggleCh('whatsapp')" id="ch-wa"
+
+            <input type="hidden" id="channelInput" name="channel">
+
+            <button type="button" onclick="toggleCh(1)" id="ch-wa"
               class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-green-500 text-white transition">WhatsApp</button>
-            <button type="button" onclick="toggleCh('sms')" id="ch-sms"
+
+            <button type="button" onclick="toggleCh(2)" id="ch-sms"
               class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">SMS</button>
-            <button type="button" onclick="toggleCh('email')" id="ch-email"
+
+            <button type="button" onclick="toggleCh(3)" id="ch-email"
               class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">Email</button>
+
           </div>
         </div>
         <button type="submit" id="saveCustomerBtn"
@@ -681,6 +786,11 @@
   </div>
 
   <script th:inline="javascript">
+    /* ================= GLOBAL STATE & THYMELEAF ================= */
+
+    const currentPage = /*[[${currentPage}]]*/ 0;
+    const totalPages = /*[[${totalPages}]]*/ 1;
+
 
     const segBadge = {
       vip: 'bg-yellow-100 text-yellow-700',
@@ -689,609 +799,13 @@
       inactive: 'bg-gray-100 text-gray-500'
     };
 
-    let selCh = 'whatsapp';
-    let csvParsedRows = [];
-    let csvFile = null;
 
-    /* ================= CUSTOMER MODAL ================= */
-
-    function showAddCustomerModal() {
-
-      document.getElementById("cId").value = "";
-      document.getElementById("cName").value = "";
-      document.getElementById("cPhone").value = "";
-      document.getElementById("cEmail").value = "";
-      document.getElementById("cBirthday").value = "";
-      document.getElementById("cAnniversary").value = "";
-
-      selectSeg("regular");
-      toggleCh("whatsapp");
-
-      document.getElementById("modalTitle").innerText = "Add Customer";
-      document.getElementById("saveCustomerBtn").innerText = "Add Customer";
-
-      document.getElementById("addCustomerModal").classList.remove("hidden");
-
-    }
-
-    function hideAddCustomerModal() {
-      document.getElementById("addCustomerModal").classList.add("hidden");
-    }
-
-    function openEditCustomer(id, name, phone, email, groupId) {
-
-      document.getElementById("cId").value = id;
-      document.getElementById("cName").value = name;
-      document.getElementById("cPhone").value = phone;
-      document.getElementById("cEmail").value = email;
-
-      document.getElementById("cBirthday").value = "";
-      document.getElementById("cAnniversary").value = "";
-
-      const groupMap = { 1: "vip", 2: "regular", 3: "new", 4: "inactive" };
-
-      selectSeg(groupMap[parseInt(groupId)] || "regular");
-
-      toggleCh("whatsapp");
-
-      document.getElementById("modalTitle").innerText = "Edit Customer";
-      document.getElementById("saveCustomerBtn").innerText = "Update Customer";
-
-      document.getElementById("addCustomerModal").classList.remove("hidden");
-
-    }
-
-    /* ================= SEGMENT ================= */
-
-    function selectSeg(s) {
-
-      document.getElementById('cSegment').value = s;
-
-      ['vip', 'regular', 'new', 'inactive'].forEach(x => {
-
-        const b = document.getElementById('sb-' + x);
-
-        if (x === s) {
-
-          b.classList.add('border-indigo-500', 'bg-indigo-50');
-          b.classList.remove('border-gray-200');
-
-          b.querySelector('.sbl').className = 'text-sm font-semibold text-indigo-700 sbl';
-
-        } else {
-
-          b.classList.remove('border-indigo-500', 'bg-indigo-50');
-          b.classList.add('border-gray-200');
-
-          b.querySelector('.sbl').className = 'text-sm font-semibold text-gray-800 sbl';
-
-        }
-
-      });
-
-    }
-
-    /* ================= CHANNEL ================= */
-
-    function toggleCh(ch) {
-
-      selCh = ch;
-
-      const colorMap = {
-        whatsapp: 'bg-green-500 text-white',
-        sms: 'bg-blue-500 text-white',
-        email: 'bg-violet-500 text-white'
-      };
-
-      const idMap = {
-        whatsapp: 'ch-wa',
-        sms: 'ch-sms',
-        email: 'ch-email'
-      };
-
-      Object.keys(idMap).forEach(key => {
-
-        const b = document.getElementById(idMap[key]);
-
-        if (key === ch) {
-
-          b.className = `flex-1 py-2.5 rounded-full text-sm font-semibold ${colorMap[ch]}`;
-
-        } else {
-
-          b.className = 'flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600';
-
-        }
-
-      });
-
-    }
-
-    /* ================= SAVE CUSTOMER ================= */
-
-    function saveCustomer(e) {
-
-      e.preventDefault();
-
-      const id = document.getElementById("cId").value;
-
-      const groupMap = { vip: 1, regular: 2, new: 3, inactive: 4 };
-
-      const customer = {
-
-        name: document.getElementById("cName").value,
-        mobile: document.getElementById("cPhone").value,
-        email: document.getElementById("cEmail").value,
-
-        dob: document.getElementById("cBirthday").value || null,
-        weddingDate: document.getElementById("cAnniversary").value || null,
-
-        channel: selCh,
-
-        customerGroupId: groupMap[document.getElementById("cSegment").value]
-
-      };
-
-      const url = id ? "/api/customers/" + id : "/api/customers";
-      const method = id ? "PUT" : "POST";
-
-      fetch(url, {
-        method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customer)
-      })
-
-        .then(async res => {
-
-          if (!res.ok) {
-
-            const text = await res.text();
-            throw new Error(text);
-
-          }
-
-          return res.json();
-
-        })
-
-        .then(() => {
-
-          hideAddCustomerModal();
-          location.reload();
-
-        })
-
-        .catch(err => {
-
-          console.error(err);
-          alert("Error: " + err.message);
-
-        });
-
-    }
-
-    /* ================= FILTER ================= */
-
-    function setFilter(filter) {
-
-      const url = new URL(window.location.href);
-
-      if (filter === 'all') url.searchParams.delete('segment');
-      else url.searchParams.set('segment', filter);
-
-      url.searchParams.set('page', '0');
-
-      window.location.href = url.toString();
-
-    }
-
-    /* ================= SEARCH ================= */
-
-    function searchCustomers() {
-
-      const search = document.getElementById("searchInput").value;
-
-      const url = new URL(window.location.href);
-
-      if (search && search.trim() !== "") url.searchParams.set("search", search);
-      else url.searchParams.delete("search");
-
-      url.searchParams.set("page", "0");
-
-      window.location.href = url.toString();
-
-    }
-
-    function clearSearch() {
-
-      const url = new URL(window.location.href);
-
-      url.searchParams.delete("search");
-      url.searchParams.set("page", "0");
-
-      window.location.href = url.toString();
-
-    }
-
-    /* ================= CSV IMPORT ================= */
-
-    function showImportModal() {
-
-      document.getElementById('importModal').classList.remove('hidden');
-
-      resetImport();
-
-    }
-
-    function hideImportModal() {
-
-      document.getElementById('importModal').classList.add('hidden');
-
-    }
-
-    function resetImport() {
-
-      csvParsedRows = [];
-      csvFile = null;
-
-      document.getElementById('csvFileInput').value = '';
-      document.getElementById('fileSelected').classList.add('hidden');
-
-      document.getElementById('parseBtn').disabled = true;
-
-      document.getElementById('importStep1').classList.remove('hidden');
-      document.getElementById('importStep2').classList.add('hidden');
-      document.getElementById('importStep3').classList.add('hidden');
-
-    }
-
-    /* ================= FILE ================= */
-
-    function handleFileSelect(input) {
-
-      if (input.files && input.files[0]) setCSVFile(input.files[0]);
-
-    }
-
-    function handleFileDrop(event) {
-
-      event.preventDefault();
-
-      const file = event.dataTransfer.files[0];
-
-      if (file && file.name.endsWith('.csv')) setCSVFile(file);
-
-      else alert('Please upload CSV');
-
-    }
-
-    function setCSVFile(file) {
-
-      csvFile = file;
-
-      document.getElementById('fileSelected').classList.remove('hidden');
-
-      document.getElementById('selectedFileName').textContent = file.name;
-
-      document.getElementById('selectedFileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
-
-      document.getElementById('parseBtn').disabled = false;
-
-    }
-
-    function clearFile() {
-
-      csvFile = null;
-
-      document.getElementById('fileSelected').classList.add('hidden');
-
-      document.getElementById('parseBtn').disabled = true;
-
-    }
-
-    /* ================= DATE FORMAT ================= */
-
-    function formatDate(dateStr) {
-
-      if (!dateStr) return null;
-
-      dateStr = dateStr.trim();
-
-      if (dateStr === "") return null;
-
-      if (dateStr.includes("-")) {
-
-        const parts = dateStr.split("-");
-
-        if (parts[0].length === 2) {
-
-          return `${parts[2]}-${parts[1]}-${parts[0]}`;
-
-        }
-
-      }
-
-      return dateStr;
-
-    }
-
-    /* ================= CSV PARSER ================= */
-
-    function parseCSV() {
-
-      if (!csvFile) return;
-
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-
-        const text = e.target.result;
-
-        const lines = text.split('\n').filter(l => l.trim());
-
-        if (lines.length < 2) {
-
-          alert("CSV empty");
-          return;
-
-        }
-
-        const dataLines = lines.slice(1);
-
-        csvParsedRows = [];
-
-        dataLines.forEach(line => {
-
-          const cols = line.split(',').map(c => c.trim());
-
-          if (cols.length < 2) return;
-
-          csvParsedRows.push({
-
-            name: cols[0] || '',
-            phone: cols[1] || '',
-            email: cols[2] || '',
-
-            segment: (cols[3] || 'regular').toLowerCase(),
-            channel: (cols[4] || 'whatsapp').toLowerCase(),
-
-            birthday: formatDate(cols[5]),
-            anniversary: formatDate(cols[6]),
-
-            valid: (cols[0] && cols[1])
-
-          });
-
-        });
-
-        showPreview();
-
-      };
-
-      reader.readAsText(csvFile);
-
-    }
-
-    /* ================= PREVIEW ================= */
-
-    function showPreview() {
-
-      document.getElementById('importStep1').classList.add('hidden');
-
-      document.getElementById('importStep2').classList.remove('hidden');
-
-      const valid = csvParsedRows.filter(r => r.valid);
-
-      document.getElementById('previewCount').textContent = valid.length + " rows";
-
-      const tbody = document.getElementById('previewTable');
-
-      tbody.innerHTML = "";
-
-      valid.slice(0, 20).forEach(r => {
-
-        tbody.innerHTML += `
-
-<tr>
-
-<td class="px-3 py-2">${r.name}</td>
-<td class="px-3 py-2">${r.phone}</td>
-<td class="px-3 py-2">${r.email || '—'}</td>
-
-<td class="px-3 py-2">
-<span class="px-2 py-0.5 rounded ${segBadge[r.segment]}">${r.segment}</span>
-</td>
-
-<td class="px-3 py-2 text-green-600">✓ Valid</td>
-
-</tr>
-
-`;
-
-      });
-
-    }
-
-    /* ================= IMPORT ================= */
-
-    function confirmImport() {
-
-      const valid = csvParsedRows.filter(r => r.valid);
-
-      const groupMap = { vip: 1, regular: 2, new: 3, inactive: 4 };
-
-      const customers = valid.map(r => ({
-
-        name: r.name,
-        mobile: r.phone,
-
-        email: r.email || null,
-
-        dob: r.birthday || null,
-        weddingDate: r.anniversary || null,
-
-        channel: r.channel,
-
-        customerGroupId: groupMap[r.segment] || 2
-
-      }));
-
-      fetch("/api/customers/import", {
-
-        method: "POST",
-
-        headers: { "Content-Type": "application/json" },
-
-        body: JSON.stringify(customers)
-
-      })
-
-        .then(res => res.json())
-
-        .then(data => {
-
-          document.getElementById('importStep2').classList.add('hidden');
-          document.getElementById('importStep3').classList.remove('hidden');
-
-          document.getElementById('importSuccessMsg').innerText =
-            `${data.imported} imported, ${data.skipped} skipped, ${data.failed || 0} failed`;
-
-        })
-
-        .catch(err => {
-
-          console.error(err);
-          alert("Import failed");
-
-        });
-
-    }
-    // ================= PAGINATION =================
-
-    // Thymeleaf variables (safe fallback if page loads static)
-    const currentPage = /*[[${currentPage}]]*/ 0;
-    const totalPages = /*[[${totalPages}]]*/ 1;
-
-    const pagination = document.getElementById("pagination");
-
-    if (pagination && totalPages > 1) {
-
-      pagination.innerHTML = "";
-
-      for (let i = 0; i < totalPages; i++) {
-
-        const urlParams = new URLSearchParams(window.location.search);
-
-        urlParams.set("page", i);
-
-        const btn = document.createElement("a");
-
-        btn.href = "customers.html?" + urlParams.toString();
-        btn.innerText = i + 1;
-
-        btn.className =
-          "px-3 py-1 rounded border text-sm " +
-          (i === currentPage
-            ? "bg-indigo-600 text-white"
-            : "bg-white text-gray-700 hover:bg-gray-50");
-
-        pagination.appendChild(btn);
-
-      }
-
-    }
-
-    /* ================= VIEW SWITCH ================= */
-
-    function setView(view) {
-
-      const grid = document.getElementById("customerGrid");
-      const list = document.getElementById("customerList");
-
-      const cardBtn = document.getElementById("v-card");
-      const listBtn = document.getElementById("v-list");
-
-      if (view === "card") {
-
-        grid.classList.remove("hidden");
-        list.classList.add("hidden");
-
-        cardBtn.classList.add("bg-indigo-50", "text-indigo-600");
-        listBtn.classList.remove("bg-indigo-50", "text-indigo-600");
-
-      } else {
-
-        grid.classList.add("hidden");
-        list.classList.remove("hidden");
-
-        listBtn.classList.add("bg-indigo-50", "text-indigo-600");
-        cardBtn.classList.remove("bg-indigo-50", "text-indigo-600");
-
-        buildCustomerList();
-
-      }
-
-    }
-    function buildCustomerList() {
-
-      const gridCards = document.querySelectorAll("#customerGrid [data-customer]");
-      const list = document.getElementById("customerList");
-
-      list.innerHTML = "";
-
-      gridCards.forEach(card => {
-
-        const name = card.dataset.name;
-        const phone = card.dataset.phone;
-        const segment = card.dataset.segment;
-
-        const badgeMap = {
-          1: "bg-yellow-100 text-yellow-700",
-          2: "bg-blue-100 text-blue-700",
-          3: "bg-green-100 text-green-700",
-          4: "bg-gray-100 text-gray-600"
-        };
-
-        const segText = {
-          1: "VIP",
-          2: "Regular",
-          3: "New",
-          4: "Inactive"
-        };
-
-        const row = document.createElement("div");
-
-        row.className =
-          "bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3 flex items-center justify-between hover:shadow-md transition";
-
-        row.innerHTML = `
-
-      <div class="flex items-center gap-3">
-
-        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-semibold text-indigo-700">
-          ${name.charAt(0)}
-        </div>
-
-        <div>
-          <p class="text-sm font-semibold text-gray-900">${name}</p>
-          <p class="text-xs text-gray-500">${phone}</p>
-        </div>
-
-      </div>
-
-      <span class="px-2 py-1 rounded text-xs font-semibold ${badgeMap[segment]}">
-        ${segText[segment]}
-      </span>
-
-    `;
-
-        list.appendChild(row);
-
-      });
-
-    }
-    setView("card");
+    let selectedChannels = [];
   </script>
+  <script th:src="@{/js/theme.js}"></script>
+  <script th:src="@{/js/customers/customerfunc.js}"></script>
+  <script th:src="@{/js/customers/ui.js}"></script>
+
 </body>
 
 </html>

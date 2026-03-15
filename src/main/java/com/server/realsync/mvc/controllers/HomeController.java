@@ -1,8 +1,6 @@
 package com.server.realsync.mvc.controllers;
 
 import java.util.Optional;
-import java.util.List;
-import java.lang.Throwable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -12,22 +10,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.server.realsync.entity.Account;
-import com.server.realsync.entity.User;
 import com.server.realsync.entity.Customer;
-import com.server.realsync.entity.Product;
+import com.server.realsync.services.AccountService;
 import com.server.realsync.services.CustomerService;
-import com.server.realsync.services.ProductService;
+
 import com.server.realsync.services.UserService;
 import com.server.realsync.util.CustomerMessageService;
+
 import com.server.realsync.util.GmailSender;
 import com.server.realsync.util.SecurityUtil;
 
@@ -42,6 +36,8 @@ public class HomeController {
 	private UserService userService;
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private AccountService accountService;
 	@Autowired
 	CustomerMessageService customerMessageService;
 
@@ -143,8 +139,13 @@ public class HomeController {
 	// ===============================
 
 	@GetMapping("/customer-detail.html")
-	public String getCustomerDetail(Model model) {
-
+	public String getCustomerDetail(@RequestParam Integer id, Model model) {
+		Account account = SecurityUtil.getCurrentAccountId();
+		Optional<Customer> customer = customerService.getById(account.getId(), id);
+		if (customer.isEmpty()) {
+			return "redirect:/customers.html";
+		}
+		model.addAttribute("customer", customer.get());
 		return "remindmeui/customer-detail";
 	}
 
@@ -184,15 +185,19 @@ public class HomeController {
 		return "remindme/reports";
 	}
 
-	@GetMapping("/settings.html")
-	public String getSettings(Model model) {
 
-		// User user = SecurityUtil.getLoggedInUser();
-		// model.addAttribute("userRole", user.getRole().getName());
-		// model.addAttribute("user", user);
-		return "remindmeui/settings";
-	}
 
+	
+@GetMapping("/settings.html")
+public String getSettings(Model model) {
+    Account loggedIn = SecurityUtil.getCurrentAccountId();
+    
+    
+    
+    Account account = accountService.getById(loggedIn.getId());
+    model.addAttribute("account", account);
+    return "remindmeui/settings";
+}
 	@GetMapping("index.html")
 	public String getIndexPage() {
 
