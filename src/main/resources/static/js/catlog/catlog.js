@@ -48,6 +48,44 @@ function setTmplFilter(f) {
     renderTemplates();
 }
 
+
+function moveIndicator(el) {
+    const indicator = document.getElementById('tabIndicator');
+    if (!indicator || !el) return;
+
+    indicator.style.width = el.offsetWidth + 'px';
+    indicator.style.transform = `translateX(${el.offsetLeft}px)`;
+}
+
+function switchCatalogTab(tab) {
+
+
+    const tabs = ['plans', 'products', 'templates', 'rtemplates'];
+
+    tabs.forEach(t => {
+        const btn = document.getElementById('ct-' + t);
+        const panel = document.getElementById('cp-' + t);
+
+        if (!btn) return;
+
+        if (panel) panel.classList.toggle('hidden', t !== tab);
+
+        if (t === tab) {
+            btn.classList.add('text-indigo-600');
+            btn.classList.remove('text-gray-500');
+
+            moveIndicator(btn);
+        } else {
+            btn.classList.remove('text-indigo-600');
+            btn.classList.add('text-gray-500');
+        }
+    });
+}
+
+window.addEventListener('load', () => {
+    const first = document.getElementById('ct-plans');
+    if (first) moveIndicator(first);
+});
 // =====================================================================
 //  PLANS  (API)
 // =====================================================================
@@ -629,6 +667,309 @@ function createTemplate() {
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
+
+
+// =====================================================================
+//  Report TEMPLATES  (API)
+// =====================================================================
+
+
+
+let rtemplates = [];
+let rtColumns = [];
+
+function addColumn(value = '') {
+    const id = Date.now();
+    rtColumns.push({ id, value });
+
+    renderColumns();
+}
+function createRTTemplate() {
+
+    const title = document.getElementById('rt_title').value.trim();
+    const columns = rtColumns.map(c => c.value.trim()).filter(c => c);
+
+    if (!title) {
+        showToast('Title is required', 'error');
+        return;
+    }
+
+    if (!columns.length) {
+        showToast('Add at least one column', 'error');
+        return;
+    }
+
+    const data = {
+        title: title,
+        category: document.getElementById('rt_category').value,
+        description: document.getElementById('rt_desc').value,
+        columns: columns.join(','), // ✅ IMPORTANT FIX
+        price: parseFloat(document.getElementById('rt_price').value) || 0,
+        showTotal: document.getElementById('rt_total').checked,
+        status: "active"
+    };
+
+    if (rtEditId) {
+        // UPDATE
+        fetch(`/api/catalog/rtemplates/${rtEditId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to save');
+                return r.json();
+            })
+            .then(() => {
+                showToast('Report Template created', 'success');
+                closeRTModal();
+                resetRTModal();     // ✅ clear form
+                loadRTemplates();   // ✅ reload from backend
+            })
+            .catch(err => showToast(err.message, 'error'));
+    } else {
+        // CREATE
+        fetch('/api/catalog/rtemplates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to save');
+                return r.json();
+            })
+            .then(() => {
+                showToast('Report Template created', 'success');
+                closeRTModal();
+                resetRTModal();     // ✅ clear form
+                loadRTemplates();   // ✅ reload from backend
+            })
+            .catch(err => showToast(err.message, 'error'));
+    }
+}
+function resetRTModal() {
+    document.getElementById('rt_title').value = '';
+    document.getElementById('rt_category').value = '';
+    document.getElementById('rt_desc').value = '';
+    document.getElementById('rt_price').value = '';
+    document.getElementById('rt_total').checked = true;
+
+    rtColumns = [];
+    renderColumns();
+}
+function renderColumns() {
+    const container = document.getElementById('rtColumnsContainer');
+
+    container.innerHTML = rtColumns.map(c => `
+        <div class="flex gap-2">
+            <input value="${c.value}"
+                oninput="updateColumn(${c.id}, this.value)"
+                class="flex-1 px-3 py-2 border rounded-xl text-sm"
+                placeholder="Column name">
+            <button onclick="removeColumn(${c.id})" class="text-red-500">✖</button>
+        </div>
+    `).join('');
+}
+
+function updateColumn(id, value) {
+    const col = rtColumns.find(c => c.id === id);
+    if (col) col.value = value;
+}
+
+function removeColumn(id) {
+    rtColumns = rtColumns.filter(c => c.id !== id);
+    renderColumns();
+}
+
+function loadRTemplates() {
+    fetch('/api/catalog/rtemplates')
+        .then(r => r.json())
+        .then(data => {
+            rtemplates = data;
+            renderRTemplates();
+        })
+        .catch(() => showToast('Failed to load report templates', 'error'));
+}
+// ================= RT MODAL =================
+
+function openRTModal() {
+    resetRTModal();
+    document.getElementById('rtModal').classList.remove('hidden');
+}
+
+function closeRTModal() {
+    document.getElementById('rtModal').classList.add('hidden');
+}
+
+
+function renderRTemplates() {
+    const grid = document.getElementById('rtGrid');
+    const badge = document.getElementById('rtBadge');
+
+    if (badge) badge.textContent = rtemplates.length;
+
+    if (!rtemplates.length) {
+        grid.innerHTML = '<p class="text-gray-500 text-sm">No templates found</p>';
+        return;
+    }
+
+    grid.innerHTML = rtemplates.map(t => {
+
+        const cols = ((t.columns || '') + '').split(',').filter(c => c);
+
+        return `
+        <div class="group bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition">
+
+          <!-- HEADER -->
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                📊
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-900">${t.title}</p>
+                ${t.category ? `
+                  <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">
+                    ${t.category}
+                  </span>` : ''}
+              </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition">
+
+              <button onclick="openRTEdit(${t.id})"
+                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
+                       text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50"
+                title="Edit">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+            </svg>
+</div>
+              </button>
+
+              <button onclick="toggleRTemplate(${t.id})"
+                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
+                       ${t.status === 'active'
+                ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50'
+                : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}"
+                title="${t.status === 'active' ? 'Set Inactive' : 'Set Active'}">
+               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="${t.status === 'active'
+                ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
+                : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/>
+            </svg>
+              </button>
+
+              <button onclick="deleteRTemplate(${t.id})"
+                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
+                       text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50"
+                title="Delete">
+               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- DESCRIPTION -->
+          ${t.description ? `
+            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${t.description}</p>
+          ` : ''}
+
+          <!-- COLUMNS -->
+          <div class="flex flex-wrap gap-1 mb-3">
+            ${cols.map(c => `
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">
+                ${c}
+              </span>
+            `).join('')}
+          </div>
+
+          <!-- PRICE -->
+          <div class="bg-gray-50 rounded-xl p-3 mb-3 flex items-center justify-between">
+            <span class="text-xs text-gray-500">Price</span>
+            <span class="text-sm font-bold text-indigo-600">₹${t.price || 0}</span>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="flex items-center justify-between">
+
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold
+              ${t.status === 'active'
+                ? 'bg-emerald-50 text-emerald-600'
+                : 'bg-gray-100 text-gray-400'}">
+              ${t.status === 'active' ? 'Active' : 'Inactive'}
+            </span>
+
+            <button onclick="useRTemplate(${t.id})"
+              class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">
+              Use →
+            </button>
+
+          </div>
+
+        </div>
+        `;
+    }).join('');
+}
+
+let rtEditId = null;
+
+function openRTEdit(id) {
+    const t = rtemplates.find(x => x.id === id);
+    if (!t) return;
+
+    rtEditId = id;
+
+    // open modal
+    openRTModal();
+
+    // fill values
+    document.getElementById('rt_title').value = t.title || '';
+    document.getElementById('rt_category').value = t.category || '';
+    document.getElementById('rt_desc').value = t.description || '';
+    document.getElementById('rt_price').value = t.price || 0;
+    document.getElementById('rt_total').checked = t.showTotal ?? true;
+
+    // columns
+    rtColumns = [];
+    const cols = ((t.columns || '') + '').split(',').filter(c => c);
+
+    cols.forEach(c => addColumn(c));
+}
+
+function deleteRTemplate(id) {
+    if (!confirm('Delete this template?')) return;
+
+    fetch(`/api/catalog/rtemplates/${id}`, { method: 'DELETE' })
+        .then(() => {
+            showToast('Deleted', 'success');
+            loadRTemplates();
+        });
+}
+
+function toggleRTemplate(id) {
+    fetch(`/api/catalog/rtemplates/${id}/toggle-status`, { method: 'PATCH' })
+        .then(() => {
+            showToast('Updated', 'success');
+            loadRTemplates();
+        });
+}
+
+
+
+
+
+
+
+
+
 function toggleTemplateStatus(id) {
     fetch(`/api/catalog/templates/${id}/toggle-status`, { method: 'PATCH' })
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -648,14 +989,6 @@ function useTemplate(id) { showToast('Template selected! Available when creating
 // =====================================================================
 //  TAB SWITCHING
 // =====================================================================
-function switchCatalogTab(t) {
-    ['plans', 'products', 'templates'].forEach(x => {
-        document.getElementById('cp-' + x).classList.toggle('hidden', x !== t);
-        const btn = document.getElementById('ct-' + x);
-        if (x === t) { btn.classList.add('tab-active'); btn.classList.remove('text-gray-500', 'border-transparent'); }
-        else { btn.classList.remove('tab-active'); btn.classList.add('border-b-2', 'border-transparent', 'text-gray-500'); }
-    });
-}
 
 // =====================================================================
 //  TOAST
@@ -697,4 +1030,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPlans();
     loadProducts();
     loadTemplates();
+    loadRTemplates();
 });

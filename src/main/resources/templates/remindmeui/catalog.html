@@ -7,57 +7,7 @@
   <title>My Catalog - Reminder Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f8f9fb;
-    }
-
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #e2e8f0;
-      border-radius: 4px;
-    }
-
-    .tab-active {
-      border-bottom: 2px solid #4f46e5;
-      color: #4f46e5;
-    }
-
-    .billing-btn.sel {
-      background: #eef2ff;
-      border-color: #4f46e5;
-      color: #4f46e5;
-    }
-
-    .tmpl-card:hover .tmpl-actions {
-      opacity: 1;
-    }
-
-    .tmpl-actions {
-      opacity: 0;
-      transition: opacity .2s;
-    }
-
-    .fade-in {
-      animation: fadeIn .25s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 
 <body class="bg-gray-50">
@@ -67,7 +17,7 @@
 
   <!-- Mobile nav -->
   <div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='settings')}"></div>
-  
+
   <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
     onclick="closeMobileNav()"></div>
   <div id="mobileNavDrawer"
@@ -197,36 +147,36 @@
         </div>
       </div>
 
-      <!-- Tabs -->
-      <div class="flex items-center gap-1 border-b border-gray-200 mb-6 overflow-x-auto">
+      <div class="relative flex items-center gap-1 bg-gray-100 p-1 rounded-2xl w-fit mb-5">
+        <div id="tabIndicator"
+          class="absolute h-[calc(100%-8px)] top-1 left-1 bg-white rounded-xl shadow-sm transition-all duration-300 ease-in-out z-0">
+        </div>
+
         <button onclick="switchCatalogTab('plans')" id="ct-plans"
-          class="flex items-center gap-2 px-4 py-3 tab-active text-sm font-semibold transition flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
+          class="relative z-10 px-4 py-2 rounded-xl text-sm font-semibold text-indigo-600 transition">
           Plans <span class="ml-1 bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full text-xs font-bold"
             id="planTabCount">3</span>
         </button>
+
         <button onclick="switchCatalogTab('products')" id="ct-products"
-          class="flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-gray-500 text-sm font-semibold hover:text-gray-700 transition flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
+          class="relative z-10 px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition">
           Products <span class="ml-1 bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs font-bold"
             id="prodTabCount">3</span>
         </button>
+
         <button onclick="switchCatalogTab('templates')" id="ct-templates"
-          class="flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-gray-500 text-sm font-semibold hover:text-gray-700 transition flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          AI Templates <span class="ml-1 bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs font-bold"
+          class="relative z-10 px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition">
+          Msg Templates <span class="ml-1 bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs font-bold"
             id="tmplTabCount">2</span>
         </button>
+        <button onclick="switchCatalogTab('rtemplates')" id="ct-rtemplates"
+          class="relative z-10 px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition">
+          Report Templates
+          <span class="ml-1 bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs font-bold"
+            id="rtBadge">0</span>
+        </button>
       </div>
+
 
       <!-- ===== PLANS TAB ===== -->
       <div id="cp-plans" class="fade-in">
@@ -336,6 +286,24 @@
           </button>
         </div>
         <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- REPORT TEMPLATES SUB-PANEL -->
+      <div id="cp-rtemplates" class="hidden fade-in">
+
+        <div class="flex items-center justify-between mb-5">
+          <p class="text-sm text-gray-500">
+            Define structured clinical report templates.
+          </p>
+
+          <button onclick="openRTModal()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-sm">
+            ➕ Create Template
+          </button>
+        </div>
+
+        <div id="rtGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
       </div>
     </div>
   </div>
@@ -690,6 +658,110 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= REPORT TEMPLATE MODAL ================= -->
+  <!-- ==================== CREATE REPORT TEMPLATE MODAL ==================== -->
+  <div id="rtModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeRTModal()"></div>
+
+    <div
+      class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[94vh] flex flex-col">
+
+      <!-- Mobile drag -->
+      <div class="flex justify-center pt-3 pb-1 md:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+      </div>
+
+      <!-- HEADER -->
+      <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center">
+            📊
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">New Report Template</h2>
+            <p class="text-xs text-gray-400">Create structured clinical report</p>
+          </div>
+        </div>
+
+        <button onclick="closeRTModal()"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
+          ✖
+        </button>
+      </div>
+
+      <!-- BODY -->
+      <div class="overflow-y-auto flex-1 px-6 py-5 space-y-4">
+
+        <!-- TITLE -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-800 mb-2">
+            Template Title <span class="text-red-500">*</span>
+          </label>
+          <input id="rt_title" placeholder="e.g. Complete Blood Count"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <!-- CATEGORY -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-800 mb-2">Category / Type</label>
+          <input id="rt_category" placeholder="e.g. Blood Test"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200">
+        </div>
+
+        <!-- COLUMNS -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-800 mb-2">
+            Report Columns <span class="text-red-500">*</span>
+          </label>
+
+          <div id="rtColumnsContainer" class="space-y-2"></div>
+
+          <button onclick="addColumn()"
+            class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold hover:bg-indigo-100 transition mt-2">
+            ➕ Add Column
+          </button>
+
+          <p class="text-xs text-gray-400 mt-1">
+            Add a Price (₹) column to enable auto-calculated total.
+          </p>
+        </div>
+
+        <!-- PRICE -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-800 mb-2">MRP / Price (₹)</label>
+          <input id="rt_price" type="number" placeholder="250"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200">
+        </div>
+
+        <!-- TOGGLE -->
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-700">Show Grand Total row</span>
+          <input type="checkbox" id="rt_total" checked class="accent-indigo-600 w-5 h-5 rounded">
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-800 mb-2">
+            Description <span class="text-xs text-gray-400">(optional)</span>
+          </label>
+          <textarea id="rt_desc" rows="3" placeholder="Describe what this template is used for..."
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 resize-none"></textarea>
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="px-6 pb-6 flex-shrink-0">
+        <button onclick="createRTTemplate()"
+          class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+          ✔ Save Report Template
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 
   <!-- Bottom Nav Mobile -->
   <div

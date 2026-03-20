@@ -8,561 +8,24 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
+  <link rel="stylesheet" href="/css/theme.css">
   <style>
-    /* ============================================================
-   LIGHT MODE — pure black / near-black text
-   ============================================================ */
-    [data-theme="light"] .text-gray-900 {
-      color: #0a0a0a !important;
+    body {
+      font-family: 'Inter', sans-serif;
     }
 
-    [data-theme="light"] .text-gray-800 {
-      color: #111111 !important;
+    ::-webkit-scrollbar {
+      width: 4px
     }
 
-    [data-theme="light"] .text-gray-700 {
-      color: #1a1a1a !important;
+    ::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 4px
     }
 
-    [data-theme="light"] .text-gray-600 {
-      color: #2a2a2a !important;
-    }
-
-    [data-theme="light"] .text-gray-500 {
-      color: #444444 !important;
-    }
-
-    [data-theme="light"] .text-gray-400 {
-      color: #666666 !important;
-    }
-
-    [data-theme="light"] .text-gray-300 {
-      color: #888888 !important;
-    }
-
-    [data-theme="light"] h1,
-    [data-theme="light"] h2,
-    [data-theme="light"] h3,
-    [data-theme="light"] h4 {
-      color: #0a0a0a !important;
-    }
-
-    [data-theme="light"] p.font-bold,
-    [data-theme="light"] p.font-semibold,
-    [data-theme="light"] span.font-bold,
-    [data-theme="light"] span.font-semibold {
-      color: #0a0a0a !important;
-    }
-
-    [data-theme="light"] label {
-      color: #1a1a1a !important;
-    }
-
-    [data-theme="light"] nav a span,
-    [data-theme="light"] nav button span {
-      color: #1a1a1a !important;
-    }
-
-    [data-theme="light"] nav .bg-indigo-600 span,
-    [data-theme="light"] nav a.bg-indigo-600 span {
-      color: #ffffff !important;
-    }
-
-    [data-theme="light"] button.bg-indigo-600,
-    [data-theme="light"] a.bg-indigo-600 {
-      color: #ffffff !important;
-    }
-
-    [data-theme="light"] input::placeholder,
-    [data-theme="light"] textarea::placeholder {
-      color: #aaaaaa !important;
-    }
-
-    [data-theme="light"] td,
-    [data-theme="light"] th {
-      color: #111111 !important;
-    }
-
-    /* ============================================================
-   DARK MODE — white / bright text
-   ============================================================ */
-    [data-theme="dark"] .text-gray-900,
-    [data-theme="dark"] .text-slate-900 {
-      color: #ffffff !important;
-    }
-
-    [data-theme="dark"] .text-gray-800,
-    [data-theme="dark"] .text-slate-800 {
-      color: #f0f0f0 !important;
-    }
-
-    [data-theme="dark"] .text-gray-700,
-    [data-theme="dark"] .text-slate-700 {
-      color: #e0e0e0 !important;
-    }
-
-    [data-theme="dark"] .text-gray-600,
-    [data-theme="dark"] .text-slate-600 {
-      color: #b0b0b0 !important;
-    }
-
-    [data-theme="dark"] .text-gray-500,
-    [data-theme="dark"] .text-slate-500 {
-      color: #888888 !important;
-    }
-
-    [data-theme="dark"] .text-gray-400,
-    [data-theme="dark"] .text-slate-400 {
-      color: #606060 !important;
-    }
-
-    [data-theme="dark"] .text-gray-300,
-    [data-theme="dark"] .text-slate-300 {
-      color: #484848 !important;
-    }
-
-    [data-theme="dark"] h1,
-    [data-theme="dark"] h2,
-    [data-theme="dark"] h3 {
-      color: #ffffff !important;
-    }
-
-    [data-theme="dark"] p.font-bold,
-    [data-theme="dark"] p.font-semibold,
-    [data-theme="dark"] span.font-bold,
-    [data-theme="dark"] span.font-semibold {
-      color: #ffffff !important;
-    }
-
-    [data-theme="dark"] input::placeholder,
-    [data-theme="dark"] textarea::placeholder {
-      color: #4a4a4a !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Backgrounds
-   ============================================================ */
-    [data-theme="dark"] body,
-    [data-theme="dark"] .bg-gray-50 {
-      background-color: #0d0d0d !important;
-    }
-
-    [data-theme="dark"] .bg-white {
-      background-color: #161616 !important;
-    }
-
-    [data-theme="dark"] .bg-gray-100 {
-      background-color: #1e1e1e !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-50 {
-      background-color: #0f2239 !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-100 {
-      background-color: #1a2234 !important;
-    }
-
-    [data-theme="dark"] .bg-blue-50 {
-      background-color: #0c1520 !important;
-    }
-
-    [data-theme="dark"] .bg-green-50 {
-      background-color: #071a0f !important;
-    }
-
-    [data-theme="dark"] .bg-green-100 {
-      background-color: #0c221a !important;
-    }
-
-    [data-theme="dark"] .bg-emerald-50 {
-      background-color: #071a10 !important;
-    }
-
-    [data-theme="dark"] .bg-amber-50 {
-      background-color: #1a1200 !important;
-    }
-
-    [data-theme="dark"] .bg-orange-50 {
-      background-color: #1a0e00 !important;
-    }
-
-    [data-theme="dark"] .bg-pink-50 {
-      background-color: #1a0a12 !important;
-    }
-
-    [data-theme="dark"] .bg-violet-50 {
-      background-color: #12091a !important;
-    }
-
-    [data-theme="dark"] .bg-yellow-100 {
-      background-color: #1c1500 !important;
-    }
-
-    [data-theme="dark"] .bg-gray-50:not(body) {
-      background-color: #1a1a1a !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Borders
-   ============================================================ */
-    [data-theme="dark"] .border-gray-100,
-    [data-theme="dark"] .border-gray-200 {
-      border-color: #2a2a2a !important;
-    }
-
-    [data-theme="dark"] .border-r,
-    [data-theme="dark"] .border-t,
-    [data-theme="dark"] .border-b,
-    [data-theme="dark"] .border-y {
-      border-color: #232323 !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Accent text colors
-   ============================================================ */
-    [data-theme="dark"] .text-indigo-600,
-    [data-theme="dark"] .text-indigo-700 {
-      color: #818cf8 !important;
-    }
-
-    [data-theme="dark"] .text-indigo-500 {
-      color: #a3a3a3 !important;
-    }
-
-    [data-theme="dark"] .text-emerald-500,
-    [data-theme="dark"] .text-emerald-600,
-    [data-theme="dark"] .text-emerald-700 {
-      color: #4ade80 !important;
-    }
-
-    [data-theme="dark"] .text-blue-600,
-    [data-theme="dark"] .text-blue-700 {
-      color: #60a5fa !important;
-    }
-
-    [data-theme="dark"] .text-amber-500,
-    [data-theme="dark"] .text-amber-600 {
-      color: #fbbf24 !important;
-    }
-
-    [data-theme="dark"] .text-orange-500,
-    [data-theme="dark"] .text-orange-600 {
-      color: #fb923c !important;
-    }
-
-    [data-theme="dark"] .text-pink-600 {
-      color: #f472b6 !important;
-    }
-
-    [data-theme="dark"] .text-violet-600,
-    [data-theme="dark"] .text-violet-700 {
-      color: #a78bfa !important;
-    }
-
-    [data-theme="dark"] .text-green-600,
-    [data-theme="dark"] .text-green-700 {
-      color: #4ade80 !important;
-    }
-
-    [data-theme="dark"] .text-red-400,
-    [data-theme="dark"] .text-red-500,
-    [data-theme="dark"] .text-red-600 {
-      color: #f87171 !important;
-    }
-
-    [data-theme="dark"] .text-white {
-      color: #ffffff !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Nav sidebar
-   ============================================================ */
-    [data-theme="dark"] nav .bg-indigo-600,
-    [data-theme="dark"] nav a.bg-indigo-600 {
-      background-color: #0f2239 !important;
-      border-left: 3px solid #3b82f6 !important;
-      border-radius: 12px !important;
-    }
-
-    [data-theme="dark"] nav .bg-indigo-600 span,
-    [data-theme="dark"] nav .bg-indigo-600 svg,
-    [data-theme="dark"] nav a.bg-indigo-600 span,
-    [data-theme="dark"] nav a.bg-indigo-600 svg {
-      color: #93c5fd !important;
-      stroke: #93c5fd !important;
-    }
-
-    [data-theme="dark"] .hover\:bg-gray-50:hover {
-      background-color: #1c1c1c !important;
-    }
-
-    [data-theme="dark"] .hover\:bg-gray-100:hover {
-      background-color: #222 !important;
-    }
-
-    [data-theme="dark"] .hover\:bg-gray-200:hover {
-      background-color: #2a2a2a !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Logo / Avatar circles
-   ============================================================ */
-    [data-theme="dark"] .bg-indigo-600.rounded-xl,
-    [data-theme="dark"] .bg-indigo-600.rounded-full,
-    [data-theme="dark"] .bg-indigo-600.rounded-2xl,
-    [data-theme="dark"] .bg-indigo-600.rounded-lg {
-      background-color: #0f2239 !important;
-      border: 1px solid #1e3a5f !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-600.rounded-xl svg,
-    [data-theme="dark"] .bg-indigo-600.rounded-full svg,
-    [data-theme="dark"] .bg-indigo-600.rounded-2xl svg,
-    [data-theme="dark"] .bg-indigo-600.rounded-lg svg {
-      stroke: #93c5fd !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-600.rounded-full span,
-    [data-theme="dark"] .bg-indigo-600.rounded-2xl span {
-      color: #93c5fd !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-100 {
-      background-color: #0f2239 !important;
-    }
-
-    [data-theme="dark"] .text-indigo-700 {
-      color: #93c5fd !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Buttons
-   ============================================================ */
-    [data-theme="dark"] button.bg-indigo-600:not(nav *),
-    [data-theme="dark"] a.bg-indigo-600:not(nav *) {
-      background-color: #2563eb !important;
-      color: #ffffff !important;
-      border: none !important;
-    }
-
-    [data-theme="dark"] button.bg-indigo-600:not(nav *):hover,
-    [data-theme="dark"] .hover\:bg-indigo-700:hover {
-      background-color: #1d4ed8 !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-50.text-indigo-600,
-    [data-theme="dark"] button.bg-indigo-50 {
-      background-color: #0f2239 !important;
-      color: #93c5fd !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Inputs
-   ============================================================ */
-    [data-theme="dark"] input,
-    [data-theme="dark"] select,
-    [data-theme="dark"] textarea {
-      background-color: #1a1a1a !important;
-      border-color: #2d2d2d !important;
-      color: #f0f0f0 !important;
-    }
-
-    [data-theme="dark"] input:focus,
-    [data-theme="dark"] select:focus,
-    [data-theme="dark"] textarea:focus {
-      border-color: #3b82f6 !important;
-      outline: none !important;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
-    }
-
-    [data-theme="dark"] input[readonly] {
-      background-color: #111 !important;
-      color: #555 !important;
-    }
-
-    [data-theme="dark"] .bg-gray-200 {
-      background-color: #2a2a2a !important;
-    }
-
-    [data-theme="dark"] input.sr-only.peer:checked~div {
-      background-color: #2563eb !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Badges
-   ============================================================ */
-    [data-theme="dark"] .bg-emerald-100.text-emerald-700,
-    [data-theme="dark"] .bg-emerald-50.text-emerald-700 {
-      background-color: #052e16 !important;
-      color: #4ade80 !important;
-    }
-
-    [data-theme="dark"] .bg-indigo-100.text-indigo-600,
-    [data-theme="dark"] .bg-indigo-100.text-indigo-700,
-    [data-theme="dark"] .bg-indigo-50.text-indigo-600,
-    [data-theme="dark"] .bg-indigo-50.text-indigo-700 {
-      background-color: #0f2239 !important;
-      color: #93c5fd !important;
-    }
-
-    [data-theme="dark"] .bg-green-100.text-green-700 {
-      background-color: #0a1a0a !important;
-      color: #86efac !important;
-    }
-
-    [data-theme="dark"] .bg-violet-50.text-violet-700 {
-      background-color: #12091a !important;
-      color: #c4b5fd !important;
-    }
-
-    [data-theme="dark"] .bg-blue-50.text-blue-700,
-    [data-theme="dark"] .bg-blue-100.text-blue-700 {
-      background-color: #0c1a2e !important;
-      color: #93c5fd !important;
-    }
-
-    [data-theme="dark"] .bg-orange-50.text-orange-600 {
-      background-color: #1a0e00 !important;
-      color: #fdba74 !important;
-    }
-
-    [data-theme="dark"] .bg-amber-50.text-amber-600 {
-      background-color: #1c1000 !important;
-      color: #fbbf24 !important;
-    }
-
-    /* ============================================================
-   DARK MODE — Layout / Misc
-   ============================================================ */
-    [data-theme="dark"] .shadow-sm {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
-    }
-
-    [data-theme="dark"] .shadow-2xl {
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8) !important;
-    }
-
-    [data-theme="dark"] .sticky {
-      background-color: #161616 !important;
-    }
-
-    [data-theme="dark"] .fixed.top-0 {
-      background-color: #161616 !important;
-      border-color: #232323 !important;
-    }
-
-    [data-theme="dark"] .fixed.bottom-0 {
-      background-color: #161616 !important;
-      border-color: #232323 !important;
-    }
-
-    [data-theme="dark"] #mobileNavDrawer {
-      background-color: #161616 !important;
-    }
-
-    [data-theme="dark"] #mobileNavBg {
-      background-color: rgba(0, 0, 0, 0.7) !important;
-    }
-
-    [data-theme="dark"] .hover\:bg-red-50:hover {
-      background-color: #1a0808 !important;
-    }
-
-    [data-theme="dark"] .hover\:text-red-600:hover {
-      color: #f87171 !important;
-    }
-
-    [data-theme="dark"] .hover\:shadow-md:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-    }
-
-    [data-theme="dark"] .bg-black\/40,
-    [data-theme="dark"] .bg-black\/50 {
-      background-color: rgba(0, 0, 0, 0.8) !important;
-    }
-
-    [data-theme="dark"] #st-general.border-indigo-600,
-    [data-theme="dark"] #st-gateways.border-indigo-600,
-    [data-theme="dark"] #st-catalog.border-indigo-600,
-    [data-theme="dark"] #st-users.border-indigo-600 {
-      border-color: #3b82f6 !important;
-      color: #60a5fa !important;
-    }
-
-    /* ============================================================
-   THEME TOGGLE BUTTON
-   ============================================================ */
-    .theme-toggle-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      background: #f3f4f6;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: #6b7280;
-      flex-shrink: 0;
-    }
-
-    .theme-toggle-btn:hover {
-      background: #e5e7eb;
-      transform: scale(1.08) rotate(12deg);
-    }
-
-    .theme-toggle-btn svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    [data-theme="dark"] .theme-toggle-btn {
-      background: #1e1e1e !important;
-      border-color: #2d2d2d !important;
-      color: #a0a0a0 !important;
-    }
-
-    [data-theme="dark"] .theme-toggle-btn:hover {
-      background: #252525 !important;
-      border-color: #3b82f6 !important;
-    }
-
-    [data-theme="dark"] .theme-toggle-btn svg {
-      stroke: #a0a0a0 !important;
-    }
-
-    [data-theme="dark"] .theme-toggle-btn:hover svg {
-      stroke: #60a5fa !important;
-    }
-
-    [data-theme="light"] .icon-sun {
-      display: none;
-    }
-
-    [data-theme="light"] .icon-moon {
-      display: block;
-    }
-
-    [data-theme="dark"] .icon-sun {
-      display: block;
-    }
-
-    [data-theme="dark"] .icon-moon {
-      display: none;
-    }
-
-    /* Catalog sub-tab pill */
-    .cst-active {
-      background: #ffffff;
-      color: #4f46e5;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    }
-
-    [data-theme="dark"] .cst-active {
-      background: #1e1e1e !important;
-      color: #818cf8 !important;
+    .toggle:checked {
+      background: #4f46e5;
+      border-color: #4f46e5
     }
   </style>
 </head>
@@ -1099,31 +562,31 @@
           </div>
         </div>
 
-        <!-- Catalog Sub-tabs pill -->
-        <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-2xl w-fit mb-5 overflow-x-auto">
+        <div class="relative flex items-center gap-1 bg-gray-100 p-1 rounded-2xl w-fit mb-5">
+
+          <!-- MOVING PILL -->
+          <div id="tabIndicator"
+            class="absolute top-1 bottom-1 left-1 bg-white rounded-xl shadow-sm transition-all duration-300 ease-in-out">
+          </div>
 
           <button onclick="switchCatSubTab('plans')" id="cst-plans"
-            class="px-4 py-2 rounded-xl text-sm font-semibold cst-active transition-all duration-200 ease-in-out">
+            class="relative z-10 px-4 py-2 text-sm font-semibold text-indigo-600">
             Plans
-            <span class="ml-1 bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full text-xs">3</span>
           </button>
 
           <button onclick="switchCatSubTab('products')" id="cst-products"
-            class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all duration-200 ease-in-out">
+            class="relative z-10 px-4 py-2 text-sm font-semibold text-gray-500">
             Products
-            <span class="ml-1 bg-gray-200 text-gray-500 px-1.5 py-0.5 rounded-full text-xs">3</span>
           </button>
 
           <button onclick="switchCatSubTab('templates')" id="cst-templates"
-            class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all duration-200 ease-in-out">
+            class="relative z-10 px-4 py-2 text-sm font-semibold text-gray-500">
             Msg Templates
-            <span class="ml-1 bg-gray-200 text-gray-500 px-1.5 py-0.5 rounded-full text-xs">2</span>
           </button>
 
           <button onclick="switchCatSubTab('rtemplates')" id="cst-rtemplates"
-            class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 transition-all duration-200 ease-in-out">
+            class="relative z-10 px-4 py-2 text-sm font-semibold text-gray-500">
             Report Templates
-            <span class="ml-1 bg-gray-200 text-gray-500 px-1.5 py-0.5 rounded-full text-xs" id="rtBadge">6</span>
           </button>
 
         </div>
@@ -1456,7 +919,8 @@
                 <p class="text-xs text-gray-400 mt-1">Use <code class="bg-gray-100 px-1 rounded">{customer_name}</code>,
                   <code class="bg-gray-100 px-1 rounded">{amount}</code>, <code
                     class="bg-gray-100 px-1 rounded">{due_date}</code>
-                  as placeholders</p>
+                  as placeholders
+                </p>
               </div>
               <div>
                 <label class="block text-sm font-semibold text-gray-800 mb-2">Channels</label>

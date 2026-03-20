@@ -11,8 +11,11 @@ import com.server.realsync.entity.Account;
 import com.server.realsync.entity.CatalogPlan;
 import com.server.realsync.entity.CatalogProduct;
 import com.server.realsync.entity.CatalogTemplate;
+import com.server.realsync.entity.CatalogRTemplate;
 import com.server.realsync.services.CatalogProductService;
+import com.server.realsync.services.CatalogRTemplateService;
 import com.server.realsync.services.CatalogTemplateService;
+import com.server.realsync.services.CatalogRTemplateService;
 import com.server.realsync.services.SettingsPlanService;
 import com.server.realsync.util.SecurityUtil;
 
@@ -28,6 +31,9 @@ public class CatlogContoller {
 
     @Autowired
     private CatalogTemplateService templateService;
+
+    @Autowired
+    private CatalogRTemplateService rTemplateService;
 
     // GET /api/catalog/plans
     @GetMapping("/plans")
@@ -175,6 +181,65 @@ public class CatlogContoller {
     public ResponseEntity<CatalogTemplate> toggleTemplateStatus(@PathVariable Integer id) {
         Account account = SecurityUtil.getCurrentAccountId();
         return templateService.toggleStatus(id, account.getId())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // =====================================================================
+    // REPORT TEMPLATES
+    // =====================================================================
+
+    // GET all
+    @GetMapping("/rtemplates")
+    public List<CatalogRTemplate> getRTemplates() {
+        Account account = SecurityUtil.getCurrentAccountId();
+        return rTemplateService.getByAccountId(account.getId());
+    }
+
+    // CREATE
+    @PostMapping("/rtemplates")
+    public CatalogRTemplate createRTemplate(@RequestBody CatalogRTemplate template) {
+        Account account = SecurityUtil.getCurrentAccountId();
+        template.setAccountId(account.getId());
+        return rTemplateService.save(template);
+    }
+
+    // UPDATE
+    @PutMapping("/rtemplates/{id}")
+    public ResponseEntity<CatalogRTemplate> updateRTemplate(
+            @PathVariable Integer id,
+            @RequestBody CatalogRTemplate template) {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return rTemplateService.getById(id, account.getId())
+                .map(existing -> {
+                    template.setId(id);
+                    template.setAccountId(account.getId());
+                    return ResponseEntity.ok(rTemplateService.save(template));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // DELETE
+    @DeleteMapping("/rtemplates/{id}")
+    public ResponseEntity<Void> deleteRTemplate(@PathVariable Integer id) {
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return rTemplateService.getById(id, account.getId())
+                .map(existing -> {
+                    rTemplateService.delete(id);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // TOGGLE STATUS
+    @PatchMapping("/rtemplates/{id}/toggle-status")
+    public ResponseEntity<CatalogRTemplate> toggleRTemplateStatus(@PathVariable Integer id) {
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return rTemplateService.toggleStatus(id, account.getId())
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

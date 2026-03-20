@@ -1,1821 +1,240 @@
-/* ============================================================
-   REMINDER ME — Design Token System
-   All colors defined once as CSS variables.
-   Dark/light mode just swaps the tokens — no duplicate rules.
-   ============================================================ */
+/* =========================================================
+   THEME VARIABLES
+========================================================= */
 
-/* ================================================================
-   DESIGN TOKENS — Light Mode (default)
-   ================================================================ */
+/* LIGHT THEME (default) */
 :root {
-    /* ── Backgrounds ── */
-    --bg-root: #f8f9fb;
-    --bg-card: #ffffff;
-    --bg-secondary: #f3f4f6;
-    --bg-tertiary: #e5e7eb;
-    --bg-hover: #f9fafb;
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --card-soft: #f3f4f6;
 
-    /* ── Text ── */
-    --text-primary: #0a0a0a;
-    --text-secondary: #1a1a1a;
-    --text-tertiary: #2a2a2a;
-    --text-muted: #555555;
-    --text-faint: #777777;
-    --text-disabled: #aaaaaa;
+    --text: #0f172a;
+    --text-light: #6b7280;
+    --text-muted: #9ca3af;
 
-    /* ── Borders ── */
-    --border-strong: #d1d5db;
-    --border-default: #e5e7eb;
-    --border-subtle: #f3f4f6;
+    --border: #e5e7eb;
 
-    /* ── Primary / Indigo ── */
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --primary-dark: #4338ca;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
     --primary-soft: #eef2ff;
-    --primary-soft-border: #c7d2fe;
-    --primary-text: #4338ca;
-    --primary-text-dark: #3730a3;
 
-    /* ── Blue ── */
-    --blue: #3b82f6;
-    --blue-hover: #2563eb;
-    --blue-soft: #eff6ff;
-    --blue-soft-border: #bfdbfe;
-    --blue-text: #1d4ed8;
+    --success: #22c55e;
+    --danger: #ef4444;
 
-    /* ── Emerald / Green ── */
-    --emerald: #10b981;
-    --emerald-hover: #059669;
-    --emerald-soft: #ecfdf5;
-    --emerald-soft-border: #a7f3d0;
-    --emerald-text: #065f46;
-    --green-soft: #f0fdf4;
-    --green-text: #166534;
-
-    /* ── Amber ── */
-    --amber: #f59e0b;
-    --amber-soft: #fffbeb;
-    --amber-text: #92400e;
-
-    /* ── Orange ── */
-    --orange: #f97316;
-    --orange-soft: #fff7ed;
-    --orange-text: #9a3412;
-
-    /* ── Pink ── */
-    --pink: #ec4899;
-    --pink-soft: #fdf2f8;
-    --pink-text: #9d174d;
-
-    /* ── Violet ── */
-    --violet: #8b5cf6;
-    --violet-soft: #f5f3ff;
-    --violet-text: #5b21b6;
-
-    /* ── Red ── */
-    --red: #ef4444;
-    --red-soft: #fef2f2;
-    --red-soft-border: #fecaca;
-    --red-text: #991b1b;
-
-    /* ── Yellow ── */
-    --yellow: #eab308;
-    --yellow-soft: #fefce8;
-    --yellow-text: #854d0e;
-
-    /* ── Rose ── */
-    --rose: #f43f5e;
-    --rose-soft: #fff1f2;
-    --rose-text: #9f1239;
-
-    /* ── Teal ── */
-    --teal: #14b8a6;
-    --teal-soft: #f0fdfa;
-    --teal-text: #115e59;
-
-    /* ── Purple ── */
-    --purple: #a855f7;
-    --purple-soft: #faf5ff;
-    --purple-text: #6b21a8;
-
-    /* ── Shadows ── */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
-    --shadow-2xl: 0 25px 60px rgba(0, 0, 0, 0.15);
-    --shadow-modal: 0 25px 60px rgba(0, 0, 0, 0.20);
-
-    /* ── FAB ── */
-    --fab-bg: #6001d2;
-    --fab-hover: #7209d4;
-    --fab-shadow: rgba(96, 1, 210, 0.5);
-    --fab-glow-lo: rgba(96, 1, 210, 0.45);
-    --fab-glow-hi: rgba(96, 1, 210, 0.75);
-
-    /* ── Scrollbar ── */
-    --scrollbar-thumb: #e2e8f0;
-
-    /* ── Nav active bg (light: just indigo-600) ── */
-    --nav-active-bg: #6366f1;
-    --nav-active-border: transparent;
-    --nav-active-text: #ffffff;
-    --nav-active-icon: #ffffff;
-
-    /* ── Icon colors per background family ── */
-    --icon-indigo: #6366f1;
-    --icon-blue: #3b82f6;
-    --icon-emerald: #10b981;
-    --icon-green: #16a34a;
-    --icon-amber: #f59e0b;
-    --icon-orange: #f97316;
-    --icon-pink: #ec4899;
-    --icon-violet: #8b5cf6;
-    --icon-purple: #a855f7;
-    --icon-red: #ef4444;
-    --icon-yellow: #eab308;
-
-    /* ── Nav link icon colors (light mode) ── */
-    --nav-icon-home: #0ea5e9;
-    --nav-icon-customers: #7c3aed;
-    --nav-icon-engagement: #d97706;
-    --nav-icon-promotions: #ea580c;
-    --nav-icon-settings: #64748b;
-
-    /* ── Toggle button ── */
-    --toggle-btn-bg: #f3f4f6;
-    --toggle-btn-border: #e5e7eb;
-    --toggle-btn-color: #6b7280;
-    --toggle-btn-hover-bg: #e5e7eb;
-    --toggle-btn-icon: currentColor;
-    --toggle-btn-hover-icon: currentColor;
-
-    /* ── Theme switch track ── */
-    --appearance-track: #e5e7eb;
-    --appearance-knob: #ffffff;
+    --toggle-track-bg: #e5e7eb;
 }
 
-
-/* ================================================================
-   DESIGN TOKENS — Dark Mode overrides
-   Only the tokens change; all rules below stay identical.
-   ================================================================ */
+/* DARK THEME */
 [data-theme="dark"] {
-    /* ── Backgrounds ── */
-    --bg-root: #0d0d0d;
-    --bg-card: #161616;
-    --bg-secondary: #1e1e1e;
-    --bg-tertiary: #2a2a2a;
-    --bg-hover: #1c1c1c;
+    --bg: #0d0d0d;
+    --card: #161616;
+    --card-soft: #1e1e1e;
 
-    /* ── Text ── */
-    --text-primary: #ffffff;
-    --text-secondary: #f0f0f0;
-    --text-tertiary: #e0e0e0;
-    --text-muted: #888888;
-    --text-faint: #606060;
-    --text-disabled: #4a4a4a;
+    --text: #f5f5f5;
+    --text-light: #a1a1aa;
+    --text-muted: #71717a;
 
-    /* ── Borders ── */
-    --border-strong: #2a2a2a;
-    --border-default: #2a2a2a;
-    --border-subtle: #1e1e1e;
+    --border: #2a2a2a;
 
-    /* ── Primary / Indigo ── */
-    --primary: #2563eb;
-    --primary-hover: #1d4ed8;
-    --primary-dark: #1e40af;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
     --primary-soft: #0f2239;
-    --primary-soft-border: #1e3a5f;
-    --primary-text: #93c5fd;
-    --primary-text-dark: #bfdbfe;
 
-    /* ── Blue ── */
-    --blue: #3b82f6;
-    --blue-hover: #2563eb;
-    --blue-soft: #0c1a2e;
-    --blue-soft-border: #1e40af;
-    --blue-text: #60a5fa;
-
-    /* ── Emerald / Green ── */
-    --emerald: #2563eb;
-    --emerald-hover: #1d4ed8;
-    --emerald-soft: #052e16;
-    --emerald-soft-border: #166534;
-    --emerald-text: #4ade80;
-    --green-soft: #052e16;
-    --green-text: #4ade80;
-
-    /* ── Amber ── */
-    --amber: #fbbf24;
-    --amber-soft: #1c1000;
-    --amber-text: #fbbf24;
-
-    /* ── Orange ── */
-    --orange: #fb923c;
-    --orange-soft: #1a0e00;
-    --orange-text: #fb923c;
-
-    /* ── Pink ── */
-    --pink: #f472b6;
-    --pink-soft: #1a0812;
-    --pink-text: #f472b6;
-
-    /* ── Violet ── */
-    --violet: #a78bfa;
-    --violet-soft: #180d2e;
-    --violet-text: #c084fc;
-
-    /* ── Red ── */
-    --red: #f87171;
-    --red-soft: #1a0808;
-    --red-soft-border: #7f1d1d;
-    --red-text: #fca5a5;
-
-    /* ── Yellow ── */
-    --yellow: #fde68a;
-    --yellow-soft: #1a1200;
-    --yellow-text: #fde68a;
-
-    /* ── Rose ── */
-    --rose: #fda4af;
-    --rose-soft: #1a0a10;
-    --rose-text: #fda4af;
-
-    /* ── Teal ── */
-    --teal: #5eead4;
-    --teal-soft: #021a16;
-    --teal-text: #5eead4;
-
-    /* ── Purple ── */
-    --purple: #c084fc;
-    --purple-soft: #180d2e;
-    --purple-text: #c084fc;
-
-    /* ── Shadows ── */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.50);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.60);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.70);
-    --shadow-2xl: 0 25px 60px rgba(0, 0, 0, 0.90);
-    --shadow-modal: 0 25px 60px rgba(0, 0, 0, 0.90);
-
-    /* ── FAB ── */
-    --fab-bg: #6001d2;
-    --fab-hover: #7209d4;
-    --fab-shadow: rgba(96, 1, 210, 0.6);
-    --fab-glow-lo: rgba(96, 1, 210, 0.45);
-    --fab-glow-hi: rgba(96, 1, 210, 0.75);
-
-    /* ── Scrollbar ── */
-    --scrollbar-thumb: #2a2a2a;
-
-    /* ── Nav active (dark: subtle blue panel + left border) ── */
-    --nav-active-bg: #2563eb;
-    --nav-active-border: #3b82f6;
-    --nav-active-text: #93c5fd;
-    --nav-active-icon: #93c5fd;
-
-    /* ── Icon colors per background family ── */
-    --icon-indigo: #818cf8;
-    --icon-blue: #60a5fa;
-    --icon-emerald: #4ade80;
-    --icon-green: #4ade80;
-    --icon-amber: #fbbf24;
-    --icon-orange: #fb923c;
-    --icon-pink: #f472b6;
-    --icon-violet: #a78bfa;
-    --icon-purple: #c084fc;
-    --icon-red: #f87171;
-    --icon-yellow: #fde68a;
-
-    /* ── Nav link icon colors (dark mode) ── */
-    --nav-icon-home: #38bdf8;
-    --nav-icon-customers: #a78bfa;
-    --nav-icon-engagement: #fbbf24;
-    --nav-icon-promotions: #fb923c;
-    --nav-icon-settings: #94a3b8;
-
-    /* ── Toggle button ── */
-    --toggle-btn-bg: #1e1e1e;
-    --toggle-btn-border: #2d2d2d;
-    --toggle-btn-color: #a0a0a0;
-    --toggle-btn-hover-bg: #252525;
-    --toggle-btn-hover-border: #3b82f6;
-    --toggle-btn-icon: #a0a0a0;
-    --toggle-btn-hover-icon: #60a5fa;
-
-    /* ── Theme switch track ── */
-    --appearance-track: #3b82f6;
-    --appearance-knob: #ffffff;
+    --success: #4ade80;
+    --danger: #f87171;
+    --toggle-track-bg: #374151;
 }
 
+/* =========================================================
+   BASE
+========================================================= */
 
-/* ================================================================
-   BASE — apply tokens to Tailwind utility classes
-   ================================================================ */
-
-/* ── Backgrounds ── */
-body,
-.bg-gray-50,
-.bg-slate-50 {
-    background-color: var(--bg-root) !important;
+body {
+    background: var(--bg);
+    color: var(--text);
 }
+
+/* =========================================================
+   BACKGROUNDS
+========================================================= */
 
 .bg-white {
-    background-color: var(--bg-card) !important;
+    background-color: var(--card) !important;
+}
+
+.bg-gray-50 {
+    background-color: var(--bg) !important;
 }
 
 .bg-gray-100 {
-    background-color: var(--bg-secondary) !important;
+    background-color: var(--card-soft) !important;
 }
 
-.bg-gray-200 {
-    background-color: var(--bg-tertiary) !important;
-}
-
-.bg-gray-50:not(body) {
-    background-color: var(--bg-hover) !important;
-}
-
-/* ── Borders ── */
-.border-gray-100,
-.border-gray-200,
-.border-slate-100,
-.border-slate-200 {
-    border-color: var(--border-default) !important;
-}
-
-.border-r,
-.border-t,
-.border-b,
-.border-y {
-    border-color: var(--border-strong) !important;
-}
-
-.border-t.border-gray-50,
-.border-b.border-gray-50,
-.border-t.border-slate-50 {
-    border-color: var(--border-subtle) !important;
-}
-
-.border.border-gray-200 {
-    border-color: var(--border-default) !important;
-}
-
-/* ── Text — base scale ── */
-.text-gray-900,
-.text-slate-900 {
-    color: var(--text-primary) !important;
-}
-
-.text-gray-800,
-.text-slate-800 {
-    color: var(--text-secondary) !important;
-}
-
-.text-gray-700,
-.text-slate-700 {
-    color: var(--text-tertiary) !important;
-}
-
-.text-gray-600,
-.text-slate-600 {
-    color: var(--text-muted) !important;
-}
-
-.text-gray-500,
-.text-slate-500 {
-    color: var(--text-muted) !important;
-}
-
-.text-gray-400,
-.text-slate-400 {
-    color: var(--text-faint) !important;
-}
-
-.text-gray-300,
-.text-slate-300 {
-    color: var(--text-disabled) !important;
-}
-
-.text-white {
-    color: #ffffff !important;
-}
-
-/* ── Headings always use primary text ── */
-h1,
-h2,
-h3 {
-    color: var(--text-primary) !important;
-}
-
-/* ── Bold / semibold text ── */
-p.font-bold,
-p.font-semibold,
-span.font-bold,
-span.font-semibold {
-    color: var(--text-primary) !important;
-}
-
-/* ── Accent text colors ── */
-.text-indigo-600,
-.text-indigo-700 {
-    color: var(--primary-text) !important;
-}
-
-.text-indigo-500 {
-    color: var(--primary-text) !important;
-}
-
-.text-indigo-700 {
-    color: var(--primary-text-dark) !important;
-}
-
-.text-indigo-800 {
-    color: var(--primary-text) !important;
-}
-
-.text-blue-600,
-.text-blue-700 {
-    color: var(--blue-text) !important;
-}
-
-.text-emerald-500,
-.text-emerald-600,
-.text-emerald-700,
-.text-emerald-800 {
-    color: var(--emerald-text) !important;
-}
-
-.text-green-600,
-.text-green-700 {
-    color: var(--green-text) !important;
-}
-
-.text-amber-500,
-.text-amber-600 {
-    color: var(--amber-text) !important;
-}
-
-.text-orange-500,
-.text-orange-600 {
-    color: var(--orange-text) !important;
-}
-
-.text-pink-600 {
-    color: var(--pink-text) !important;
-}
-
-.text-violet-600,
-.text-violet-700 {
-    color: var(--violet-text) !important;
-}
-
-.text-red-400,
-.text-red-500,
-.text-red-600,
-.text-red-700 {
-    color: var(--red-text) !important;
-}
-
-.text-yellow-700 {
-    color: var(--yellow-text) !important;
-}
-
-/* ── Light mode nav text ── */
-[data-theme="light"] label {
-    color: var(--text-tertiary) !important;
-}
-
-[data-theme="light"] nav a span,
-[data-theme="light"] nav button span {
-    color: var(--text-secondary) !important;
-}
-
-[data-theme="light"] nav .bg-indigo-600 span,
-[data-theme="light"] nav a.bg-indigo-600 span {
-    color: #ffffff !important;
-}
-
-[data-theme="light"] button.bg-indigo-600,
-[data-theme="light"] a.bg-indigo-600 {
-    color: #ffffff !important;
-}
-
-[data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-    color: #aaaaaa !important;
-}
-
-[data-theme="light"] td,
-[data-theme="light"] th {
-    color: var(--text-secondary) !important;
-}
-
-/* ── Avatar initials — always white in all modes ── */
-.bg-indigo-600 span {
-    color: #ffffff !important;
-}
-
-
-/* ================================================================
-   INPUTS
-   ================================================================ */
-input,
-select,
-textarea {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-primary) !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-    color: var(--text-disabled) !important;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    border-color: var(--blue) !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
-}
-
-input[readonly] {
-    background-color: var(--bg-secondary) !important;
-    color: var(--text-faint) !important;
-}
-
-/* Toggle switches */
-input.sr-only.peer:checked~div {
-    background-color: var(--primary) !important;
-}
-
-
-/* ================================================================
-   SIDEBAR + NAV
-   ================================================================ */
-nav a.bg-indigo-600.rounded-xl {
-    background-color: var(--nav-active-bg) !important;
-    border-left: 3px solid var(--nav-active-border) !important;
-}
-/* Active nav item */
-nav a.bg-indigo-600 {
-    background-color: var(--nav-active-bg) !important;
-    border-left: 3px solid var(--nav-active-border) !important;
-    border-radius: 12px !important;
-    color: #ffffff !important;
-}
-
-nav a.bg-indigo-600 svg {
-    color: #ffffff !important;
-    stroke: #ffffff !important;
-}
-
-nav .bg-indigo-600 span,
-nav .bg-indigo-600 svg,
-nav a.bg-indigo-600 span,
-nav a.bg-indigo-600 svg {
-    color: var(--nav-active-icon) !important;
-    stroke: var(--nav-active-icon) !important;
-}
-
-.hover\:bg-gray-50:hover {
-    background-color: var(--bg-hover) !important;
-}
-
-.hover\:bg-gray-100:hover {
-    background-color: var(--bg-secondary) !important;
-}
-
-.hover\:bg-gray-200:hover {
-    background-color: var(--bg-tertiary) !important;
-}
-
-
-/* ================================================================
-   LOGO / AVATAR CIRCLES  (bg-indigo-600 rounded-*)
-   ================================================================ */
-
-/* DO NOT affect sidebar */
-:not(nav) .bg-indigo-600.rounded-xl,
-:not(nav) .bg-indigo-600.rounded-full,
-:not(nav) .bg-indigo-600.rounded-2xl,
-:not(nav) .bg-indigo-600.rounded-lg {
+.bg-indigo-50 {
     background-color: var(--primary-soft) !important;
-    border: 1px solid var(--primary-soft-border) !important;
-}
-
-
-
-
-.bg-indigo-600.rounded-xl svg,
-.bg-indigo-600.rounded-full svg,
-.bg-indigo-600.rounded-2xl svg,
-.bg-indigo-600.rounded-lg svg {
-    stroke: var(--primary-text) !important;
-}
-
-.bg-indigo-600.rounded-full span,
-.bg-indigo-600.rounded-2xl span {
-    color: var(--primary-text) !important;
 }
 
 .bg-indigo-100 {
     background-color: var(--primary-soft) !important;
 }
 
-.text-indigo-700 {
-    color: var(--primary-text) !important;
+/* =========================================================
+   TEXT COLORS
+========================================================= */
+
+.text-gray-900 {
+    color: var(--text) !important;
 }
 
+.text-gray-800,
+.text-gray-700 {
+    color: var(--text) !important;
+}
 
-/* ================================================================
-   BUTTONS
-   ================================================================ */
-button.bg-indigo-600:not(nav *),
-a.bg-indigo-600:not(nav *) {
+.text-gray-600,
+.text-gray-500 {
+    color: var(--text-light) !important;
+}
+
+.text-gray-400 {
+    color: var(--text-muted) !important;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+    color: var(--text) !important;
+}
+
+/* =========================================================
+   BORDERS
+========================================================= */
+
+.border-gray-100,
+.border-gray-200 {
+    border-color: var(--border) !important;
+}
+
+/* =========================================================
+   BUTTONS (PRIMARY)
+========================================================= */
+
+.bg-indigo-600 {
     background-color: var(--primary) !important;
-    color: #ffffff !important;
-    border: none !important;
+    color: #fff !important;
 }
 
-button.bg-indigo-600:not(nav *):hover,
-a.bg-indigo-600:not(nav *):hover,
-.hover\:bg-indigo-700:hover {
+.bg-indigo-600:hover {
     background-color: var(--primary-hover) !important;
 }
 
-button.bg-indigo-600:not(nav *) svg,
-a.bg-indigo-600:not(nav *) svg {
-    stroke: #ffffff !important;
-}
-
-/* Filter pill — active */
-button#f-all.bg-indigo-600,
-button.bg-indigo-600.rounded-full {
+/* Fix rounded icon backgrounds */
+:not(nav) .bg-indigo-600.rounded-xl,
+:not(nav) .bg-indigo-600.rounded-full,
+:not(nav) .bg-indigo-600.rounded-2xl,
+:not(nav) .bg-indigo-600.rounded-lg {
     background-color: var(--primary) !important;
-    color: #ffffff !important;
-    border: none !important;
+    border: 1px solid var(--border) !important;
 }
 
-/* Filter pills — inactive */
-button.border.border-gray-200.rounded-full,
-button.rounded-full.border.border-gray-200 {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-tertiary) !important;
-}
-
-button.border.border-gray-200.rounded-full:hover {
-    background-color: var(--bg-secondary) !important;
-    border-color: var(--blue) !important;
-    color: var(--text-primary) !important;
-}
-
-/* Count badge inside pill */
-button .bg-gray-100,
-.rounded-full .bg-gray-100 {
-    background-color: var(--bg-secondary) !important;
-    color: var(--text-muted) !important;
-}
-
-.bg-white\/25 {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-/* Edit buttons */
-.bg-indigo-50.text-indigo-600,
-button.bg-indigo-50 {
-    background-color: var(--primary-soft) !important;
-    color: var(--primary-text) !important;
-}
-
-.hover\:bg-indigo-100:hover {
-    background-color: var(--primary-soft-border) !important;
-    color: var(--primary-text-dark) !important;
-}
-
-/* Emerald buttons → primary in dark mode */
-.bg-emerald-600,
-.bg-emerald-700 {
-    background-color: var(--emerald) !important;
-    color: #ffffff !important;
-}
-
-.hover\:bg-emerald-700:hover,
-.hover\:bg-emerald-800:hover {
-    background-color: var(--emerald-hover) !important;
-}
-
-.bg-green-500 {
-    background-color: var(--emerald) !important;
-    color: #ffffff !important;
-}
-
-.bg-emerald-600.text-white {
-    background-color: var(--emerald) !important;
-}
-
-button.bg-emerald-50.text-emerald-700,
-button.bg-emerald-50 {
-    background-color: var(--emerald-soft) !important;
-    color: var(--emerald-text) !important;
-}
-
-.hover\:bg-emerald-100:hover {
-    background-color: var(--emerald-soft) !important;
-}
-
-/* ── Modal form colored borders (dynamic, dark only) ── */
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(1),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(1) {
-    border-left: 3px solid #6366f1 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(2),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(2) {
-    border-left: 3px solid #f59e0b !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(3),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(3) {
-    border-left: 3px solid #f97316 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(4),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(4) {
-    border-left: 3px solid #ec4899 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(5),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(5) {
-    border-left: 3px solid #10b981 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(6),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(6) {
-    border-left: 3px solid #8b5cf6 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-4>div:nth-child(7),
-[data-theme="dark"] [id$="Modal"] .overflow-y-auto>.space-y-5>div:nth-child(7) {
-    border-left: 3px solid #06b6d4 !important;
-    padding-left: 12px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .grid.grid-cols-2>div:nth-child(1) {
-    border-left: 3px solid #6366f1 !important;
-    padding-left: 10px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .grid.grid-cols-2>div:nth-child(2) {
-    border-left: 3px solid #f59e0b !important;
-    padding-left: 10px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .grid.grid-cols-2>div:nth-child(3) {
-    border-left: 3px solid #f97316 !important;
-    padding-left: 10px !important;
-}
-
-[data-theme="dark"] [id$="Modal"] .grid.grid-cols-2>div:nth-child(4) {
-    border-left: 3px solid #ec4899 !important;
-    padding-left: 10px !important;
-}
-
-[data-theme="light"] [id$="Modal"] .grid>div,
-[data-theme="light"] [id$="Modal"] .space-y-4>div,
-[data-theme="light"] [id$="Modal"] .space-y-5>div {
-    border-left: none !important;
-    padding-left: 0 !important;
-}
-
-
-/* ================================================================
-   CHANNEL & STATUS BADGES
-   ================================================================ */
-.bg-green-100.text-green-700,
-span.bg-green-100 {
-    background-color: var(--green-soft) !important;
-    color: var(--green-text) !important;
-    border: 1px solid var(--emerald-soft-border) !important;
-}
-
-.bg-blue-100.text-blue-700,
-span.bg-blue-100 {
-    background-color: var(--blue-soft) !important;
-    color: var(--blue-text) !important;
-    border: 1px solid var(--blue-soft-border) !important;
-}
-
-.bg-purple-100.text-purple-700,
-span.bg-purple-100 {
-    background-color: var(--purple-soft) !important;
-    color: var(--purple-text) !important;
-    border: 1px solid var(--violet-soft) !important;
-}
-
-.bg-emerald-100.text-emerald-700,
-.bg-emerald-50.text-emerald-700 {
-    background-color: var(--emerald-soft) !important;
-    color: var(--emerald-text) !important;
-}
-
-.bg-amber-50.text-amber-600,
-.bg-amber-100.text-amber-700 {
-    background-color: var(--amber-soft) !important;
-    color: var(--amber-text) !important;
-}
-
-.bg-yellow-100.text-yellow-700 {
-    background-color: var(--yellow-soft) !important;
-    color: var(--yellow-text) !important;
-}
-
-.bg-indigo-100.text-indigo-600,
-.bg-indigo-100.text-indigo-700,
-.bg-indigo-50.text-indigo-600,
-.bg-indigo-50.text-indigo-700 {
-    background-color: var(--primary-soft) !important;
-    color: var(--primary-text) !important;
-}
-
-.bg-violet-50.text-violet-700,
-.bg-violet-100.text-violet-700 {
-    background-color: var(--violet-soft) !important;
-    color: var(--violet-text) !important;
-}
-
-.bg-orange-50.text-orange-600 {
-    background-color: var(--orange-soft) !important;
-    color: var(--orange-text) !important;
-}
-
-.bg-blue-50.text-blue-700 {
-    background-color: var(--blue-soft) !important;
-    color: var(--blue-text) !important;
-}
-
-.bg-green-50.text-green-700 {
-    background-color: var(--green-soft) !important;
-    color: var(--green-text) !important;
-}
-
-.bg-pink-100.text-pink-700 {
-    background-color: var(--pink-soft) !important;
-    color: var(--pink-text) !important;
-}
-
-
-/* ================================================================
-   MODAL
-   ================================================================ */
-.bg-black\/40,
-.bg-black\/50 {
-    background-color: rgba(0, 0, 0, 0.80) !important;
-}
-
-.shadow-2xl {
-    box-shadow: var(--shadow-2xl) !important;
-}
-
-.shadow-sm {
-    box-shadow: var(--shadow-sm) !important;
-}
-
-
-/* ================================================================
-   STICKY / FIXED CHROME
-   ================================================================ */
-.sticky {
-    background-color: var(--bg-card) !important;
-}
-
-.fixed.top-0 {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-strong) !important;
-}
-
-.fixed.bottom-0 {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-strong) !important;
-}
-
-#mobileNavDrawer {
-    background-color: var(--bg-card) !important;
-}
-
-#mobileNavBg {
-    background-color: rgba(0, 0, 0, 0.70) !important;
-}
-
-
-/* ================================================================
-   CARDS
-   ================================================================ */
-.bg-white.rounded-2xl,
-.bg-white.rounded-xl {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-default) !important;
-}
-
-
-/* ================================================================
-   CUSTOMER DETAIL
-   ================================================================ */
-.from-indigo-500.to-purple-600 {
-    background: linear-gradient(135deg, var(--primary-soft), var(--violet-soft)) !important;
-}
-
-.border-b-2.border-indigo-600 {
-    border-color: var(--blue) !important;
-    color: var(--blue-text) !important;
-}
-
-.bg-emerald-50.border-b.border-emerald-100 {
-    background-color: var(--emerald-soft) !important;
-    border-color: var(--emerald-soft-border) !important;
-}
-
-.bg-emerald-50.rounded-xl {
-    background-color: var(--emerald-soft) !important;
-}
-
-.text-emerald-800 {
-    color: var(--emerald-text) !important;
-}
-
-
-/* ================================================================
-   QUICK ACTION ICON CIRCLES
-   ================================================================ */
-.bg-blue-100 {
-    background-color: var(--blue-soft) !important;
-}
-
-.bg-pink-100 {
-    background-color: var(--pink-soft) !important;
-}
-
-.bg-orange-100 {
-    background-color: var(--orange-soft) !important;
-}
-
-.bg-green-100 {
-    background-color: var(--green-soft) !important;
-}
-
-
-/* ================================================================
-   IMPORT / DROP ZONE
-   ================================================================ */
-.drop-zone {
-    border-color: var(--border-default) !important;
-    background-color: var(--bg-card) !important;
-}
-
-.drop-zone:hover,
-.drop-zone.drag-over {
-    border-color: var(--blue) !important;
-    background-color: var(--blue-soft) !important;
-}
-
-.bg-indigo-50.border-indigo-100 {
-    background-color: var(--primary-soft) !important;
-    border-color: var(--primary-soft-border) !important;
-}
-
-.text-indigo-800 {
-    color: var(--primary-text) !important;
-}
-
-.text-indigo-500 {
-    color: var(--primary-text) !important;
-}
-
-.bg-emerald-50.border-emerald-200 {
-    background-color: var(--emerald-soft) !important;
-    border-color: var(--emerald-soft-border) !important;
-}
-
-
-/* ================================================================
-   TABLE
-   ================================================================ */
-table th {
-    color: var(--text-muted) !important;
-}
-
-table td {
-    color: var(--text-tertiary) !important;
-}
-
-thead tr {
-    background-color: var(--bg-secondary) !important;
-}
-
-
-/* ================================================================
-   ERROR STATES
-   ================================================================ */
-.bg-red-50 {
-    background-color: var(--red-soft) !important;
-}
-
-.border-red-200 {
-    border-color: var(--red-soft-border) !important;
-}
-
-.text-red-700 {
-    color: var(--red-text) !important;
-}
-
-
-/* ================================================================
-   PAGINATION
-   ================================================================ */
-#pagination button {
-    background-color: var(--bg-secondary) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-tertiary) !important;
-}
+/* =========================================================
+   NAV ACTIVE (Sidebar Fix)
+========================================================= */
 
-#pagination button.bg-indigo-600 {
+nav .bg-indigo-600,
+nav a.bg-indigo-600 {
     background-color: var(--primary) !important;
-    color: #ffffff !important;
 }
 
-
-/* ================================================================
-   HOVER MISC
-   ================================================================ */
-.hover\:bg-red-50:hover {
-    background-color: var(--red-soft) !important;
-}
-
-.hover\:text-red-600:hover {
-    color: var(--red-text) !important;
-}
-
-.hover\:text-indigo-600:hover {
-    color: var(--primary-text) !important;
-}
-
-.hover\:shadow-md:hover {
-    box-shadow: var(--shadow-md) !important;
-}
-
-
-/* ================================================================
-   SHADOWS
-   ================================================================ */
-.shadow-emerald-300 {
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35) !important;
-}
-
-.shadow-indigo-300 {
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35) !important;
-}
-
-
-/* ================================================================
-   CATALOG BANNER BADGES
-   ================================================================ */
-.bg-indigo-50.border.border-indigo-100 {
-    background-color: var(--primary-soft) !important;
-    border-color: var(--primary-soft-border) !important;
-}
-
-.bg-indigo-50.border.border-indigo-100 span,
-.bg-indigo-50.border.border-indigo-100 svg {
-    color: var(--primary-text) !important;
-    stroke: var(--primary-text) !important;
-}
-
-.bg-violet-50.border.border-violet-100 {
-    background-color: var(--violet-soft) !important;
-    border-color: var(--violet) !important;
-}
-
-.bg-violet-50.border.border-violet-100 span,
-.bg-violet-50.border.border-violet-100 svg {
-    color: var(--violet-text) !important;
-    stroke: var(--violet-text) !important;
-}
-
-.bg-emerald-50.border.border-emerald-100 {
-    background-color: var(--emerald-soft) !important;
-    border-color: var(--emerald-soft-border) !important;
-}
-
-.bg-emerald-50.border.border-emerald-100 span,
-.bg-emerald-50.border.border-emerald-100 svg {
-    color: var(--emerald-text) !important;
-    stroke: var(--emerald-text) !important;
-}
-
-
-/* ================================================================
-   CATALOG DYNAMIC CARDS (innerHTML-rendered)
-   ================================================================ */
-#plansGrid .bg-white,
-#productsGrid .bg-white,
-#templatesGrid .bg-white {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-default) !important;
-}
-
-/* Status badges */
-#plansGrid .bg-emerald-50,
-#productsGrid .bg-emerald-50,
-#templatesGrid .bg-emerald-50 {
-    background-color: rgba(16, 185, 129, 0.12) !important;
-}
-
-#plansGrid .text-emerald-600,
-#productsGrid .text-emerald-600,
-#templatesGrid .text-emerald-600 {
-    color: var(--emerald-text) !important;
-}
-
-#plansGrid .bg-gray-100,
-#productsGrid .bg-gray-100,
-#templatesGrid .bg-gray-100 {
-    background-color: var(--bg-tertiary) !important;
-}
-
-#plansGrid .text-gray-400,
-#productsGrid .text-gray-400,
-#templatesGrid .text-gray-400 {
-    color: var(--text-faint) !important;
-}
-
-/* Category badges */
-#productsGrid .bg-yellow-50 {
-    background-color: rgba(234, 179, 8, 0.12) !important;
-}
-
-#productsGrid .text-yellow-700 {
-    color: var(--yellow-text) !important;
-}
-
-#productsGrid .bg-blue-50,
-#templatesGrid .bg-blue-50 {
-    background-color: rgba(59, 130, 246, 0.12) !important;
-}
-
-#productsGrid .text-blue-700,
-#templatesGrid .text-blue-700 {
-    color: var(--blue-text) !important;
-}
-
-#productsGrid .bg-violet-50,
-#templatesGrid .bg-violet-50 {
-    background-color: rgba(139, 92, 246, 0.12) !important;
-}
-
-#productsGrid .text-violet-700,
-#templatesGrid .text-violet-700 {
-    color: var(--violet-text) !important;
-}
-
-#productsGrid .bg-orange-50,
-#templatesGrid .bg-orange-50 {
-    background-color: rgba(249, 115, 22, 0.12) !important;
-}
-
-#productsGrid .text-orange-700,
-#templatesGrid .text-orange-700 {
-    color: var(--orange-text) !important;
-}
-
-#productsGrid .text-emerald-700 {
-    color: var(--emerald-text) !important;
-}
-
-#productsGrid .bg-pink-50,
-#templatesGrid .bg-pink-50 {
-    background-color: rgba(236, 72, 153, 0.12) !important;
-}
-
-#productsGrid .text-pink-700,
-#templatesGrid .text-pink-700 {
-    color: var(--pink-text) !important;
-}
-
-#templatesGrid .bg-red-50 {
-    background-color: rgba(239, 68, 68, 0.12) !important;
-}
-
-#templatesGrid .text-red-700 {
-    color: var(--red-text) !important;
-}
-
-#templatesGrid .bg-rose-50 {
-    background-color: rgba(244, 63, 94, 0.12) !important;
-}
-
-#templatesGrid .text-rose-700 {
-    color: var(--rose-text) !important;
-}
-
-#templatesGrid .bg-indigo-50 {
-    background-color: rgba(99, 102, 241, 0.12) !important;
-}
-
-#templatesGrid .text-indigo-600 {
-    color: var(--primary-text) !important;
-}
-
-#productsGrid .text-indigo-600 {
-    color: var(--primary-text) !important;
-}
-
-#templatesGrid .bg-gray-50 {
-    background-color: var(--bg-secondary) !important;
-}
-
-#templatesGrid .text-gray-600 {
-    color: var(--text-muted) !important;
-}
-
-/* Card separators & text */
-#plansGrid .border-t,
-#productsGrid .border-t,
-#templatesGrid .border-t {
-    border-color: var(--border-default) !important;
-}
-
-#plansGrid .text-gray-300,
-#productsGrid .text-gray-300,
-#templatesGrid .text-gray-300 {
-    color: var(--text-disabled) !important;
-}
-
-#plansGrid .text-gray-900,
-#productsGrid .text-gray-900,
-#templatesGrid .text-gray-900 {
-    color: var(--text-primary) !important;
-}
-
-#plansGrid .text-gray-500,
-#productsGrid .text-gray-500,
-#templatesGrid .text-gray-500 {
-    color: var(--text-muted) !important;
-}
-
-
-/* ================================================================
-   STAT CARDS — colored left borders (scoped, no modal bleed)
-   ================================================================ */
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(1),
-#statGrid>div:nth-child(1) {
-    border-left: 3px solid #6366f1 !important;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(2),
-#statGrid>div:nth-child(2) {
-    border-left: 3px solid #f59e0b !important;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(3),
-#statGrid>div:nth-child(3) {
-    border-left: 3px solid #f97316 !important;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(4),
-#statGrid>div:nth-child(4) {
-    border-left: 3px solid #ec4899 !important;
-}
-
-/* Reset modal grid borders */
-[id$="Modal"] .grid>div {
-    border-left: none !important;
-}
-
-
-/* ================================================================
-   SCROLLBAR
-   ================================================================ */
-::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-
-/* ================================================================
-   THEME TOGGLE BUTTON
-   ================================================================ */
-.theme-toggle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    border: 1px solid var(--toggle-btn-border);
-    background: var(--toggle-btn-bg);
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    color: var(--toggle-btn-color);
-    flex-shrink: 0;
-}
-
-.theme-toggle-btn:hover {
-    background: var(--toggle-btn-hover-bg);
-    transform: scale(1.08) rotate(12deg);
-    border-color: var(--toggle-btn-hover-border, var(--toggle-btn-border));
-}
-
-.theme-toggle-btn svg {
-    stroke: var(--toggle-btn-icon);
-}
-
-.theme-toggle-btn:hover svg {
-    stroke: var(--toggle-btn-hover-icon);
-}
-
-/* Sun/moon icon toggling */
-[data-theme="light"] .icon-sun {
-    display: none;
-}
-
-[data-theme="light"] .icon-moon {
-    display: block;
-}
-
-[data-theme="dark"] .icon-sun {
-    display: block;
-}
-
-[data-theme="dark"] .icon-moon {
-    display: none;
-}
-
-
-/* ================================================================
-   SVG ICON COLOR SYSTEM
-   All SVGs inherit currentColor; bg-* containers drive the color.
-   ================================================================ */
-svg {
-    stroke: currentColor;
-}
-
-/* ── NAV LINK ICONS ── */
-nav a[href*="home"] svg {
-    color: var(--nav-icon-home);
-    stroke: var(--nav-icon-home);
-}
-
-nav a[href*="customer"] svg {
-    color: var(--nav-icon-customers);
-    stroke: var(--nav-icon-customers);
-}
-
-nav a[href*="engagement"] svg {
-    color: var(--nav-icon-engagement);
-    stroke: var(--nav-icon-engagement);
-}
-
-nav a[href*="promotion"] svg {
-    color: var(--nav-icon-promotions);
-    stroke: var(--nav-icon-promotions);
-}
-
-nav a[href*="setting"] svg {
-    color: var(--nav-icon-settings);
-    stroke: var(--nav-icon-settings);
-}
-
-/* Active nav — overrides above */
-nav .bg-indigo-600 svg,
-nav a.bg-indigo-600 svg {
-    color: var(--nav-active-icon) !important;
-    stroke: var(--nav-active-icon) !important;
-}
-
-/* ── ICON CONTAINER BACKGROUNDS ── */
-.bg-indigo-50 svg,
-.bg-indigo-100 svg {
-    color: var(--icon-indigo);
-    stroke: var(--icon-indigo);
-}
-
-.bg-blue-50 svg,
-.bg-blue-100 svg {
-    color: var(--icon-blue);
-    stroke: var(--icon-blue);
-}
-
-.bg-emerald-50 svg,
-.bg-emerald-100 svg {
-    color: var(--icon-emerald);
-    stroke: var(--icon-emerald);
-}
-
-.bg-green-50 svg,
-.bg-green-100 svg {
-    color: var(--icon-green);
-    stroke: var(--icon-green);
-}
-
-.bg-amber-50 svg,
-.bg-amber-100 svg {
-    color: var(--icon-amber);
-    stroke: var(--icon-amber);
-}
-
-.bg-orange-50 svg,
-.bg-orange-100 svg {
-    color: var(--icon-orange);
-    stroke: var(--icon-orange);
-}
-
-.bg-pink-50 svg,
-.bg-pink-100 svg {
-    color: var(--icon-pink);
-    stroke: var(--icon-pink);
-}
-
-.bg-violet-50 svg,
-.bg-violet-100 svg {
-    color: var(--icon-violet);
-    stroke: var(--icon-violet);
-}
-
-.bg-purple-50 svg,
-.bg-purple-100 svg {
-    color: var(--icon-purple);
-    stroke: var(--icon-purple);
-}
-
-.bg-red-50 svg,
-.bg-red-100 svg {
-    color: var(--icon-red);
-    stroke: var(--icon-red);
-}
-
-.bg-yellow-50 svg,
-.bg-yellow-100 svg {
-    color: var(--icon-yellow);
-    stroke: var(--icon-yellow);
-}
-
-/* ── EXCEPTION: Brand avatar icon always white ── */
-.bg-indigo-600 svg {
-    color: #ffffff !important;
-    stroke: #ffffff !important;
-}
-
+nav .bg-indigo-600 span,
 nav .bg-indigo-600 svg {
-    color: var(--nav-active-icon) !important;
-    stroke: var(--nav-active-icon) !important;
+    color: #fff !important;
+    stroke: #fff !important;
 }
 
-/* ── MOBILE BOTTOM NAV ── */
-.fixed.bottom-0 a svg {
-    color: var(--text-disabled);
-    stroke: var(--text-disabled);
+/* =========================================================
+   INPUTS / FORMS
+========================================================= */
+
+input,
+textarea,
+select {
+    background-color: var(--card) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
 }
 
-.fixed.bottom-0 a.text-indigo-600 svg {
-    color: var(--blue-text) !important;
-    stroke: var(--blue-text) !important;
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted) !important;
 }
 
-.fixed.bottom-0 a.text-emerald-600 svg {
-    color: var(--emerald-text) !important;
-    stroke: var(--emerald-text) !important;
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
 }
 
-/* ── TAB ICONS ── */
-[id^="tab-"] svg {
-    color: var(--text-disabled);
-    stroke: var(--text-disabled);
+/* =========================================================
+   TOGGLES / SWITCH
+========================================================= */
+
+input.sr-only.peer:checked~div {
+    background-color: var(--primary) !important;
 }
 
-[id^="tab-"].text-indigo-600 svg,
-[id^="tab-"].border-indigo-600 svg {
-    color: var(--blue-text) !important;
-    stroke: var(--blue-text) !important;
+/* =========================================================
+   BADGES
+========================================================= */
+
+.bg-emerald-100 {
+    background-color: rgba(34, 197, 94, 0.1) !important;
+    color: var(--success) !important;
 }
 
-/* ── QUICK ACTION SIDEBAR BUTTONS ── */
-nav button .bg-blue-100 svg {
-    color: var(--icon-blue) !important;
-    stroke: var(--icon-blue) !important;
+.bg-red-50 {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: var(--danger) !important;
 }
 
-nav button .bg-pink-100 svg {
-    color: var(--icon-pink) !important;
-    stroke: var(--icon-pink) !important;
+/* =========================================================
+   HOVER STATES
+========================================================= */
+
+.hover\:bg-gray-50:hover {
+    background-color: var(--card-soft) !important;
 }
 
-nav button .bg-orange-100 svg {
-    color: var(--icon-orange) !important;
-    stroke: var(--icon-orange) !important;
+.hover\:bg-gray-100:hover {
+    background-color: var(--card-soft) !important;
 }
 
-nav button .bg-green-100 svg {
-    color: var(--icon-green) !important;
-    stroke: var(--icon-green) !important;
+/* =========================================================
+   SHADOW (optional tweak for dark)
+========================================================= */
+
+[data-theme="dark"] .shadow-sm {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* ── HOME GRID ICONS ── */
-.grid svg.text-indigo-600 {
-    color: var(--icon-indigo) !important;
-    stroke: var(--icon-indigo) !important;
+[data-theme="dark"] .shadow-2xl {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8) !important;
 }
 
-.grid svg.text-orange-500 {
-    color: var(--icon-orange) !important;
-    stroke: var(--icon-orange) !important;
+[data-theme="dark"] #tabIndicator {
+    background: #1e1e1e;
 }
 
-.grid svg.text-emerald-600 {
-    color: var(--icon-emerald) !important;
-    stroke: var(--icon-emerald) !important;
+/* Toggle button */
+#appearanceToggle {
+    background: var(--toggle-track-bg);
 }
 
-.grid svg.text-violet-600 {
-    color: var(--icon-violet) !important;
-    stroke: var(--icon-violet) !important;
-}
-
-/* ── UPCOMING BELL ICONS ── */
-.bg-indigo-100.rounded-full svg {
-    color: var(--icon-indigo) !important;
-    stroke: var(--icon-indigo) !important;
-}
-
-.bg-pink-100.rounded-full svg {
-    color: var(--icon-pink) !important;
-    stroke: var(--icon-pink) !important;
-}
-
-.bg-yellow-100.rounded-full svg {
-    color: var(--icon-yellow) !important;
-    stroke: var(--icon-yellow) !important;
-}
-
-.bg-amber-100.rounded-full svg {
-    color: var(--icon-amber) !important;
-    stroke: var(--icon-amber) !important;
-}
-
-.bg-blue-100.rounded-full svg {
-    color: var(--icon-blue) !important;
-    stroke: var(--icon-blue) !important;
-}
-
-
-/* ================================================================
-   ANIMATIONS
-   ================================================================ */
-
-/* ── Customer card staggered entrance ── */
-@keyframes cardFadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#customerGrid>div {
-    animation: cardFadeUp 0.38s ease both;
-}
-
-#customerGrid>div:nth-child(1) {
-    animation-delay: 0.04s;
-}
-
-#customerGrid>div:nth-child(2) {
-    animation-delay: 0.08s;
-}
-
-#customerGrid>div:nth-child(3) {
-    animation-delay: 0.12s;
-}
-
-#customerGrid>div:nth-child(4) {
-    animation-delay: 0.16s;
-}
-
-#customerGrid>div:nth-child(5) {
-    animation-delay: 0.20s;
-}
-
-#customerGrid>div:nth-child(6) {
-    animation-delay: 0.24s;
-}
-
-#customerGrid>div:nth-child(7) {
-    animation-delay: 0.28s;
-}
-
-#customerGrid>div:nth-child(8) {
-    animation-delay: 0.32s;
-}
-
-#customerList>div {
-    animation: cardFadeUp 0.3s ease both;
-}
-
-/* ── Card hover lift ── */
-#customerGrid>div,
-#customerList>div {
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-    will-change: transform;
-}
-
-#customerGrid>div:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: var(--shadow-lg) !important;
-    border-color: #a5b4fc !important;
-}
-
-[data-theme="dark"] #customerGrid>div:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: var(--shadow-2xl) !important;
-    border-color: var(--primary-soft-border) !important;
-}
-
-/* ── Avatar scale on card hover ── */
-#customerGrid>div:hover .w-11.h-11 {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
-}
-
-/* ── Stat cards pop in ── */
-@keyframes statPop {
-    from {
-        opacity: 0;
-        transform: scale(0.92);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.grid.lg\:grid-cols-4>div:nth-child(1) {
-    animation: statPop 0.3s 0.05s ease both;
-}
-
-.grid.lg\:grid-cols-4>div:nth-child(2) {
-    animation: statPop 0.3s 0.10s ease both;
-}
-
-.grid.lg\:grid-cols-4>div:nth-child(3) {
-    animation: statPop 0.3s 0.15s ease both;
-}
-
-.grid.lg\:grid-cols-4>div:nth-child(4) {
-    animation: statPop 0.3s 0.20s ease both;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(1) {
-    animation: statPop 0.3s 0.05s ease both;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(2) {
-    animation: statPop 0.3s 0.10s ease both;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(3) {
-    animation: statPop 0.3s 0.15s ease both;
-}
-
-.grid.grid-cols-2.lg\:grid-cols-4>div:nth-child(4) {
-    animation: statPop 0.3s 0.20s ease both;
-}
-
-/* ── Page title slide in ── */
-@keyframes titleIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.sticky h1 {
-    animation: titleIn 0.3s ease both;
-}
-
-/* ── Sidebar nav items ── */
-nav a,
-nav button {
-    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
-}
-
-nav a:hover:not(.bg-indigo-600) {
-    transform: translateX(3px);
-}
-
-/* ── Button press ── */
-button {
-    transition: transform 0.1s ease !important;
-}
-
-button:active {
-    transform: scale(0.96) !important;
-}
-
-/* ── Modal slide up ── */
-@keyframes modalUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#addCustomerModal .relative.bg-white,
-#importModal .relative.bg-white {
-    animation: modalUp 0.28s ease both;
-}
-
-/* ── FAB — deep purple with glow pulse ── */
-.rounded-full.bg-indigo-600 {
-    background: var(--fab-bg) !important;
-    box-shadow: 0 8px 28px var(--fab-shadow) !important;
-    animation: fabGlow 2.5s ease-in-out infinite !important;
-}
-
-.rounded-full.bg-indigo-600:hover {
-    background: var(--fab-hover) !important;
-}
-
-.rounded-full.bg-indigo-600 svg {
-    stroke: #ffffff !important;
-    color: #ffffff !important;
-}
-
-@keyframes fabGlow {
-
-    0%,
-    100% {
-        box-shadow: 0 4px 16px var(--fab-glow-lo);
-    }
-
-    50% {
-        box-shadow: 0 4px 32px var(--fab-glow-hi);
-    }
-}
-
-/* ── Tab transitions ── */
-[id^="tab-"] {
-    transition: color 0.15s ease, border-color 0.15s ease !important;
-}
-
-[id^="st-"] {
-    transition: color 0.15s ease, border-color 0.15s ease !important;
-}
-
-/* ── Badge pop ── */
-span.rounded,
-span.rounded-full {
-    transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-/* ── Edit button lift ── */
-button.bg-indigo-50,
-button.text-indigo-600 {
-    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
-}
-
-button.bg-indigo-50:hover {
-    transform: translateY(-1px);
+/* Knob */
+#appearanceKnob {
+    background: #fff;
 }
