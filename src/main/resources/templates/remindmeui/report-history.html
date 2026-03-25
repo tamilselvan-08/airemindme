@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report History - Reminder Me</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fb;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Sidebar Desktop -->
+    <div class="hidden md:flex fixed left-0 top-0 h-screen w-60 bg-white border-r border-gray-100 flex-col z-30">
+        <div class="px-4 pt-5 pb-3"><a href="home.html" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+                        class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg></div>
+                <div>
+                    <p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
+                    <p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
+                </div>
+            </a></div>
+        <nav class="flex-1 px-3 py-2 overflow-y-auto">
+            <a href="home.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Home</a>
+            <a href="customers.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Customers</a>
+            <a href="engagement.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Engage</a>
+            <a href="promotions.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Promotions</a>
+            <a href="appointments.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Appointments</a>
+            <!-- Reports collapsible -->
+            <div class="mb-0.5">
+                <button onclick="toggleSub('reports')" id="btn-reports"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-1">
+                    <div class="flex items-center gap-3"><svg class="w-5 h-5 flex-shrink-0" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg><span class="text-sm font-medium">Reports</span></div>
+                    <svg id="ch-reports" class="w-4 h-4 text-gray-400 transition-transform duration-200"
+                        style="transform:rotate(180deg)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div id="sub-reports" class="ml-2 pl-3 border-l-2 border-indigo-100 space-y-0.5 pb-1">
+                    <a href="reports.html"
+                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-500 hover:bg-gray-50">Dashboard</a>
+                    <a href="reports.html#generated"
+                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-500 hover:bg-gray-50">Reports
+                        Generated</a>
+                    <a href="report-history.html"
+                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-indigo-50 text-indigo-600">History</a>
+                </div>
+            </div>
+            <a href="user-management.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Users</a>
+            <a href="settings.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium">Settings</a>
+        </nav>
+        <div class="px-4 py-4 border-t border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+                        class="text-white text-sm font-bold">A</span></div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+                    <p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial Services</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Header -->
+    <div
+        class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-40 h-14 flex items-center justify-between px-4 shadow-sm">
+        <a href="reports.html"
+            class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 transition"><svg
+                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg></a>
+        <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+                    class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg></div><span class="text-sm font-bold text-gray-900">Reminder Me</span>
+        </div>
+        <div class="w-9"></div>
+    </div>
+
+    <!-- Main -->
+    <div class="md:ml-60 min-h-screen pb-24 md:pb-0 pt-14 md:pt-0">
+
+        <!-- Top Bar -->
+        <div class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 sticky top-14 md:top-0 z-20">
+            <div class="flex items-center gap-3">
+                <a href="reports.html"
+                    class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition hidden md:flex"><svg
+                        class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg></a>
+                <div>
+                    <p class="text-xs text-gray-400"><a href="home.html" class="hover:text-indigo-600">Home</a> / <a
+                            href="reports.html" class="hover:text-indigo-600">Reports</a> / <span
+                            class="text-gray-700">History</span></p>
+                    <h1 class="text-xl font-bold text-gray-900">Report Send History</h1>
+                </div>
+                <!-- Tab links for context -->
+                <div class="ml-auto hidden sm:flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+                    <a href="reports.html"
+                        class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-700">Dashboard</a>
+                    <a href="reports.html#generated"
+                        class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-700">Generated</a>
+                    <span
+                        class="px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800">History</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 md:px-6 py-5 max-w-5xl mx-auto">
+
+            <!-- Stats row -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-gray-900" id="hStatTotal">18</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Total Sent</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-emerald-600" id="hStatRead">11</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Read</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-blue-600" id="hStatDelivered">5</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Delivered</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-gray-400" id="hStatPending">2</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Pending</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                <div class="relative flex-1"><svg
+                        class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg><input type="text" id="hSearch" placeholder="Search patient name or test..."
+                        oninput="renderHistory()"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="relative sm:w-40 flex-shrink-0"><select id="hChannelFilter" onchange="renderHistory()"
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                        <option value="">All Channels</option>
+                        <option value="wa">WhatsApp</option>
+                        <option value="email">Email</option>
+                        <option value="sms">SMS</option>
+                    </select><svg
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg></div>
+                <div class="relative sm:w-40 flex-shrink-0"><select id="hStatusFilter" onchange="renderHistory()"
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                        <option value="">All Status</option>
+                        <option value="Read">Read</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Failed">Failed</option>
+                    </select><svg
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg></div>
+            </div>
+
+            <!-- History List -->
+            <div id="historyList" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDetail()"></div>
+        <div
+            class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-lg max-h-[95vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-center pt-3 pb-1 md:hidden">
+                <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+            </div>
+            <div class="flex items-center justify-between px-5 pt-4 pb-3">
+                <h2 class="text-base font-bold text-gray-900">Send Transaction Detail</h2>
+                <button onclick="closeDetail()"
+                    class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><svg
+                        class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div id="detailContent" class="px-5 pb-6 space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast"
+        class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 px-5 py-3 bg-gray-900 text-white rounded-2xl shadow-2xl">
+        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p id="toastMsg" class="text-sm font-medium">Done!</p>
+    </div>
+
+    <script>
+        const history = [
+            { id: 1, customer: 'Rajesh Kumar', tests: ['Complete Blood Count (CBC)', 'Lipid Profile'], channel: 'wa', sentAt: '17 Mar 2026, 10:30 AM', status: 'Read', totalMrp: 800, result: ['Hb: 14.2 g/dL — Normal', 'Total Chol: 178 mg/dL — Normal'], batchId: 'BATCH-2026-031' },
+            { id: 2, customer: 'Anjali Singh', tests: ['TSH', 'Free T3 (FT3)', 'Free T4 (FT4)'], channel: 'email', sentAt: '16 Mar 2026, 03:15 PM', status: 'Delivered', totalMrp: 480, result: ['TSH: 1.8 µIU/mL — Normal', 'FT3: 3.2 pg/mL — Normal', 'FT4: 1.1 ng/dL — Normal'], batchId: 'BATCH-2026-030' },
+            { id: 3, customer: 'Mohammed Ibrahim', tests: ['Liver Function Test', 'Complete Blood Count (CBC)'], channel: 'wa', sentAt: '15 Mar 2026, 09:45 AM', status: 'Read', totalMrp: 850, result: ['All LFT values normal', 'Hb: 13.8 g/dL — Normal'], batchId: 'BATCH-2026-029' },
+            { id: 4, customer: 'Sunita Patel', tests: ['HBA1c', 'Glucose (F)'], channel: 'sms', sentAt: '14 Mar 2026, 02:20 PM', status: 'Pending', totalMrp: 560, result: ['HbA1c: 7.8%', 'Glucose: 142 mg/dL'], batchId: 'BATCH-2026-028' },
+            { id: 5, customer: 'Vikram Nair', tests: ['Lipid Profile', 'Liver Function Test', 'Uric Acid'], channel: 'wa', sentAt: '13 Mar 2026, 11:00 AM', status: 'Read', totalMrp: 1290, result: ['Total Chol: 215 mg/dL — High', 'AST: 45 U/L — Borderline', 'Uric Acid: 6.2 mg/dL — Normal'], batchId: 'BATCH-2026-027' },
+            { id: 6, customer: 'Priya Mehta', tests: ['TSH'], channel: 'email', sentAt: '12 Mar 2026, 04:30 PM', status: 'Read', totalMrp: 120, result: ['TSH: 4.8 µIU/mL — Borderline High'], batchId: 'BATCH-2026-026' },
+            { id: 7, customer: 'Kiran Bose', tests: ['Ferritin', 'Iron Profile'], channel: 'wa', sentAt: '11 Mar 2026, 10:15 AM', status: 'Delivered', totalMrp: 2600, result: ['Ferritin: 12 ng/mL — Low', 'See iron profile details'], batchId: 'BATCH-2026-025' },
+            { id: 8, customer: 'Deepa Krishnan', tests: ['Vitamin B12', 'Vitamin D Total (25 OH)'], channel: 'wa', sentAt: '10 Mar 2026, 03:00 PM', status: 'Read', totalMrp: 1620, result: ['B12: 312 pg/mL — Normal', 'Vit D: 18 ng/mL — Deficient'], batchId: 'BATCH-2026-024' },
+            { id: 9, customer: 'Amit Gupta', tests: ['Complete Blood Count (CBC)', 'HBA1c', 'Glucose (F)'], channel: 'email', sentAt: '09 Mar 2026, 09:30 AM', status: 'Read', totalMrp: 810, result: ['CBC all normal', 'HbA1c: 7.2%', 'FBG: 118 mg/dL'], batchId: 'BATCH-2026-023' },
+            { id: 10, customer: 'Suresh Reddy', tests: ['D-Dimer (Quantitative)', 'Coagulation Profile'], channel: 'wa', sentAt: '08 Mar 2026, 02:45 PM', status: 'Delivered', totalMrp: 2350, result: ['D-Dimer: 0.42 µg/mL FEU — Normal', 'PT: 13.2 sec — Normal'], batchId: 'BATCH-2026-022' },
+            { id: 11, customer: 'Rajesh Kumar', tests: ['Thyroid Function Test (TFT)'], channel: 'wa', sentAt: '07 Mar 2026, 11:15 AM', status: 'Read', totalMrp: 400, result: ['TSH: 2.1 µIU/mL — Normal'], batchId: 'BATCH-2026-021' },
+            { id: 12, customer: 'Anjali Singh', tests: ['PAP SMEAR', 'Urine Routine Examination'], channel: 'email', sentAt: '06 Mar 2026, 04:00 PM', status: 'Pending', totalMrp: 470, result: ['PAP: Results pending review', 'Urine: Clear, No abnormality'], batchId: 'BATCH-2026-020' }
+        ];
+
+        const chColors = { wa: 'bg-green-100 text-green-700', email: 'bg-violet-100 text-violet-700', sms: 'bg-blue-100 text-blue-700' };
+        const chIcons = { wa: '💬', email: '📧', sms: '📱' };
+        const chLabel = { wa: 'WhatsApp', email: 'Email', sms: 'SMS' };
+        const statusColors = { Read: 'bg-emerald-100 text-emerald-700', Delivered: 'bg-blue-100 text-blue-700', Pending: 'bg-amber-100 text-amber-700', Failed: 'bg-red-100 text-red-700' };
+        const statusIcons = { Read: '✓✓', Delivered: '✓', Pending: '⏳', Failed: '✗' };
+
+        function renderHistory() {
+            const q = (document.getElementById('hSearch').value || '').toLowerCase();
+            const chF = document.getElementById('hChannelFilter').value;
+            const stF = document.getElementById('hStatusFilter').value;
+            const filtered = history.filter(h => {
+                const matchQ = !q || h.customer.toLowerCase().includes(q) || h.tests.some(t => t.toLowerCase().includes(q));
+                const matchCh = !chF || h.channel === chF;
+                const matchSt = !stF || h.status === stF;
+                return matchQ && matchCh && matchSt;
+            });
+            const list = document.getElementById('historyList');
+            list.innerHTML = '';
+            if (!filtered.length) { list.innerHTML = `<div class="text-center py-16 bg-white rounded-2xl border border-gray-100"><svg class="w-10 h-10 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p class="text-sm text-gray-500">No send history found</p></div>`; return; }
+            // Group by date
+            const byDate = {};
+            filtered.forEach(h => { const d = h.sentAt.split(',')[0]; if (!byDate[d]) byDate[d] = []; byDate[d].push(h); });
+            Object.entries(byDate).forEach(([date, items]) => {
+                list.innerHTML += `<div class="flex items-center gap-3 mb-2 mt-4 first:mt-0"><div class="h-px flex-1 bg-gray-200"></div><span class="text-xs text-gray-400 font-medium whitespace-nowrap">${date}</span><div class="h-px flex-1 bg-gray-200"></div></div>`;
+                items.forEach(h => {
+                    list.innerHTML += `
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div class="flex items-start gap-3">
+                <div class="w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white text-sm font-bold">${h.customer.charAt(0)}</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <p class="text-sm font-bold text-gray-900">${h.customer}</p>
+                    <span class="text-xs ${chColors[h.channel]} px-2 py-0.5 rounded-full font-semibold">${chIcons[h.channel]} ${chLabel[h.channel]}</span>
+                    <span class="text-xs ${statusColors[h.status]} px-2 py-0.5 rounded-full font-semibold">${statusIcons[h.status]} ${h.status}</span>
+                  </div>
+                  <div class="flex flex-wrap gap-1 mb-1.5">
+                    ${h.tests.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-lg bg-gray-100 text-gray-600 font-medium">🧪 ${t}</span>`).join('')}
+                  </div>
+                  <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-xs text-gray-400 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${h.sentAt}</span>
+                    <span class="text-xs font-bold text-emerald-600">₹${h.totalMrp.toLocaleString('en-IN')}</span>
+                    <span class="text-[10px] text-gray-400 font-mono">${h.batchId}</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                  <button onclick="openDetail(${h.id})" class="px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-semibold hover:bg-indigo-100 transition">Details</button>
+                  <button onclick="resend(${h.id})" class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-semibold hover:bg-emerald-100 transition">Resend</button>
+                </div>
+              </div>
+            </div>`;
+                });
+            });
+        }
+
+        function openDetail(id) {
+            const h = history.find(x => x.id === id);
+            if (!h) return;
+            document.getElementById('detailContent').innerHTML = `
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+          <div class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">${h.customer.charAt(0)}</div>
+          <div><p class="text-base font-bold text-gray-900">${h.customer}</p><p class="text-xs text-gray-400 mt-0.5">${h.sentAt}</p></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="text-center p-3 bg-gray-50 rounded-2xl"><p class="text-[10px] text-gray-400 mb-1">Channel</p><p class="text-sm font-bold text-gray-800">${chIcons[h.channel]} ${chLabel[h.channel]}</p></div>
+          <div class="text-center p-3 ${statusColors[h.status].replace('text-', 'bg-').split(' ')[0].replace('bg-', '').includes('emerald') ? 'bg-emerald-50' : 'bg-blue-50'} rounded-2xl"><p class="text-[10px] text-gray-400 mb-1">Status</p><p class="text-sm font-bold text-gray-800">${statusIcons[h.status]} ${h.status}</p></div>
+          <div class="text-center p-3 bg-emerald-50 rounded-2xl"><p class="text-[10px] text-gray-400 mb-1">Total MRP</p><p class="text-sm font-bold text-emerald-700">₹${h.totalMrp.toLocaleString('en-IN')}</p></div>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-gray-500 mb-3">Tests Included</p>
+          <div class="space-y-2">
+            ${h.tests.map((t, i) => `<div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100"><div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center flex-shrink-0 text-base border border-gray-100">🧪</div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-800">${t}</p>${h.result[i] ? `<p class="text-xs text-gray-500 mt-0.5">${h.result[i]}</p>` : ''}</div></div>`).join('')}
+          </div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+          <p class="text-[10px] font-semibold text-gray-400 mb-1.5">BATCH REFERENCE</p>
+          <p class="text-xs font-mono text-gray-700">${h.batchId}</p>
+          <p class="text-[10px] text-gray-400 mt-1">Sent: ${h.sentAt}</p>
+        </div>
+        <button onclick="resend(${h.id}); closeDetail();" class="w-full py-3.5 rounded-2xl bg-emerald-600 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-emerald-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          Resend Report
+        </button>`;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetail() { document.getElementById('detailModal').classList.add('hidden'); }
+
+        function resend(id) {
+            const h = history.find(x => x.id === id);
+            if (!h) return;
+            const tests = h.tests.map((t, i) => `${i + 1}. ${t}${h.result[i] ? ': ' + h.result[i] : ''}`).join('\n');
+            const msg = encodeURIComponent(`Hello ${h.customer},\n\nHere are your lab reports (resent):\n\n${tests}\n\nTotal: ₹${h.totalMrp.toLocaleString('en-IN')}\n\nRef: ${h.batchId}\nView: https://reminderme.app/reports/${h.batchId}\n\nThank you.`);
+            if (h.channel === 'wa') window.open(`https://wa.me/?text=${msg}`, '_blank');
+            else if (h.channel === 'email') window.open(`mailto:?subject=Your Lab Reports (Resent) - ${h.batchId}&body=${decodeURIComponent(msg)}`, '_blank');
+            else if (h.channel === 'sms') window.open(`sms:?&body=${decodeURIComponent(msg)}`, '_blank');
+            showToast('Reports resent via ' + chLabel[h.channel]);
+        }
+
+        function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3000); }
+
+        function toggleSub(id) {
+            const sub = document.getElementById('sub-' + id);
+            const ch = document.getElementById('ch-' + id);
+            if (!sub) return;
+            const hidden = sub.classList.contains('hidden');
+            sub.classList.toggle('hidden', !hidden);
+            if (ch) ch.style.transform = hidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        renderHistory();
+    </script>
+</body>
+
+</html>

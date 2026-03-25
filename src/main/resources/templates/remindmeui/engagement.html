@@ -6,11 +6,6 @@
   <title>Engagement - Reminder Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-   <!-- Prevent flash before CSS loads -->
-  <script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
-
-  <!-- Theme CSS -->
-  <link rel="stylesheet" th:href="@{/css/theme.css}">
   <style>
     body { font-family: 'Inter', sans-serif; background: #f8f9fb; }
     ::-webkit-scrollbar { width: 4px; }
@@ -32,6 +27,9 @@
       <a href="customers.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-sm font-medium">Customers</span></a>
       <a href="engagement.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-indigo-600 text-white mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="text-sm font-semibold">Engage</span></a>
       <a href="promotions.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg><span class="text-sm font-medium">Promotions</span></a>
+      <a href="appointments.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="text-sm font-medium">Appointments</span></a>
+      <a href="reports.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="text-sm font-medium">Reports</span></a>
+      <a href="user-management.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-medium">Users</span></a>
       <a href="settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-medium">Settings</span></a>
       <div class="mt-6">
         <p class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Quick Actions</p>
@@ -61,6 +59,9 @@
       <a href="customers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-sm font-semibold">Customers</span></a>
       <a href="engagement.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="text-sm font-semibold">Engage</span></a>
       <a href="promotions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg><span class="text-sm font-semibold">Promotions</span></a>
+      <a href="appointments.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="text-sm font-semibold">Appointments</span></a>
+      <a href="reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="text-sm font-semibold">Reports</span></a>
+      <a href="user-management.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-semibold">Users</span></a>
       <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-semibold">Settings</span></a>
     </nav>
     <div class="px-3 py-3 border-t border-gray-100 flex-shrink-0"><div class="flex items-center gap-2.5 px-2 py-1.5"><div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">A</span></div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p><p class="text-[10px] text-gray-400 truncate mt-0.5">Acme Financial Services</p></div></div><button onclick="window.location.href='login.html'" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span class="text-sm font-medium">Sign Out</span></button></div>
@@ -118,44 +119,43 @@
 
       <!-- REMINDERS PANEL -->
       <div id="panel-reminders">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm text-gray-500">12 reminders</p>
-          <button onclick="openModal('createReminderModal')" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="remSearch" type="text" placeholder="Search reminders..." oninput="filterReminders()" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <button onclick="openModal('createReminderModal')" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm flex-shrink-0">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             New Reminder
           </button>
         </div>
+        <p id="rem-count" class="text-sm text-gray-500 mb-4">12 reminders</p>
         <div id="remindersGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-5"></div>
         <div id="remindersList" class="hidden bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50 mb-5"></div>
         <div class="flex items-center justify-between">
-          <p class="text-sm text-gray-500">Showing 1–6 of 12</p>
-          <div class="flex items-center gap-1">
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-medium">1</button>
-            <button onclick="alert('Page 2')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">2</button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
-          </div>
+          <p id="rem-page-label" class="text-sm text-gray-500">Showing 1–4 of 12</p>
+          <div id="rem-pagination" class="flex items-center gap-1"></div>
         </div>
       </div>
 
       <!-- GREETINGS PANEL -->
       <div id="panel-greetings" class="hidden">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm text-gray-500">10 greetings</p>
-          <button onclick="openModal('sendGreetingModal')" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 transition shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="greetSearch" type="text" placeholder="Search greetings..." oninput="filterGreetings()" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+          <button onclick="openModal('sendGreetingModal')" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 transition shadow-sm flex-shrink-0">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             New Greeting
           </button>
         </div>
+        <p id="greet-count" class="text-sm text-gray-500 mb-4">10 greetings</p>
         <div id="greetingsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-5"></div>
         <div id="greetingsList" class="hidden bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50 mb-5"></div>
         <div class="flex items-center justify-between">
-          <p class="text-sm text-gray-500">Showing 1–6 of 10</p>
-          <div class="flex items-center gap-1">
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-medium">1</button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
-          </div>
+          <p id="greet-page-label" class="text-sm text-gray-500">Showing 1–4 of 10</p>
+          <div id="greet-pagination" class="flex items-center gap-1"></div>
         </div>
       </div>
     </div>
@@ -292,7 +292,24 @@
         <div><label class="text-sm font-medium text-gray-700 mb-2 block">Send To</label><div class="flex rounded-2xl border border-gray-200 p-1 bg-gray-50"><button type="button" onclick="selST('ind')" id="st-ind" class="flex-1 py-2 rounded-xl text-sm font-medium bg-white text-rose-600 shadow-sm flex items-center justify-center gap-1.5 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Individual</button><button type="button" onclick="selST('grp')" id="st-grp" class="flex-1 py-2 rounded-xl text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Customer Group</button></div></div>
         <div id="gwCust"><label class="text-sm font-medium text-gray-700 mb-1.5 block">Select Customer</label><div class="relative"><select id="gtCustomer" class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 appearance-none"><option value="">Choose customer...</option><option>Rajesh Kumar</option><option>Anjali Singh</option><option>Mohammed Ibrahim</option><option>Sunita Patel</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div></div>
         <div id="gwGrp" class="hidden"><label class="text-sm font-medium text-gray-700 mb-1.5 block">Select Group</label><div class="relative"><select class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 appearance-none"><option>⭐ VIP</option><option>🔄 Regular</option><option>🆕 New</option><option>💤 Inactive</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div></div>
-        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Attach Image (optional)</label><label class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-2xl p-6 cursor-pointer hover:border-gray-300 transition bg-gray-50/50"><svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><p class="text-sm text-gray-400">Click to upload image</p><p class="text-xs text-gray-300">PNG, JPG up to 5MB</p><input type="file" class="hidden" accept="image/*"></label></div>
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-1.5 block">Attach Image (optional)</label>
+          <label id="gtImgLabel" class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-2xl p-5 cursor-pointer hover:border-pink-300 transition bg-gray-50/50">
+            <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <p class="text-sm text-gray-400">Click to upload image</p>
+            <p class="text-xs text-gray-300">PNG, JPG up to 5MB</p>
+            <input type="file" id="gtImgInput" class="hidden" accept="image/*" onchange="handleGreetingImgUpload(this)">
+          </label>
+          <div id="gtImgPreview" class="hidden mt-2 relative">
+            <img id="gtImgPreviewImg" src="" alt="Preview" class="w-full h-32 object-cover rounded-2xl border border-gray-200">
+            <div class="absolute inset-0 rounded-2xl bg-black/10 flex items-start justify-end p-2">
+              <button type="button" onclick="clearGreetingImg()" class="w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-gray-600 hover:text-red-500 shadow-sm transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <p id="gtImgFileName" class="text-xs text-gray-400 mt-1 text-center truncate"></p>
+          </div>
+        </div>
         <div><div class="flex items-center justify-between mb-1.5"><label class="text-sm font-medium text-gray-700">Message <span class="text-red-500">*</span></label><button type="button" onclick="genGreetingMsg()" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-50 text-pink-600 text-xs font-medium hover:bg-pink-100 transition"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"/></svg>Generate Message</button></div><textarea id="gtMessage" placeholder="Enter your greeting message..." rows="4" required class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none placeholder-gray-400"></textarea></div>
         <div class="grid grid-cols-2 gap-3"><div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Date <span class="text-red-500">*</span></label><input type="date" id="gtDate" required class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"></div><div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Time</label><input type="time" id="gtTime" value="09:00" class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"></div></div>
         <div><label class="text-sm font-medium text-gray-700 mb-2 block">Send Via</label><div class="flex gap-2"><button type="button" onclick="selGtCh('wa')" id="gch-wa" class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-green-500 text-white transition">WhatsApp</button><button type="button" onclick="selGtCh('sms')" id="gch-sms" class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">SMS</button><button type="button" onclick="selGtCh('em')" id="gch-em" class="flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">Email</button></div></div>
@@ -330,81 +347,232 @@
   </div>
 
   <script>
+    // ===================== DATA =====================
     const reminders = [
-      { id:1, title:'Loan EMI Payment Due', customer:'Rajesh Kumar', message:'Dear Rajesh, your home loan EMI o...', date:'15 Mar 2025', time:'09:00 am', channels:['wa','phone'], status:'Scheduled', recurring:true },
-      { id:2, title:'Policy Renewal', customer:'Mohammed Ibrahim', message:'Dear Mohammed, your insurance...', date:'18 Mar 2025', time:'10:00 am', channels:['em','phone'], status:'Scheduled', recurring:false },
-      { id:3, title:'SIP Investment Reminder', customer:'Vikram Nair', message:'Hi Vikram, your monthly SIP of...', date:'12 Mar 2025', time:'08:00 am', channels:['wa'], status:'Sent', recurring:true },
-      { id:4, title:'Document Submission', customer:'Anjali Singh', message:'Dear Anjali, please submit your KY...', date:'20 Mar 2025', time:'11:00 am', channels:['wa','em'], status:'Pending', recurring:false },
-      { id:5, title:'Quarterly Review Meeting', customer:'Amit Gupta', message:'Hi Amit, your quarterly investment...', date:'22 Mar 2025', time:'02:00 pm', channels:['wa','em'], status:'Scheduled', recurring:false },
-      { id:6, title:'FD Maturity Alert', customer:'Kiran Bose', message:'Dear Kiran, your Fixed Deposit of...', date:'28 Mar 2025', time:'10:00 am', channels:['wa','phone','em'], status:'Scheduled', recurring:false },
+      { id:1, title:'Loan EMI Payment Due', customer:'Rajesh Kumar', message:'Dear Rajesh, your home loan EMI of ₹12,500 is due on 15th March. Please ensure timely payment.', date:'15 Mar 2025', time:'09:00 am', channels:['wa','phone'], status:'Scheduled', recurring:true },
+      { id:2, title:'Policy Renewal', customer:'Mohammed Ibrahim', message:'Dear Mohammed, your insurance policy #INS-2021-4432 is due for renewal on 18th March.', date:'18 Mar 2025', time:'10:00 am', channels:['em','phone'], status:'Scheduled', recurring:false },
+      { id:3, title:'SIP Investment Reminder', customer:'Vikram Nair', message:'Hi Vikram, your monthly SIP of ₹5,000 is scheduled for 12th March. Ensure sufficient balance.', date:'12 Mar 2025', time:'08:00 am', channels:['wa'], status:'Sent', recurring:true },
+      { id:4, title:'Document Submission', customer:'Anjali Singh', message:'Dear Anjali, please submit your KYC documents at our office before 20th March 2025.', date:'20 Mar 2025', time:'11:00 am', channels:['wa','em'], status:'Pending', recurring:false },
+      { id:5, title:'Quarterly Review Meeting', customer:'Amit Gupta', message:'Hi Amit, your quarterly investment portfolio review is scheduled for 22nd March at 2pm.', date:'22 Mar 2025', time:'02:00 pm', channels:['wa','em'], status:'Scheduled', recurring:false },
+      { id:6, title:'FD Maturity Alert', customer:'Kiran Bose', message:'Dear Kiran, your Fixed Deposit of ₹2,00,000 matures on 28th March 2025.', date:'28 Mar 2025', time:'10:00 am', channels:['wa','phone','em'], status:'Scheduled', recurring:false },
+      { id:7, title:'Premium Payment Due', customer:'Deepa Krishnan', message:'Dear Deepa, your annual insurance premium of ₹18,000 is due next week.', date:'5 Apr 2025', time:'10:00 am', channels:['wa','em'], status:'Scheduled', recurring:true },
+      { id:8, title:'Portfolio Rebalancing', customer:'Priya Mehta', message:'Hi Priya, it is time to review and rebalance your investment portfolio for the new quarter.', date:'8 Apr 2025', time:'11:00 am', channels:['wa'], status:'Scheduled', recurring:false },
     ];
 
     const greetings = [
-      { id:1, type:'Birthday', customer:'Rajesh Kumar', message:'🎉 Wishing you a very Happy Birthday, Rajesh! May this special day bring you joy and...', date:'15 Mar 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
-      { id:2, type:'Anniversary', customer:'Mohammed Ibrahim', message:'💍 Happy Wedding Anniversary, Mohammed & Family! May your bond grow stronger each...', date:'15 Apr 2025', channels:['wa','phone'], status:'Scheduled', img:'https://images.unsplash.com/photo-1769050736767-bda81a15c397?w=400&q=80' },
-      { id:3, type:'Birthday', customer:'Anjali Singh', message:'🎂 Happy Birthday, Anjali! Sending you warm wishes on your special day.', date:'22 Jun 2025', channels:['wa','em'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
-      { id:4, type:'Birthday', customer:'Amit Gupta', message:'🎁 Happy Birthday Amit! We are grateful to have you as our client.', date:'12 Sept 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
-      { id:5, type:'Festival', customer:'Sunita Patel', message:'🪔 Happy Diwali, Sunita! May the festival of lights bring happiness and prosperity.', date:'20 Oct 2025', channels:['wa','em'], status:'Scheduled', img:'https://images.unsplash.com/photo-1635842975205-d6c2f1c0e1fe?w=400&q=80' },
-      { id:6, type:'Birthday', customer:'Kiran Bose', message:'🎉 Happy Birthday, Kiran! Wishing you continued success in all your endeavors.', date:'14 Jul 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
+      { id:1, type:'Birthday', customer:'Rajesh Kumar', message:'🎉 Wishing you a very Happy Birthday, Rajesh! May this special day bring you joy and prosperity.', date:'15 Mar 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
+      { id:2, type:'Anniversary', customer:'Mohammed Ibrahim', message:'💍 Happy Wedding Anniversary, Mohammed & Family! May your bond grow stronger each passing year.', date:'15 Apr 2025', channels:['wa','phone'], status:'Scheduled', img:'https://images.unsplash.com/photo-1769050736767-bda81a15c397?w=400&q=80' },
+      { id:3, type:'Birthday', customer:'Anjali Singh', message:'🎂 Happy Birthday, Anjali! Sending you warm wishes on your special day from our entire team.', date:'22 Jun 2025', channels:['wa','em'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
+      { id:4, type:'Birthday', customer:'Amit Gupta', message:'🎁 Happy Birthday Amit! We are grateful to have you as our valued client.', date:'12 Sept 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
+      { id:5, type:'Festival', customer:'Sunita Patel', message:'🪔 Happy Diwali, Sunita! May the festival of lights bring happiness and prosperity to you and your family.', date:'20 Oct 2025', channels:['wa','em'], status:'Scheduled', img:'https://images.unsplash.com/photo-1635842975205-d6c2f1c0e1fe?w=400&q=80' },
+      { id:6, type:'Birthday', customer:'Kiran Bose', message:'🎉 Happy Birthday, Kiran! Wishing you continued success in all your financial endeavors.', date:'14 Jul 2025', channels:['wa'], status:'Scheduled', img:'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80' },
+      { id:7, type:'Anniversary', customer:'Priya Mehta', message:'🌹 Happy Work Anniversary, Priya! Thank you for your continued trust in Acme Financial Services.', date:'3 Aug 2025', channels:['wa','em'], status:'Scheduled', img:'https://images.unsplash.com/photo-1769050736767-bda81a15c397?w=400&q=80' },
     ];
 
     const statusColors = { Scheduled:'bg-blue-100 text-blue-700', Sent:'bg-green-100 text-green-700', Pending:'bg-orange-100 text-orange-700', Failed:'bg-red-100 text-red-700' };
-    const chIcon = { wa:`<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`, phone:`<svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>`, em:`<svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>` };
+    const chIcon = {
+      wa:`<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
+      phone:`<svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>`,
+      em:`<svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`
+    };
 
+    // ===================== STATE =====================
     let engView = 'card';
+    let remPage = 1, greetPage = 1;
+    let remSearchTerm = '', greetSearchTerm = '';
+    const REM_PER_PAGE = 4, GREET_PER_PAGE = 4;
+    let remType = 'onetime', recurFreq = 'monthly';
+    let activeRemCh = 'wa', activeGtCh = 'wa';
+    let greetingImgDataUrl = null;
 
+    // ===================== SEARCH =====================
+    function filterReminders() {
+      remSearchTerm = (document.getElementById('remSearch').value || '').toLowerCase().trim();
+      remPage = 1;
+      renderReminders();
+    }
+
+    function filterGreetings() {
+      greetSearchTerm = (document.getElementById('greetSearch').value || '').toLowerCase().trim();
+      greetPage = 1;
+      renderGreetings();
+    }
+
+    function getFilteredReminders() {
+      if (!remSearchTerm) return reminders;
+      return reminders.filter(r =>
+        r.title.toLowerCase().includes(remSearchTerm) ||
+        r.customer.toLowerCase().includes(remSearchTerm) ||
+        r.message.toLowerCase().includes(remSearchTerm) ||
+        r.status.toLowerCase().includes(remSearchTerm)
+      );
+    }
+
+    function getFilteredGreetings() {
+      if (!greetSearchTerm) return greetings;
+      return greetings.filter(gr =>
+        gr.customer.toLowerCase().includes(greetSearchTerm) ||
+        gr.type.toLowerCase().includes(greetSearchTerm) ||
+        gr.message.toLowerCase().includes(greetSearchTerm) ||
+        gr.status.toLowerCase().includes(greetSearchTerm)
+      );
+    }
+
+    // ===================== PAGINATION HELPER =====================
+    function renderEngPagination(containerId, currentPage, total, perPage, goFnName) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      const totalPages = Math.ceil(total / perPage);
+      if (totalPages <= 1) { el.innerHTML = ''; return; }
+      const maxVisible = 5;
+      let startP = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+      let endP = Math.min(totalPages, startP + maxVisible - 1);
+      if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+      const prev = `<button onclick="${goFnName}(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>`;
+      let pages = '';
+      for (let i = startP; i <= endP; i++) {
+        pages += `<button onclick="${goFnName}(${i})" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium ${i === currentPage ? 'bg-indigo-600 text-white' : 'border border-gray-200 text-gray-600 hover:bg-gray-50'}">${i}</button>`;
+      }
+      const next = `<button onclick="${goFnName}(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>`;
+      el.innerHTML = prev + pages + next;
+    }
+
+    function goRemPage(p) {
+      const total = getFilteredReminders().length;
+      const tp = Math.ceil(total / REM_PER_PAGE);
+      if (p < 1 || p > tp) return;
+      remPage = p;
+      renderReminders();
+    }
+
+    function goGreetPage(p) {
+      const total = getFilteredGreetings().length;
+      const tp = Math.ceil(total / GREET_PER_PAGE);
+      if (p < 1 || p > tp) return;
+      greetPage = p;
+      renderGreetings();
+    }
+
+    // ===================== RENDER REMINDERS =====================
     function renderReminders() {
+      const filtered = getFilteredReminders();
+      const total = filtered.length;
+      const start = (remPage - 1) * REM_PER_PAGE;
+      const page = filtered.slice(start, start + REM_PER_PAGE);
       const g = document.getElementById('remindersGrid');
       const l = document.getElementById('remindersList');
       g.innerHTML = '';
       l.innerHTML = '';
-      reminders.forEach(r => {
+
+      document.getElementById('rem-count').textContent = total + ' reminder' + (total !== 1 ? 's' : '');
+      if (total === 0) {
+        document.getElementById('rem-page-label').textContent = 'No reminders found';
+        g.innerHTML = `<div class="col-span-3 text-center py-14"><div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><p class="text-sm font-semibold text-gray-500 mb-1">No reminders found</p><p class="text-xs text-gray-400">Try a different search term</p></div>`;
+        document.getElementById('rem-pagination').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('rem-page-label').textContent = `Showing ${start + 1}–${Math.min(start + REM_PER_PAGE, total)} of ${total}`;
+
+      page.forEach(r => {
         const chHtml = r.channels.map(c => chIcon[c]).join('');
         const detailPage = r.recurring ? 'reminder-detail.html' : 'reminder-detail-onetime.html';
-        g.innerHTML += `<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md hover:border-indigo-200 transition cursor-pointer" onclick="window.location.href='${detailPage}'">
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center gap-3 flex-1 min-w-0">
-              <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-              <div class="flex-1 min-w-0"><p class="text-sm font-bold text-gray-900 flex items-center gap-1">${r.title} ${r.recurring?'<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-50 text-purple-600 font-semibold flex items-center gap-0.5"><svg class=\'w-2.5 h-2.5\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15\'/></svg>Recurring</span>':'<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold">One-Time</span>'}</p><p class="text-xs text-gray-500">${r.customer}</p></div>
+        const recurBadge = r.recurring
+          ? `<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-50 text-purple-600 font-semibold flex items-center gap-0.5"><svg class='w-2.5 h-2.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'/></svg>Recurring</span>`
+          : `<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold">One-Time</span>`;
+        g.innerHTML += `
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md hover:border-indigo-200 transition cursor-pointer" onclick="window.location.href='${detailPage}'">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold text-gray-900 flex items-center gap-1 flex-wrap">${r.title} ${recurBadge}</p>
+                  <p class="text-xs text-gray-500">${r.customer}</p>
+                </div>
+              </div>
+              <button onclick="event.stopPropagation(); deleteReminder(${r.id})" class="text-gray-300 hover:text-red-400 p-1 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
             </div>
-            <button onclick="event.stopPropagation()" class="text-gray-300 hover:text-red-400 p-1 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-          </div>
-          <p class="text-xs text-gray-500 mb-3 line-clamp-1">${r.message}</p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1 text-xs text-gray-400"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> ${r.date} · ${r.time}</div>
-            <div class="flex items-center gap-2">${chHtml} <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span></div>
-          </div>
-        </div>`;
-        l.innerHTML += `<div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition"><div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate">${r.title}</p><p class="text-xs text-gray-400">${r.customer} · ${r.date}</p></div><div class="flex items-center gap-2">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span></div></div>`;
+            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${r.message}</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1 text-xs text-gray-400"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> ${r.date} · ${r.time}</div>
+              <div class="flex items-center gap-2">${chHtml} <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span></div>
+            </div>
+          </div>`;
+        l.innerHTML += `
+          <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition cursor-pointer" onclick="window.location.href='${detailPage}'">
+            <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate">${r.title}</p><p class="text-xs text-gray-400">${r.customer} · ${r.date}</p></div>
+            <div class="flex items-center gap-2">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span></div>
+          </div>`;
       });
+
+      renderEngPagination('rem-pagination', remPage, total, REM_PER_PAGE, 'goRemPage');
     }
 
+    function deleteReminder(id) {
+      const idx = reminders.findIndex(r => r.id === id);
+      if (idx !== -1) { reminders.splice(idx, 1); remPage = 1; renderReminders(); }
+    }
+
+    // ===================== RENDER GREETINGS =====================
     function renderGreetings() {
+      const filtered = getFilteredGreetings();
+      const total = filtered.length;
+      const start = (greetPage - 1) * GREET_PER_PAGE;
+      const page = filtered.slice(start, start + GREET_PER_PAGE);
       const g = document.getElementById('greetingsGrid');
       const l = document.getElementById('greetingsList');
       g.innerHTML = '';
       l.innerHTML = '';
-      const typeColors = { Birthday:'bg-pink-100 text-pink-700', Anniversary:'bg-red-100 text-red-700', Festival:'bg-orange-100 text-orange-700' };
+
       const typeEmoji = { Birthday:'🎂', Anniversary:'💍', Festival:'🎊' };
-      greetings.forEach(gr => {
+
+      document.getElementById('greet-count').textContent = total + ' greeting' + (total !== 1 ? 's' : '');
+      if (total === 0) {
+        document.getElementById('greet-page-label').textContent = 'No greetings found';
+        g.innerHTML = `<div class="col-span-3 text-center py-14"><div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><p class="text-sm font-semibold text-gray-500 mb-1">No greetings found</p><p class="text-xs text-gray-400">Try a different search term</p></div>`;
+        document.getElementById('greet-pagination').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('greet-page-label').textContent = `Showing ${start + 1}–${Math.min(start + GREET_PER_PAGE, total)} of ${total}`;
+
+      page.forEach(gr => {
         const chHtml = gr.channels.map(c => chIcon[c]).join('');
-        g.innerHTML += `<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:border-pink-200 transition cursor-pointer" onclick="window.location.href='greeting-detail.html'">
-          <div class="relative h-36 overflow-hidden">
-            <img src="${gr.img}" alt="${gr.type}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-            <span class="absolute bottom-2 left-2 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-gray-800">${typeEmoji[gr.type]} ${gr.type}</span>
-            <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center text-gray-400 hover:text-red-500"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-          </div>
-          <div class="p-4">
-            <div class="flex items-start justify-between mb-1"><p class="text-sm font-bold text-gray-900">${gr.customer}</p><button class="text-gray-300 hover:text-gray-500 p-0.5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button></div>
-            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${gr.message}</p>
-            <div class="flex items-center justify-between"><div class="flex items-center gap-1 text-xs text-gray-400"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>${gr.date}</div><div class="flex items-center gap-1.5">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[gr.status]}">${gr.status}</span></div></div>
-          </div>
-        </div>`;
-        l.innerHTML += `<div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition"><div class="w-12 h-10 rounded-xl overflow-hidden flex-shrink-0"><img src="${gr.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate">${gr.customer}</p><p class="text-xs text-gray-400">${typeEmoji[gr.type]} ${gr.type} · ${gr.date}</p></div><div class="flex items-center gap-2">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[gr.status]}">${gr.status}</span></div></div>`;
+        g.innerHTML += `
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:border-pink-200 transition cursor-pointer" onclick="window.location.href='greeting-detail.html'">
+            <div class="relative h-36 overflow-hidden">
+              <img src="${gr.img}" alt="${gr.type}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+              <span class="absolute bottom-2 left-2 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-gray-800">${typeEmoji[gr.type] || '🎊'} ${gr.type}</span>
+              <button onclick="event.stopPropagation(); deleteGreeting(${gr.id})" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center text-gray-400 hover:text-red-500"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+            </div>
+            <div class="p-4">
+              <p class="text-sm font-bold text-gray-900 mb-1">${gr.customer}</p>
+              <p class="text-xs text-gray-500 mb-3 line-clamp-2">${gr.message}</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1 text-xs text-gray-400"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>${gr.date}</div>
+                <div class="flex items-center gap-1.5">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[gr.status]}">${gr.status}</span></div>
+              </div>
+            </div>
+          </div>`;
+        l.innerHTML += `
+          <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition cursor-pointer" onclick="window.location.href='greeting-detail.html'">
+            <div class="w-12 h-10 rounded-xl overflow-hidden flex-shrink-0"><img src="${gr.img}" class="w-full h-full object-cover"></div>
+            <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate">${gr.customer}</p><p class="text-xs text-gray-400">${typeEmoji[gr.type] || '🎊'} ${gr.type} · ${gr.date}</p></div>
+            <div class="flex items-center gap-2">${chHtml}<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[gr.status]}">${gr.status}</span></div>
+          </div>`;
       });
+
+      renderEngPagination('greet-pagination', greetPage, total, GREET_PER_PAGE, 'goGreetPage');
     }
 
+    function deleteGreeting(id) {
+      const idx = greetings.findIndex(g => g.id === id);
+      if (idx !== -1) { greetings.splice(idx, 1); greetPage = 1; renderGreetings(); }
+    }
+
+    // ===================== UI HELPERS =====================
     function switchTab(tab) {
       ['reminders','greetings'].forEach(t => {
         const panel = document.getElementById(`panel-${t}`);
@@ -417,17 +585,16 @@
     function setEngView(v) {
       engView = v;
       ['reminders','greetings'].forEach(t => {
-        document.getElementById(t+'Grid').classList.toggle('hidden', v!=='card');
-        document.getElementById(t+'List').classList.toggle('hidden', v!=='list');
+        document.getElementById(t+'Grid').classList.toggle('hidden', v !== 'card');
+        document.getElementById(t+'List').classList.toggle('hidden', v !== 'list');
       });
-      document.getElementById('ev-card').className = v==='card'?'p-2 rounded-lg bg-indigo-50 text-indigo-600':'p-2 rounded-lg text-gray-400 hover:bg-gray-100';
-      document.getElementById('ev-list').className = v==='list'?'p-2 rounded-lg bg-indigo-50 text-indigo-600':'p-2 rounded-lg text-gray-400 hover:bg-gray-100';
+      document.getElementById('ev-card').className = v === 'card' ? 'p-2 rounded-lg bg-indigo-50 text-indigo-600' : 'p-2 rounded-lg text-gray-400 hover:bg-gray-100';
+      document.getElementById('ev-list').className = v === 'list' ? 'p-2 rounded-lg bg-indigo-50 text-indigo-600' : 'p-2 rounded-lg text-gray-400 hover:bg-gray-100';
     }
 
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // FAB toggle
     let fabOpen = false;
     function toggleFab() {
       fabOpen = !fabOpen;
@@ -436,10 +603,7 @@
       document.getElementById('fabIcon').style.transform = fabOpen ? 'rotate(45deg)' : 'rotate(0deg)';
     }
 
-    // Reminder type: one-time vs recurring
-    let remType = 'onetime';
-    let recurFreq = 'monthly';
-
+    // ===================== REMINDER FORM =====================
     function setRemType(t) {
       remType = t;
       const freq = document.getElementById('recurringFreqBox');
@@ -459,67 +623,192 @@
     function setFreq(f) {
       recurFreq = f;
       ['daily','weekly','monthly','yearly'].forEach(x => {
-        const b = document.getElementById('freq-'+x);
-        b.className = x===f ? 'py-2.5 rounded-xl border-2 border-indigo-500 bg-indigo-50 text-xs font-semibold text-indigo-700 transition' : 'py-2.5 rounded-xl border-2 border-gray-200 text-xs font-semibold text-gray-600 hover:border-indigo-300 transition';
+        document.getElementById('freq-'+x).className = x === f
+          ? 'py-2.5 rounded-xl border-2 border-indigo-500 bg-indigo-50 text-xs font-semibold text-indigo-700 transition'
+          : 'py-2.5 rounded-xl border-2 border-gray-200 text-xs font-semibold text-gray-600 hover:border-indigo-300 transition';
       });
     }
 
     function setAttachTab(t) {
-      document.getElementById('attachPlansPanel').classList.toggle('hidden', t!=='plan');
-      document.getElementById('attachProductsPanel').classList.toggle('hidden', t!=='product');
-      document.getElementById('at-plan').className = t==='plan' ? 'flex-1 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition' : 'flex-1 py-2 rounded-lg text-xs font-semibold text-gray-500 transition';
-      document.getElementById('at-product').className = t==='product' ? 'flex-1 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition' : 'flex-1 py-2 rounded-lg text-xs font-semibold text-gray-500 transition';
+      document.getElementById('attachPlansPanel').classList.toggle('hidden', t !== 'plan');
+      document.getElementById('attachProductsPanel').classList.toggle('hidden', t !== 'product');
+      document.getElementById('at-plan').className = t === 'plan' ? 'flex-1 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition' : 'flex-1 py-2 rounded-lg text-xs font-semibold text-gray-500 transition';
+      document.getElementById('at-product').className = t === 'product' ? 'flex-1 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition' : 'flex-1 py-2 rounded-lg text-xs font-semibold text-gray-500 transition';
     }
 
     function selRemCh(ch) {
-      const map = { wa: 'bg-green-500', sms: 'bg-blue-500', em: 'bg-violet-500' };
+      activeRemCh = ch;
+      const map = { wa:'bg-green-500', sms:'bg-blue-500', em:'bg-violet-500' };
       ['wa','sms','em'].forEach(c => {
-        const b = document.getElementById('rch-'+c);
-        b.className = c===ch ? `flex-1 py-2.5 rounded-full text-sm font-semibold ${map[c]} text-white transition` : 'flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+        document.getElementById('rch-'+c).className = c === ch
+          ? `flex-1 py-2.5 rounded-full text-sm font-semibold ${map[c]} text-white transition`
+          : 'flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
       });
     }
 
+    function genReminderMsg() {
+      const t = document.getElementById('remTitle').value || 'this reminder';
+      const msgs = [
+        `Dear Customer, this is a friendly reminder about your ${t}. Please ensure timely action to avoid any inconvenience.`,
+        `Hi! Quick reminder about your ${t}. Please take action at your earliest convenience. Our team is here to assist you.`
+      ];
+      const m = msgs[Math.floor(Math.random() * msgs.length)];
+      document.getElementById('remMessage').value = m;
+      document.getElementById('remCC').textContent = m.length;
+    }
+
+    function submitReminder(e) {
+      e.preventDefault();
+      const dateVal = document.getElementById('remDate').value;
+      const timeVal = document.getElementById('remTime').value;
+      const fmtDate = dateVal ? new Date(dateVal).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) : new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const fmtTime = timeVal || '09:00 am';
+      const chMap = { wa:'wa', sms:'phone', em:'em' };
+      const newR = {
+        id: Date.now(),
+        title: document.getElementById('remTitle').value,
+        customer: document.getElementById('remCustomer').value || 'Customer',
+        message: document.getElementById('remMessage').value,
+        date: fmtDate,
+        time: fmtTime,
+        channels: [chMap[activeRemCh] || 'wa'],
+        status: 'Scheduled',
+        recurring: remType === 'recurring'
+      };
+      reminders.unshift(newR);
+      closeModal('createReminderModal');
+      e.target.reset();
+      remPage = 1;
+      remSearchTerm = '';
+      const si = document.getElementById('remSearch');
+      if (si) si.value = '';
+      document.getElementById('remCC').textContent = '0';
+      setRemType('onetime');
+      selRemCh('wa');
+      renderReminders();
+    }
+
+    // ===================== GREETING FORM =====================
     function selGT(t) {
       document.getElementById('gtHidden').value = t;
       const map = { birthday:'gt-b', anniversary:'gt-a', festival:'gt-f' };
       Object.keys(map).forEach(k => {
         const b = document.getElementById(map[k]);
-        if (k===t) { b.classList.add('border-pink-400','bg-pink-50'); b.classList.remove('border-gray-200'); }
+        if (k === t) { b.classList.add('border-pink-400','bg-pink-50'); b.classList.remove('border-gray-200'); }
         else { b.classList.remove('border-pink-400','bg-pink-50'); b.classList.add('border-gray-200'); }
       });
     }
 
     function selST(m) {
       const indB = document.getElementById('st-ind'), grpB = document.getElementById('st-grp');
-      if (m==='ind') { indB.className='flex-1 py-2 rounded-xl text-sm font-medium bg-white text-rose-600 shadow-sm flex items-center justify-center gap-1.5 transition'; grpB.className='flex-1 py-2 rounded-xl text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition'; document.getElementById('gwCust').classList.remove('hidden'); document.getElementById('gwGrp').classList.add('hidden'); }
-      else { grpB.className='flex-1 py-2 rounded-xl text-sm font-medium bg-white text-rose-600 shadow-sm flex items-center justify-center gap-1.5 transition'; indB.className='flex-1 py-2 rounded-xl text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition'; document.getElementById('gwCust').classList.add('hidden'); document.getElementById('gwGrp').classList.remove('hidden'); }
+      if (m === 'ind') {
+        indB.className = 'flex-1 py-2 rounded-xl text-sm font-medium bg-white text-rose-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        grpB.className = 'flex-1 py-2 rounded-xl text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+        document.getElementById('gwCust').classList.remove('hidden');
+        document.getElementById('gwGrp').classList.add('hidden');
+      } else {
+        grpB.className = 'flex-1 py-2 rounded-xl text-sm font-medium bg-white text-rose-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        indB.className = 'flex-1 py-2 rounded-xl text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+        document.getElementById('gwCust').classList.add('hidden');
+        document.getElementById('gwGrp').classList.remove('hidden');
+      }
     }
 
     function selGtCh(ch) {
-      const map = { wa: 'bg-green-500', sms: 'bg-blue-500', em: 'bg-violet-500' };
+      activeGtCh = ch;
+      const map = { wa:'bg-green-500', sms:'bg-blue-500', em:'bg-violet-500' };
       ['wa','sms','em'].forEach(c => {
-        const b = document.getElementById('gch-'+c);
-        b.className = c===ch ? `flex-1 py-2.5 rounded-full text-sm font-semibold ${map[c]} text-white transition` : 'flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+        document.getElementById('gch-'+c).className = c === ch
+          ? `flex-1 py-2.5 rounded-full text-sm font-semibold ${map[c]} text-white transition`
+          : 'flex-1 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
       });
-    }
-
-    function genReminderMsg() {
-      const t = document.getElementById('remTitle').value || 'reminder';
-      const msgs = [`Dear Customer, this is a friendly reminder about your ${t}. Please ensure timely action.`, `Hi! Quick reminder about your ${t}. Please take action at your earliest convenience.`];
-      const m = msgs[Math.floor(Math.random()*msgs.length)];
-      document.getElementById('remMessage').value = m;
-      document.getElementById('remCC').textContent = m.length;
     }
 
     function genGreetingMsg() {
       const t = document.getElementById('gtHidden').value;
-      const msgs = { birthday:'🎂 Wishing you a very Happy Birthday! May this special day bring you endless joy and happiness. Warm regards!', anniversary:'💍 Congratulations on your Anniversary! May your journey together continue with love and cherished memories.', festival:'🎊 Wishing you and your family a joyful and prosperous festival! May this occasion bring happiness and good fortune.' };
+      const msgs = {
+        birthday: '🎂 Wishing you a very Happy Birthday! May this special day bring you endless joy, good health, and happiness. With warm regards from Acme Financial Services.',
+        anniversary: '💍 Congratulations on your Anniversary! May your journey together continue to be filled with love, laughter, and cherished memories. Best wishes!',
+        festival: '🎊 Wishing you and your family a joyful and prosperous festival! May this occasion bring happiness, good fortune, and wonderful memories.'
+      };
       document.getElementById('gtMessage').value = msgs[t] || msgs.birthday;
     }
 
-    function submitReminder(e) { e.preventDefault(); closeModal('createReminderModal'); e.target.reset(); }
-    function submitGreeting(e) { e.preventDefault(); closeModal('sendGreetingModal'); e.target.reset(); }
+    // ===================== IMAGE UPLOAD =====================
+    function handleGreetingImgUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image must be less than 5MB. Please choose a smaller file.');
+        input.value = '';
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (PNG, JPG, etc.)');
+        input.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        greetingImgDataUrl = e.target.result;
+        document.getElementById('gtImgPreviewImg').src = e.target.result;
+        document.getElementById('gtImgFileName').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+        document.getElementById('gtImgPreview').classList.remove('hidden');
+        document.getElementById('gtImgLabel').classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
 
+    function clearGreetingImg() {
+      greetingImgDataUrl = null;
+      const inp = document.getElementById('gtImgInput');
+      if (inp) inp.value = '';
+      document.getElementById('gtImgPreview').classList.add('hidden');
+      document.getElementById('gtImgLabel').classList.remove('hidden');
+    }
+
+    function submitGreeting(e) {
+      e.preventDefault();
+      const gtTypeVal = document.getElementById('gtHidden').value;
+      const typeLabel = { birthday:'Birthday', anniversary:'Anniversary', festival:'Festival' };
+      const typeEmoji = { Birthday:'🎂', Anniversary:'💍', Festival:'🎊' };
+      const isIndividual = !document.getElementById('gwCust').classList.contains('hidden');
+      const customerVal = isIndividual
+        ? (document.getElementById('gtCustomer').value || 'Customer')
+        : 'Customer Group';
+      const dateVal = document.getElementById('gtDate').value;
+      const fmtDate = dateVal ? new Date(dateVal).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) : new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const fallbackImgs = {
+        birthday: 'https://images.unsplash.com/photo-1664289597477-d5b2d266169d?w=400&q=80',
+        anniversary: 'https://images.unsplash.com/photo-1769050736767-bda81a15c397?w=400&q=80',
+        festival: 'https://images.unsplash.com/photo-1635842975205-d6c2f1c0e1fe?w=400&q=80'
+      };
+      const newG = {
+        id: Date.now(),
+        type: typeLabel[gtTypeVal] || 'Birthday',
+        customer: customerVal,
+        message: document.getElementById('gtMessage').value,
+        date: fmtDate,
+        channels: [activeGtCh || 'wa'],
+        status: 'Scheduled',
+        img: greetingImgDataUrl || fallbackImgs[gtTypeVal] || fallbackImgs.birthday
+      };
+      greetings.unshift(newG);
+      closeModal('sendGreetingModal');
+      e.target.reset();
+      greetPage = 1;
+      greetSearchTerm = '';
+      const si = document.getElementById('greetSearch');
+      if (si) si.value = '';
+      // Reset greeting form state
+      selGT('birthday');
+      selST('ind');
+      selGtCh('wa');
+      clearGreetingImg();
+      renderGreetings();
+    }
+
+    // ===================== INIT =====================
     renderReminders();
     renderGreetings();
 
@@ -534,6 +823,5 @@
       document.body.style.overflow = '';
     }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>

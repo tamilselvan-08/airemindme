@@ -1,79 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promotions - Reminder Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-   <!-- Prevent flash before CSS loads -->
+  <!-- Prevent flash before CSS loads -->
   <script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
 
   <!-- Theme CSS -->
   <link rel="stylesheet" th:href="@{/css/theme.css}">
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:4px}
-    .card-selected { border-color: #4f46e5 !important; background: #f5f3ff; }
-    .check-ring { display:none; }
-    .card-selected .check-ring { display:flex; }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 4px
+    }
+
+    .card-selected {
+      border-color: #4f46e5 !important;
+      background: #f5f3ff;
+    }
+
+    .check-ring {
+      display: none;
+    }
+
+    .card-selected .check-ring {
+      display: flex;
+    }
   </style>
 </head>
+
 <body class="bg-gray-50">
 
-  <!-- Sidebar -->
-  <div class="hidden md:flex fixed left-0 top-0 h-screen w-56 bg-white border-r border-gray-100 flex-col z-30">
-    <div class="px-4 pt-5 pb-3"><a href="home.html" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p><p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p></div></a></div>
-    <nav class="flex-1 px-3 py-2 overflow-y-auto">
-      <a href="home.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="text-sm font-medium">Home</span></a>
-      <a href="customers.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-sm font-medium">Customers</span></a>
-      <a href="engagement.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="text-sm font-medium">Engage</span></a>
-      <a href="promotions.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-indigo-600 text-white mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg><span class="text-sm font-semibold">Promotions</span></a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-medium">Settings</span></a>
-      <div class="mt-6">
-        <p class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Quick Actions</p>
-        <a href="engagement.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1"><div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-sm">Create Reminder</span></a>
-        <a href="engagement.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1"><div class="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><span class="text-sm">Send Greeting</span></a>
-        <button onclick="openCreateLinkModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1"><div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div><span class="text-sm">Create Promotion</span></button>
-        <a href="customers.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1"><div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg></div><span class="text-sm">Add Customer</span></a>
-      </div>
-    </nav>
-    <div class="px-4 py-4 border-t border-gray-100">
-      <div class="flex items-center gap-3 mb-3"><div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">A</span></div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p><p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial Services</p></div></div>
-      <button onclick="window.location.href='login.html'" class="flex items-center gap-2 px-1 py-1 text-gray-500 hover:text-red-600 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span class="text-sm font-medium">Sign Out</span></button>
-    </div>
-  </div>
 
-  <!-- MOBILE HEADER -->
-  <div class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-40 h-14 flex items-center justify-between px-4 shadow-sm">
-    <button onclick="openMobileNav()" class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-    <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><span class="text-sm font-bold text-gray-900">Reminder Me</span></div>
-    <button onclick="window.location.href='login.html'" class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
-  </div>
-  <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm" onclick="closeMobileNav()"></div>
-  <div id="mobileNavDrawer" class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300" style="transform:translateX(-100%)">
-    <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p><p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p></div></div><button onclick="closeMobileNav()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+  <!-- Sidebar -->
+  <div th:replace="~{remindmeui/fragments/layout :: sidebar(activePage='promotions')}"></div>
+
+  <!-- Mobile nav -->
+  <div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='promotions')}"></div>
+
+  <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
+    onclick="closeMobileNav()"></div>
+  <div id="mobileNavDrawer"
+    class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300"
+    style="transform:translateX(-100%)">
+    <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+            class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg></div>
+        <div>
+          <p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
+          <p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
+        </div>
+      </div><button onclick="closeMobileNav()"
+        class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+          class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+    </div>
     <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-0.5">
-      <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="text-sm font-semibold">Home</span></a>
-      <a href="customers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-sm font-semibold">Customers</span></a>
-      <a href="engagement.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="text-sm font-semibold">Engage</span></a>
-      <a href="promotions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg><span class="text-sm font-semibold">Promotions</span></a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-semibold">Settings</span></a>
+      <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg><span class="text-sm font-semibold">Home</span></a>
+      <a href="customers.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg><span class="text-sm font-semibold">Customers</span></a>
+      <a href="engagement.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg><span class="text-sm font-semibold">Engage</span></a>
+      <a href="promotions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg><span class="text-sm font-semibold">Promotions</span></a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg><span class="text-sm font-semibold">Settings</span></a>
     </nav>
-    <div class="px-3 py-3 border-t border-gray-100 flex-shrink-0"><div class="flex items-center gap-2.5 px-2 py-1.5"><div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-xs font-bold">A</span></div><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p><p class="text-[10px] text-gray-400 truncate mt-0.5">Acme Financial Services</p></div></div><button onclick="window.location.href='login.html'" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span class="text-sm font-medium">Sign Out</span></button></div>
+    <div class="px-3 py-3 border-t border-gray-100 flex-shrink-0">
+      <div class="flex items-center gap-2.5 px-2 py-1.5">
+        <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+            class="text-white text-xs font-bold">A</span></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+          <p class="text-[10px] text-gray-400 truncate mt-0.5">Acme Financial Services</p>
+        </div>
+      </div><button onclick="window.location.href='login.html'"
+        class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition"><svg
+          class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg><span class="text-sm font-medium">Sign Out</span></button>
+    </div>
   </div>
 
   <!-- Main -->
   <div class="md:ml-56 min-h-screen pb-32 md:pb-24 pt-14 md:pt-0">
-    <div class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 sticky top-14 md:top-0 z-20 flex flex-wrap items-center justify-between gap-3">
+    <div
+      class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 sticky top-14 md:top-0 z-20 flex flex-wrap items-center justify-between gap-3">
       <div>
-        <p class="text-xs text-gray-400 mb-1"><a href="home.html" class="hover:text-indigo-600">Home</a> / <span class="text-gray-700">Promotions</span></p>
+        <p class="text-xs text-gray-400 mb-1"><a href="home.html" class="hover:text-indigo-600">Home</a> / <span
+            class="text-gray-700">Promotions</span></p>
         <h1 class="text-xl font-bold text-gray-900">Promotions</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Select plans &amp; products, create a shareable link, send to customers</p>
+        <p class="text-sm text-gray-400 mt-0.5">Select plans &amp; products, create a shareable link, send to customers
+        </p>
       </div>
       <!-- Create Link header button (shows when items selected) -->
-      <button id="headerCreateBtn" onclick="openCreateLinkModal()" class="hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      <button id="headerCreateBtn" onclick="openCreateLinkModal()"
+        class="hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
         Create Link (<span id="headerCount">0</span>)
       </button>
     </div>
@@ -81,13 +143,22 @@
     <div class="px-4 md:px-6 py-5">
       <!-- Tabs -->
       <div class="flex items-center gap-3 mb-5 overflow-x-auto">
-        <button onclick="switchPromoTab('catalog')" id="pt-catalog" class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-600 text-indigo-600 text-sm font-semibold flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+        <button onclick="switchPromoTab('catalog')" id="pt-catalog"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-600 text-indigo-600 text-sm font-semibold flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
           Catalog <span class="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full text-xs ml-1">6</span>
         </button>
-        <button onclick="switchPromoTab('links')" id="pt-links" class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-gray-200 text-gray-500 text-sm font-semibold hover:border-gray-300 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-          My Links <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs ml-1" id="linksCount">1</span>
+        <button onclick="switchPromoTab('links')" id="pt-links"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-gray-200 text-gray-500 text-sm font-semibold hover:border-gray-300 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          My Links <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs ml-1"
+            id="linksCount">1</span>
         </button>
       </div>
 
@@ -96,22 +167,37 @@
         <!-- Search + Filter -->
         <div class="flex items-center gap-3 mb-5">
           <div class="relative flex-1">
-            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" placeholder="Search plans &amp; products..." oninput="filterCatalog(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" placeholder="Search plans &amp; products..." oninput="filterCatalog(this.value)"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
           <div class="flex items-center gap-1">
-            <button onclick="setCatFilter('all')" id="cat-all" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium">All</button>
-            <button onclick="setCatFilter('plans')" id="cat-plans" class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50">Plans</button>
-            <button onclick="setCatFilter('products')" id="cat-products" class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50">Products</button>
-            <button id="clearSelBtn" onclick="clearAll()" class="hidden px-4 py-2 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50">Clear (<span id="clearCount">0</span>)</button>
+            <button onclick="setCatFilter('all')" id="cat-all"
+              class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium">All</button>
+            <button onclick="setCatFilter('plans')" id="cat-plans"
+              class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50">Plans</button>
+            <button onclick="setCatFilter('products')" id="cat-products"
+              class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50">Products</button>
+            <button id="clearSelBtn" onclick="clearAll()"
+              class="hidden px-4 py-2 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50">Clear
+              (<span id="clearCount">0</span>)</button>
           </div>
         </div>
 
         <!-- Plans Section -->
         <div id="plansSection" class="mb-7">
           <div class="flex items-center gap-2 mb-3">
-            <div class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center"><svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
-            <h3 class="text-sm font-bold text-gray-900">Plans <span class="text-gray-400 font-normal text-xs ml-1">3</span></h3>
+            <div class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center"><svg
+                class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg></div>
+            <h3 class="text-sm font-bold text-gray-900">Plans <span
+                class="text-gray-400 font-normal text-xs ml-1">3</span></h3>
             <span class="text-xs text-gray-400 ml-1">from Super Admin</span>
           </div>
           <div id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
@@ -120,8 +206,13 @@
         <!-- Products Section -->
         <div id="productsSection">
           <div class="flex items-center gap-2 mb-3">
-            <div class="w-6 h-6 rounded bg-violet-100 flex items-center justify-center"><svg class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-            <h3 class="text-sm font-bold text-gray-900">Products <span class="text-gray-400 font-normal text-xs ml-1">3</span></h3>
+            <div class="w-6 h-6 rounded bg-violet-100 flex items-center justify-center"><svg
+                class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg></div>
+            <h3 class="text-sm font-bold text-gray-900">Products <span
+                class="text-gray-400 font-normal text-xs ml-1">3</span></h3>
             <span class="text-xs text-gray-400 ml-1">from Super Admin</span>
           </div>
           <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
@@ -132,10 +223,19 @@
       <div id="pp-links" class="hidden">
         <div class="flex items-center justify-between mb-5">
           <div class="relative flex-1 mr-3">
-            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" placeholder="Search links..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" placeholder="Search links..."
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <button onclick="openCreateLinkModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Create Link</button>
+          <button onclick="openCreateLinkModal()"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm flex-shrink-0"><svg
+              class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>Create Link</button>
         </div>
         <div id="linksList"></div>
       </div>
@@ -149,8 +249,12 @@
         <p class="text-sm font-semibold"><span id="barCount">0</span> items selected</p>
         <p class="text-xs text-gray-400 truncate" id="barNames"></p>
       </div>
-      <button onclick="openCreateLinkModal()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition whitespace-nowrap">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      <button onclick="openCreateLinkModal()"
+        class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition whitespace-nowrap">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
         Create Link
       </button>
     </div>
@@ -159,8 +263,11 @@
   <!-- CREATE LINK MODAL -->
   <div id="createLinkModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeCreateLinkModal()"></div>
-    <div class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-md shadow-2xl overflow-hidden max-h-[95vh] overflow-y-auto">
-      <div class="flex justify-center pt-3 pb-1 md:hidden"><div class="w-10 h-1 rounded-full bg-gray-200"></div></div>
+    <div
+      class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-md shadow-2xl overflow-hidden max-h-[95vh] overflow-y-auto">
+      <div class="flex justify-center pt-3 pb-1 md:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+      </div>
       <!-- Progress Bar -->
       <div class="h-1 bg-gray-100">
         <div id="modalProgress" class="h-1 bg-indigo-600 transition-all duration-300" style="width:50%"></div>
@@ -168,13 +275,21 @@
       <!-- Header -->
       <div class="flex items-center justify-between px-6 pt-5 pb-3">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></div>
+          <div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center"><svg
+              class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg></div>
           <div>
             <h2 class="text-base font-bold text-gray-900">Create Promotion Link</h2>
             <p class="text-xs text-gray-400" id="modalStepLabel">0 items selected · Step 1 of 2</p>
           </div>
         </div>
-        <button onclick="closeCreateLinkModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        <button onclick="closeCreateLinkModal()"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+            class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
       </div>
 
       <!-- STEP 1 -->
@@ -184,15 +299,22 @@
         <div>
           <div class="flex items-center justify-between mb-1.5">
             <label class="text-sm font-medium text-gray-700">Description <span class="text-red-500">*</span></label>
-            <button onclick="genPromoMsg()" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-xs font-medium hover:bg-violet-100 transition">
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <button onclick="genPromoMsg()"
+              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-xs font-medium hover:bg-violet-100 transition">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
               Generate Message
             </button>
           </div>
-          <textarea id="promoDesc" rows="5" oninput="document.getElementById('descCount').textContent=this.value.length" class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" placeholder="Describe your promotion..."></textarea>
+          <textarea id="promoDesc" rows="5" oninput="document.getElementById('descCount').textContent=this.value.length"
+            class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+            placeholder="Describe your promotion..."></textarea>
           <p class="text-xs text-gray-400 mt-1"><span id="descCount">0</span> characters</p>
         </div>
-        <button onclick="goModalStep(2)" class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition mt-4">Next: Target &amp; Send →</button>
+        <button onclick="goModalStep(2)"
+          class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition mt-4">Next:
+          Target &amp; Send →</button>
       </div>
 
       <!-- STEP 2 -->
@@ -200,71 +322,142 @@
         <div class="mb-4">
           <p class="text-sm font-semibold text-gray-800 mb-2">Send To</p>
           <div class="flex rounded-xl border border-gray-200 p-0.5 bg-gray-50 mb-3">
-            <button onclick="setSendTo('group')" id="st-group" class="flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <button onclick="setSendTo('group')" id="st-group"
+              class="flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
               Customer Group
             </button>
-            <button onclick="setSendTo('ind')" id="st-ind" class="flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <button onclick="setSendTo('ind')" id="st-ind"
+              class="flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
               Individual
             </button>
           </div>
 
           <!-- Group List -->
           <div id="groupList" class="space-y-2 mb-4">
-            <label onclick="selectGroup(17)" class="flex items-center justify-between px-4 py-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 cursor-pointer">
-              <div><p class="text-sm font-semibold text-gray-900">All Customers</p><p class="text-xs text-gray-400">Send to every active customer</p></div>
-              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">17</span><div class="w-5 h-5 rounded-full border-2 border-indigo-600 flex items-center justify-center"><div class="w-2.5 h-2.5 rounded-full bg-indigo-600"></div></div></div>
+            <label onclick="selectGroup(17)"
+              class="flex items-center justify-between px-4 py-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 cursor-pointer">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">All Customers</p>
+                <p class="text-xs text-gray-400">Send to every active customer</p>
+              </div>
+              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">17</span>
+                <div class="w-5 h-5 rounded-full border-2 border-indigo-600 flex items-center justify-center">
+                  <div class="w-2.5 h-2.5 rounded-full bg-indigo-600"></div>
+                </div>
+              </div>
             </label>
-            <label onclick="selectGroup(6)" class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
-              <div><p class="text-sm font-semibold text-gray-900">VIP Customers</p><p class="text-xs text-gray-400">Premium clients only</p></div>
-              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">6</span><div class="w-5 h-5 rounded-full border-2 border-gray-300"></div></div>
+            <label onclick="selectGroup(6)"
+              class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">VIP Customers</p>
+                <p class="text-xs text-gray-400">Premium clients only</p>
+              </div>
+              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">6</span>
+                <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+              </div>
             </label>
-            <label onclick="selectGroup(6)" class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
-              <div><p class="text-sm font-semibold text-gray-900">Regular Customers</p><p class="text-xs text-gray-400">Regular customer base</p></div>
-              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">6</span><div class="w-5 h-5 rounded-full border-2 border-gray-300"></div></div>
+            <label onclick="selectGroup(6)"
+              class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">Regular Customers</p>
+                <p class="text-xs text-gray-400">Regular customer base</p>
+              </div>
+              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">6</span>
+                <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+              </div>
             </label>
-            <label onclick="selectGroup(5)" class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
-              <div><p class="text-sm font-semibold text-gray-900">New Customers</p><p class="text-xs text-gray-400">Recently added customers</p></div>
-              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">5</span><div class="w-5 h-5 rounded-full border-2 border-gray-300"></div></div>
+            <label onclick="selectGroup(5)"
+              class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">New Customers</p>
+                <p class="text-xs text-gray-400">Recently added customers</p>
+              </div>
+              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">5</span>
+                <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+              </div>
             </label>
-            <label onclick="selectGroup(0)" class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
-              <div><p class="text-sm font-semibold text-gray-900">Inactive Customers</p><p class="text-xs text-gray-400">Re-engage lapsed customers</p></div>
-              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">0</span><div class="w-5 h-5 rounded-full border-2 border-gray-300"></div></div>
+            <label onclick="selectGroup(0)"
+              class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-300 cursor-pointer bg-white">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">Inactive Customers</p>
+                <p class="text-xs text-gray-400">Re-engage lapsed customers</p>
+              </div>
+              <div class="flex items-center gap-2"><span class="text-sm font-semibold text-gray-700">0</span>
+                <div class="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+              </div>
             </label>
           </div>
 
           <!-- Individual dropdown -->
           <div id="indDropdown" class="hidden mb-4">
-            <div class="relative"><select class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none"><option>Choose customer...</option><option>Rajesh Kumar</option><option>Anjali Singh</option><option>Mohammed Ibrahim</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div>
+            <div class="relative"><select
+                class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                <option>Choose customer...</option>
+                <option>Rajesh Kumar</option>
+                <option>Anjali Singh</option>
+                <option>Mohammed Ibrahim</option>
+              </select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg></div>
           </div>
 
           <!-- Send Via -->
           <p class="text-sm font-semibold text-gray-800 mb-2">Send Via</p>
           <div class="grid grid-cols-3 gap-2 mb-4">
-            <button onclick="selSendVia('wa')" id="sv-wa" class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-green-500 bg-green-50 transition">
-              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <button onclick="selSendVia('wa')" id="sv-wa"
+              class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-green-500 bg-green-50 transition">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
               <span class="text-xs font-semibold text-green-700">WhatsApp</span>
             </button>
-            <button onclick="selSendVia('sms')" id="sv-sms" class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition">
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <button onclick="selSendVia('sms')" id="sv-sms"
+              class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
               <span class="text-xs font-semibold text-gray-500">SMS</span>
             </button>
-            <button onclick="selSendVia('em')" id="sv-em" class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition">
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <button onclick="selSendVia('em')" id="sv-em"
+              class="flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
               <span class="text-xs font-semibold text-gray-500">Email</span>
             </button>
           </div>
 
           <div class="flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-50 border border-indigo-100">
-            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <p class="text-sm text-indigo-700 font-medium"><span id="recipientsCount">17</span> recipients will receive this link</p>
+            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p class="text-sm text-indigo-700 font-medium"><span id="recipientsCount">17</span> recipients will receive
+              this link</p>
           </div>
         </div>
         <div class="flex gap-3 mt-4">
-          <button onclick="goModalStep(1)" class="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">← Back</button>
-          <button onclick="createAndSendLink()" class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          <button onclick="goModalStep(1)"
+            class="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">←
+            Back</button>
+          <button onclick="createAndSendLink()"
+            class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
             Create &amp; Send Link
           </button>
         </div>
@@ -273,7 +466,10 @@
       <!-- STEP 3 SUCCESS -->
       <div id="modal-step3" class="hidden px-6 pb-6 text-center">
         <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
         <h3 class="text-lg font-bold text-gray-900 mb-1">Promotion Link Ready!</h3>
         <p class="text-sm text-gray-500 mb-5" id="sentToLabel">Sent to All Customers (17 recipients)</p>
@@ -281,51 +477,81 @@
           <p class="text-xs font-semibold text-gray-500 mb-2">Shareable URL</p>
           <div class="flex items-center gap-2">
             <p class="text-xs text-indigo-600 truncate flex-1 font-mono" id="generatedUrl"></p>
-            <button onclick="copyLink()" class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 hover:bg-indigo-700 transition">
-              <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            <button onclick="copyLink()"
+              class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 hover:bg-indigo-700 transition">
+              <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
             </button>
           </div>
         </div>
-        <button onclick="window.location.href='promo-landing.html'" class="w-full py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2 mb-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        <button onclick="window.location.href='promo-landing.html'"
+          class="w-full py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2 mb-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
           Preview Customer Page
         </button>
-        <button onclick="closeCreateLinkModal()" class="w-full py-3 rounded-2xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Close</button>
+        <button onclick="closeCreateLinkModal()"
+          class="w-full py-3 rounded-2xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Bottom Nav -->
-  <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-1 pb-2 pt-1 flex items-end justify-around z-30">
-    <a href="home.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="text-[10px] font-medium">Home</span></a>
-    <a href="customers.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-[10px] font-medium">Customers</span></a>
+  <div
+    class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-1 pb-2 pt-1 flex items-end justify-around z-30">
+    <a href="home.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="customers.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg><span class="text-[10px] font-medium">Customers</span></a>
     <!-- FAB Center -->
     <div class="relative flex flex-col items-center" style="margin-bottom:8px">
-      <button onclick="openCreateLinkModal()" class="w-14 h-14 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-300 -mt-5 transition-transform active:scale-95">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      <button onclick="openCreateLinkModal()"
+        class="w-14 h-14 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-300 -mt-5 transition-transform active:scale-95">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
       </button>
       <span class="text-[10px] font-medium text-orange-600 mt-0.5">Create</span>
     </div>
-    <a href="engagement.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="text-[10px] font-medium">Engage</span></a>
-    <a href="settings.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-[10px] font-medium">Settings</span></a>
+    <a href="engagement.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg><span class="text-[10px] font-medium">Engage</span></a>
+    <a href="settings.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg><span class="text-[10px] font-medium">Settings</span></a>
   </div>
 
   <script>
     const plans = [
-      { id:'plan-1', type:'plan', name:'Basic SIP', code:'', price:'₹500', priceNote:'/month', desc:'Start your investment journey with ₹500/month SIP', features:['Monthly SIP','ELSS eligible','Online tracking'], img:'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=400&q=80', color:'bg-blue-600' },
-      { id:'plan-2', type:'plan', name:'Wealth Builder', code:'', price:'₹5,000', priceNote:'/month', desc:'Premium wealth management plan with expert advisory', features:['Dedicated advisor','Quarterly review','Tax planning'], img:'https://images.unsplash.com/photo-1769676391642-de7d70147636?w=400&q=80', color:'bg-indigo-600' },
-      { id:'plan-3', type:'plan', name:'Term Life Cover', code:'', price:'₹999', priceNote:'/year', desc:'₹1 Crore life cover at just ₹999/year', features:['₹1Cr cover','Online policy','Instant approval'], img:'https://images.unsplash.com/photo-1758084413534-ca441e8376a3?w=400&q=80', color:'bg-violet-600' },
+      { id: 'plan-1', type: 'plan', name: 'Basic SIP', code: '', price: '₹500', priceNote: '/month', desc: 'Start your investment journey with ₹500/month SIP', features: ['Monthly SIP', 'ELSS eligible', 'Online tracking'], img: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=400&q=80', color: 'bg-blue-600' },
+      { id: 'plan-2', type: 'plan', name: 'Wealth Builder', code: '', price: '₹5,000', priceNote: '/month', desc: 'Premium wealth management plan with expert advisory', features: ['Dedicated advisor', 'Quarterly review', 'Tax planning'], img: 'https://images.unsplash.com/photo-1769676391642-de7d70147636?w=400&q=80', color: 'bg-indigo-600' },
+      { id: 'plan-3', type: 'plan', name: 'Term Life Cover', code: '', price: '₹999', priceNote: '/year', desc: '₹1 Crore life cover at just ₹999/year', features: ['₹1Cr cover', 'Online policy', 'Instant approval'], img: 'https://images.unsplash.com/photo-1758084413534-ca441e8376a3?w=400&q=80', color: 'bg-violet-600' },
     ];
     const products = [
-      { id:'prod-1', type:'product', name:'Gold ETF Units', code:'GOLD-ETF-001', price:'₹4,850', priceNote:'', desc:'Sovereign Gold Bond – digital gold investment', features:[], img:'https://images.unsplash.com/photo-1768207450151-30c0bf8e8091?w=400&q=80', color:'bg-yellow-500' },
-      { id:'prod-2', type:'product', name:'ULIP Standard Plan', code:'ULIP-STD-002', price:'₹12,000', priceNote:'', desc:'Unit Linked Insurance Plan with market-linked returns', features:[], img:'https://images.unsplash.com/photo-1750581227597-7372ae99bf0a?w=400&q=80', color:'bg-orange-500' },
-      { id:'prod-3', type:'product', name:'Corporate FD', code:'FD-CORP-003', price:'₹10,000', priceNote:'', desc:'Corporate Fixed Deposit – 8.5% p.a. for 12 months', features:[], img:'https://images.unsplash.com/photo-1652503698072-175651f77634?w=400&q=80', color:'bg-emerald-600' },
+      { id: 'prod-1', type: 'product', name: 'Gold ETF Units', code: 'GOLD-ETF-001', price: '₹4,850', priceNote: '', desc: 'Sovereign Gold Bond – digital gold investment', features: [], img: 'https://images.unsplash.com/photo-1768207450151-30c0bf8e8091?w=400&q=80', color: 'bg-yellow-500' },
+      { id: 'prod-2', type: 'product', name: 'ULIP Standard Plan', code: 'ULIP-STD-002', price: '₹12,000', priceNote: '', desc: 'Unit Linked Insurance Plan with market-linked returns', features: [], img: 'https://images.unsplash.com/photo-1750581227597-7372ae99bf0a?w=400&q=80', color: 'bg-orange-500' },
+      { id: 'prod-3', type: 'product', name: 'Corporate FD', code: 'FD-CORP-003', price: '₹10,000', priceNote: '', desc: 'Corporate Fixed Deposit – 8.5% p.a. for 12 months', features: [], img: 'https://images.unsplash.com/photo-1652503698072-175651f77634?w=400&q=80', color: 'bg-emerald-600' },
     ];
 
     let selected = new Set();
     let catFilter = 'all';
     let savedLinks = [
-      { id:1, desc:'Explore our exclusive investment plans designed to grow your...', items:['Basic SIP','Wealth Builder','Gold ETF Units'], status:'active', recipients:18, views:42, enquiries:7, created:'2025-03-01', channels:['wa','em'] }
+      { id: 1, desc: 'Explore our exclusive investment plans designed to grow your...', items: ['Basic SIP', 'Wealth Builder', 'Gold ETF Units'], status: 'active', recipients: 18, views: 42, enquiries: 7, created: '2025-03-01', channels: ['wa', 'em'] }
     ];
     let currentRecipients = 17;
 
@@ -359,7 +585,7 @@
       clearCount.textContent = count;
 
       const allItems = [...plans, ...products];
-      const names = [...selected].map(id => allItems.find(i => i.id===id)?.name || '').filter(Boolean);
+      const names = [...selected].map(id => allItems.find(i => i.id === id)?.name || '').filter(Boolean);
       document.getElementById('barNames').textContent = names.join(', ');
     }
 
@@ -389,7 +615,7 @@
               </div>
               <p class="text-sm font-bold text-indigo-600 mb-1">${item.price}<span class="text-xs text-gray-400 font-normal">${item.priceNote}</span></p>
               <p class="text-xs text-gray-500 mb-2">${item.desc}</p>
-              ${item.features.length ? `<div class="flex flex-wrap gap-x-3 gap-y-1">${item.features.map(f=>`<span class="text-xs text-emerald-600 flex items-center gap-0.5 font-medium">✓ ${f}</span>`).join('')}</div>` : ''}
+              ${item.features.length ? `<div class="flex flex-wrap gap-x-3 gap-y-1">${item.features.map(f => `<span class="text-xs text-emerald-600 flex items-center gap-0.5 font-medium">✓ ${f}</span>`).join('')}</div>` : ''}
             </div>
           </div>`;
       });
@@ -419,9 +645,9 @@
 
     function setCatFilter(f) {
       catFilter = f;
-      ['all','plans','products'].forEach(x => {
-        const b = document.getElementById('cat-'+x);
-        b.className = x===f ? 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium' : 'px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50';
+      ['all', 'plans', 'products'].forEach(x => {
+        const b = document.getElementById('cat-' + x);
+        b.className = x === f ? 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium' : 'px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50';
       });
       renderCards();
     }
@@ -438,11 +664,11 @@
     }
 
     function switchPromoTab(t) {
-      ['catalog','links'].forEach(x => {
-        document.getElementById('pp-'+x).classList.toggle('hidden', x!==t);
-        const btn = document.getElementById('pt-'+x);
-        if (x===t) { btn.classList.add('border-indigo-600','text-indigo-600'); btn.classList.remove('border-gray-200','text-gray-500'); }
-        else { btn.classList.remove('border-indigo-600','text-indigo-600'); btn.classList.add('border-gray-200','text-gray-500'); }
+      ['catalog', 'links'].forEach(x => {
+        document.getElementById('pp-' + x).classList.toggle('hidden', x !== t);
+        const btn = document.getElementById('pt-' + x);
+        if (x === t) { btn.classList.add('border-indigo-600', 'text-indigo-600'); btn.classList.remove('border-gray-200', 'text-gray-500'); }
+        else { btn.classList.remove('border-indigo-600', 'text-indigo-600'); btn.classList.add('border-gray-200', 'text-gray-500'); }
       });
       if (t === 'links') renderLinks();
     }
@@ -460,7 +686,7 @@
               <p class="text-xs text-gray-400 mt-1">Created ${l.created} · ${l.recipients} recipients</p>
             </div>
           </div>
-          <div class="flex flex-wrap gap-2 mb-3">${l.items.map(n=>`<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium">${n}</span>`).join('')}</div>
+          <div class="flex flex-wrap gap-2 mb-3">${l.items.map(n => `<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium">${n}</span>`).join('')}</div>
           <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
             <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>${l.views} views</span>
             <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${l.enquiries} enquiries</span>
@@ -483,7 +709,7 @@
 
     function populateSelectedItems() {
       const allItems = [...plans, ...products];
-      const sel = [...selected].map(id => allItems.find(i => i.id===id)).filter(Boolean);
+      const sel = [...selected].map(id => allItems.find(i => i.id === id)).filter(Boolean);
       const count = sel.length;
       document.getElementById('modalStepLabel').textContent = `${count} items selected · Step 1 of 2`;
       const list = document.getElementById('selectedItemsList');
@@ -497,26 +723,26 @@
               <p class="text-sm font-semibold text-gray-900 truncate">${item.name}</p>
               <p class="text-xs text-indigo-600 font-semibold">${item.price}</p>
             </div>
-            <span class="text-xs px-2 py-0.5 rounded-full ${item.type==='plan'?'bg-blue-100 text-blue-700':'bg-violet-100 text-violet-700'} font-semibold capitalize">${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full ${item.type === 'plan' ? 'bg-blue-100 text-blue-700' : 'bg-violet-100 text-violet-700'} font-semibold capitalize">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
           </div>`).join('');
       }
     }
 
     function goModalStep(s) {
       modalStep = s;
-      [1,2,3].forEach(x => document.getElementById('modal-step'+x).classList.add('hidden'));
-      document.getElementById('modal-step'+s).classList.remove('hidden');
-      document.getElementById('modalProgress').style.width = s===1?'50%':s===2?'80%':'100%';
+      [1, 2, 3].forEach(x => document.getElementById('modal-step' + x).classList.add('hidden'));
+      document.getElementById('modal-step' + s).classList.remove('hidden');
+      document.getElementById('modalProgress').style.width = s === 1 ? '50%' : s === 2 ? '80%' : '100%';
       const allItems = [...plans, ...products];
       const count = [...selected].length;
-      const labels = { 1:`${count} items selected · Step 1 of 2`, 2:`${count} items selected · Step 2 of 2`, 3:'Link Created!' };
+      const labels = { 1: `${count} items selected · Step 1 of 2`, 2: `${count} items selected · Step 2 of 2`, 3: 'Link Created!' };
       document.getElementById('modalStepLabel').textContent = labels[s];
-      if (s===1) populateSelectedItems();
+      if (s === 1) populateSelectedItems();
     }
 
     function genPromoMsg() {
       const allItems = [...plans, ...products];
-      const names = [...selected].map(id => allItems.find(i => i.id===id)?.name || '').filter(Boolean);
+      const names = [...selected].map(id => allItems.find(i => i.id === id)?.name || '').filter(Boolean);
       const nameStr = names.join(', ') || 'our exclusive offerings';
       const msg = `Explore our exclusive offerings: ${nameStr}. These products have been specially curated for you by Acme Financial Services. Our expert advisors are available to guide you through the best options tailored to your financial goals. Click to learn more and express your interest today.`;
       document.getElementById('promoDesc').value = msg;
@@ -526,13 +752,13 @@
     function setSendTo(m) {
       const gBtn = document.getElementById('st-group'), iBtn = document.getElementById('st-ind');
       const gList = document.getElementById('groupList'), iDrop = document.getElementById('indDropdown');
-      if (m==='group') {
-        gBtn.className='flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
-        iBtn.className='flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+      if (m === 'group') {
+        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
         gList.classList.remove('hidden'); iDrop.classList.add('hidden');
       } else {
-        iBtn.className='flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
-        gBtn.className='flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
         gList.classList.add('hidden'); iDrop.classList.remove('hidden');
         document.getElementById('recipientsCount').textContent = '1';
       }
@@ -542,20 +768,20 @@
 
     function selSendVia(ch) {
       const map = { wa: 'border-green-500 bg-green-50', sms: 'border-blue-500 bg-blue-50', em: 'border-violet-500 bg-violet-50' };
-      ['wa','sms','em'].forEach(c => {
-        const b = document.getElementById('sv-'+c);
-        if (c===ch) { b.className = `flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 ${map[c]} transition`; }
+      ['wa', 'sms', 'em'].forEach(c => {
+        const b = document.getElementById('sv-' + c);
+        if (c === ch) { b.className = `flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 ${map[c]} transition`; }
         else { b.className = 'flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition'; }
       });
     }
 
     function createAndSendLink() {
       const allItems = [...plans, ...products];
-      const selItems = [...selected].map(id => allItems.find(i => i.id===id)).filter(Boolean);
-      const url = 'https://promo.reminderme.app/l/' + Math.random().toString(36).substr(2,9);
+      const selItems = [...selected].map(id => allItems.find(i => i.id === id)).filter(Boolean);
+      const url = 'https://promo.reminderme.app/l/' + Math.random().toString(36).substr(2, 9);
       document.getElementById('generatedUrl').textContent = url;
       document.getElementById('sentToLabel').textContent = `Sent to All Customers (${currentRecipients} recipients)`;
-      savedLinks.unshift({ id: Date.now(), desc: selItems.map(i=>i.name).join(', ') + '...', items: selItems.map(i=>i.name), status:'active', recipients: currentRecipients, views:0, enquiries:0, created: new Date().toISOString().split('T')[0], channels:['wa'] });
+      savedLinks.unshift({ id: Date.now(), desc: selItems.map(i => i.name).join(', ') + '...', items: selItems.map(i => i.name), status: 'active', recipients: currentRecipients, views: 0, enquiries: 0, created: new Date().toISOString().split('T')[0], channels: ['wa'] });
       document.getElementById('linksCount').textContent = savedLinks.length;
       // Store selected items for promo landing page
       localStorage.setItem('promoItems', JSON.stringify(selItems));
@@ -570,9 +796,10 @@
 
     // Init
     renderCards();
-    function openMobileNav(){document.getElementById('mobileNavDrawer').style.transform='translateX(0)';document.getElementById('mobileNavBg').classList.remove('hidden');document.body.style.overflow='hidden';}
-    function closeMobileNav(){document.getElementById('mobileNavDrawer').style.transform='translateX(-100%)';document.getElementById('mobileNavBg').classList.add('hidden');document.body.style.overflow='';}
+    function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 </body>
+
 </html>

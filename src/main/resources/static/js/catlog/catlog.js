@@ -1,25 +1,135 @@
+/**
+ * catalog.js
+ * Wired to: CatlogContoller.java  →  /api/catalog/*
+ * Covers:   Plans · Products · Msg Templates · Report Templates
+ */
 
+'use strict';
 
-const billingLabels = { monthly: 'Monthly', quarterly: 'Quarterly', yearly: 'Yearly', 'one-time': 'One-Time' };
-const currencySymbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£', AED: 'AED ', SGD: 'S$' };
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────────────────────────────────────
+const API = {
+    plans: '/api/catalog/plans',
+    products: '/api/catalog/products',
+    templates: '/api/catalog/templates',
+    rtemplates: '/api/catalog/rtemplates',
+    summary: '/api/catalog/summary'
+};
 
-// ── in-memory arrays ─────────────────────────────────────────────────
+const BILLING_LABELS = { monthly: 'Monthly', quarterly: 'Quarterly', yearly: 'Yearly', 'one-time': 'One-Time' };
+const CURRENCY_SYMBOLS = { INR: '₹', USD: '$', EUR: '€', GBP: '£', AED: 'AED ', SGD: 'S$' };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
 let plans = [];
 let products = [];
 let templates = [];
+let rtemplates = [];
 
-// ── filter state ─────────────────────────────────────────────────────
 let planFilter = 'all';
 let prodFilter = 'all';
 let tmplFilter = 'all';
 
-// =====================================================================
-//  FILTER BUTTONS
-// =====================================================================
+let editPlanId = null;   // null = create, number = edit
+let editProductId = null;
+let editTemplateId = null;
+let editRTId = null;
+
+let currentBilling = 'monthly';
+let rtCols = [];     // [{ uid, value }]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────────────────────────────────────
+function sym(entity) {
+    return CURRENCY_SYMBOLS[entity.currency] || '₹';
+}
+
+/** Generic fetch wrapper — always sends JSON, always parses JSON */
+async function api(url, method = 'GET', body = null) {
+    const opts = {
+        method,
+        headers: { 'Content-Type': 'application/json' }
+    };
+    if (body !== null) opts.body = JSON.stringify(body);
+
+    const res = await fetch(url, opts);
+    if (!res.ok) {
+        const text = await res.text().catch(() => res.statusText);
+        throw new Error(`${res.status}: ${text}`);
+    }
+    // DELETE returns 200 with empty body
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'fixed bottom-24 md:bottom-6 right-4 z-[100] flex flex-col gap-2';
+        document.body.appendChild(container);
+    }
+    const bg = { success: 'bg-emerald-600', error: 'bg-red-500', info: 'bg-indigo-600' }[type] || 'bg-gray-800';
+    const icon = type === 'error'
+        ? 'M6 18L18 6M6 6l12 12'
+        : 'M5 13l4 4L19 7';
+    const toast = document.createElement('div');
+    toast.className = `${bg} text-white text-sm font-medium px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 fade-in`;
+    toast.innerHTML = `<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${icon}"/></svg>${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOBILE NAV
+// ─────────────────────────────────────────────────────────────────────────────
+function openMobileNav() {
+    document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)';
+    document.getElementById('mobileNavBg').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+function closeMobileNav() {
+    document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)';
+    document.getElementById('mobileNavBg').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────────────────────────────────────────────────────
+function moveIndicator(el) {
+    const ind = document.getElementById('tabIndicator');
+    if (!ind || !el) return;
+    ind.style.width = el.offsetWidth + 'px';
+    ind.style.transform = `translateX(${el.offsetLeft}px)`;
+}
+
+function switchCatalogTab(tab) {
+    ['plans', 'products', 'templates', 'rtemplates'].forEach(t => {
+        const btn = document.getElementById('ct-' + t);
+        const panel = document.getElementById('cp-' + t);
+        if (panel) panel.classList.toggle('hidden', t !== tab);
+        if (!btn) return;
+        if (t === tab) { btn.classList.add('text-indigo-600'); btn.classList.remove('text-gray-500'); moveIndicator(btn); }
+        else { btn.classList.remove('text-indigo-600'); btn.classList.add('text-gray-500'); }
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FILTER HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
 function setPlanFilter(f) {
     planFilter = f;
     ['all', 'active', 'inactive'].forEach(x => {
         const b = document.getElementById('pf-' + x);
+        if (!b) return;
         b.className = x === f
             ? 'px-4 py-2 text-sm font-semibold bg-indigo-600 text-white'
             : 'px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50';
@@ -30,6 +140,7 @@ function setProdFilter(f) {
     prodFilter = f;
     ['all', 'active', 'inactive'].forEach(x => {
         const b = document.getElementById('prf-' + x);
+        if (!b) return;
         b.className = x === f
             ? 'px-4 py-2 text-sm font-semibold bg-indigo-600 text-white'
             : 'px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50';
@@ -48,70 +159,39 @@ function setTmplFilter(f) {
     renderTemplates();
 }
 
-
-function moveIndicator(el) {
-    const indicator = document.getElementById('tabIndicator');
-    if (!indicator || !el) return;
-
-    indicator.style.width = el.offsetWidth + 'px';
-    indicator.style.transform = `translateX(${el.offsetLeft}px)`;
-}
-
-function switchCatalogTab(tab) {
-
-
-    const tabs = ['plans', 'products', 'templates', 'rtemplates'];
-
-    tabs.forEach(t => {
-        const btn = document.getElementById('ct-' + t);
-        const panel = document.getElementById('cp-' + t);
-
-        if (!btn) return;
-
-        if (panel) panel.classList.toggle('hidden', t !== tab);
-
-        if (t === tab) {
-            btn.classList.add('text-indigo-600');
-            btn.classList.remove('text-gray-500');
-
-            moveIndicator(btn);
-        } else {
-            btn.classList.remove('text-indigo-600');
-            btn.classList.add('text-gray-500');
-        }
-    });
-}
-
-window.addEventListener('load', () => {
-    const first = document.getElementById('ct-plans');
-    if (first) moveIndicator(first);
-});
-// =====================================================================
-//  PLANS  (API)
-// =====================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════╗
+// ║                         PLANS                           ║
+// ╚══════════════════════════════════════════════════════════╝
+// ─────────────────────────────────────────────────────────────────────────────
 function loadPlans() {
-    fetch('/api/catalog/plans')
-        .then(r => r.json())
+    api(API.plans)
         .then(data => { plans = data; renderPlans(); })
-        .catch(() => showToast('Failed to load plans', 'error'));
+        .catch(err => showToast('Failed to load plans: ' + err.message, 'error'));
 }
 
 function renderPlans() {
     const q = (document.getElementById('planSearch')?.value || '').toLowerCase();
     const filtered = plans.filter(p =>
         (planFilter === 'all' || p.status === planFilter) &&
-        ((p.name || '').toLowerCase().includes(q) ||
-            (p.description || '').toLowerCase().includes(q))
+        ((p.name || '').toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q))
     );
-    document.getElementById('planTabCount').textContent = plans.length;
-    document.getElementById('planCountBadge').textContent = plans.filter(p => p.status === 'active').length;
+
+    const countEl = document.getElementById('planTabCount');
+    const badgeEl = document.getElementById('planCountBadge');
+    if (countEl) countEl.textContent = plans.length;
+    if (badgeEl) badgeEl.textContent = plans.filter(p => p.status === 'active').length;
 
     const grid = document.getElementById('plansGrid');
     const empty = document.getElementById('plansEmpty');
-    if (!filtered.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+
+    if (!filtered.length) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+    }
     empty.classList.add('hidden');
 
-    const sym = p => currencySymbols[p.currency] || '₹';
     grid.innerHTML = filtered.map(p => `
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition relative group">
       ${p.img ? `<img src="${p.img}" class="w-full h-24 object-cover rounded-xl mb-4 border border-gray-100">` : ''}
@@ -119,58 +199,37 @@ function renderPlans() {
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2
-                   M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
             </svg>
           </div>
           <div>
             <p class="text-sm font-bold text-gray-900">${p.name}</p>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="text-sm font-bold text-indigo-600">${sym(p)}${Number(p.price || 0).toLocaleString()}</span>
-              <span class="text-xs text-gray-400">${billingLabels[p.billingCycle] || p.billingCycle || ''}</span>
+              <span class="text-xs text-gray-400">${BILLING_LABELS[p.billingCycle] || p.billingCycle || ''}</span>
             </div>
           </div>
         </div>
         <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition">
-          <button onclick="openPlanModal(${p.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50" title="Edit">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-            </svg>
+          <button onclick="openPlanModal(${p.id})" title="Edit"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
           </button>
-          <button onclick="togglePlanStatus(${p.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   ${p.status === 'active'
-            ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50'
-            : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}"
-            title="${p.status === 'active' ? 'Set Inactive' : 'Set Active'}">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="${p.status === 'active'
-            ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
-            : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/>
-            </svg>
+          <button onclick="togglePlanStatus(${p.id})" title="${p.status === 'active' ? 'Set Inactive' : 'Set Active'}"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center ${p.status === 'active' ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50' : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.status === 'active' ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/></svg>
           </button>
-          <button onclick="deletePlan(${p.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50" title="Delete">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
+          <button onclick="deletePlan(${p.id})" title="Delete"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           </button>
         </div>
       </div>
       ${p.description ? `<p class="text-xs text-gray-500 mb-3 leading-relaxed">${p.description}</p>` : ''}
       ${buildFeatureTags(p.features)}
       <div class="flex items-center justify-between mt-2 pt-3 border-t border-gray-50">
-        <span class="text-[10px] text-gray-300">Created ${p.createdAt ? p.createdAt.split('T')[0] : (p.created || '')}</span>
-        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">
-          ${p.status === 'active' ? 'Active' : 'Inactive'}
-        </span>
+        <span class="text-[10px] text-gray-300">Created ${p.createdAt ? p.createdAt.split('T')[0] : ''}</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">${p.status === 'active' ? 'Active' : 'Inactive'}</span>
       </div>
     </div>`).join('');
 }
@@ -181,30 +240,15 @@ function buildFeatureTags(features) {
     else if (typeof features === 'string' && features.trim())
         list = features.split('\n').map(s => s.trim()).filter(Boolean);
     if (!list.length) return '';
-    return `<div class="flex flex-wrap gap-1.5 mb-3">
-    ${list.map(f => `<span class="text-[11px] text-indigo-600 font-medium flex items-center gap-1">
-      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-      </svg>${f}</span>`).join('')}
-  </div>`;
+    return `<div class="flex flex-wrap gap-1.5 mb-3">${list.map(f =>
+        `<span class="text-[11px] text-indigo-600 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>${f}</span>`
+    ).join('')}</div>`;
 }
 
-function togglePlanStatus(id) {
-    fetch(`/api/catalog/plans/${id}/toggle-status`, { method: 'PATCH' })
-        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(() => { showToast('Plan status updated', 'success'); loadPlans(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-
-// ── Plan modal ────────────────────────────────────────────────────────
-let currentBilling = 'monthly';
-let editPlanId = null;
-
+// ── Plan Modal ────────────────────────────────────────────────────────────────
 function openPlanModal(id) {
     editPlanId = id || null;
-    document.getElementById('planImgPreview').classList.add('hidden');
-    document.getElementById('planImgZone').classList.remove('hidden');
-    document.getElementById('planImgInput').value = '';
+    clearPlanImg();
 
     if (editPlanId) {
         const p = plans.find(x => x.id === editPlanId);
@@ -213,24 +257,55 @@ function openPlanModal(id) {
         document.getElementById('pm_price').value = p.price || '';
         document.getElementById('pm_desc').value = p.description || '';
         document.getElementById('pm_currency').value = p.currency || 'INR';
-        document.getElementById('pm_features').value = Array.isArray(p.features)
-            ? p.features.join('\n') : (p.features || '');
+        document.getElementById('pm_features').value = Array.isArray(p.features) ? p.features.join('\n') : (p.features || '');
         selectBilling(p.billingCycle || 'monthly');
-        document.querySelector('#planModal h2').textContent = 'Edit Plan';
-        document.querySelector('#planModal button[onclick="createPlan()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Save Changes`;
+        document.getElementById('planModalTitle').textContent = 'Edit Plan';
+        document.getElementById('planSaveLabel').textContent = 'Save Changes';
     } else {
-        ['pm_name', 'pm_price', 'pm_desc', 'pm_features'].forEach(id => document.getElementById(id).value = '');
+        ['pm_name', 'pm_price', 'pm_desc', 'pm_features'].forEach(i => document.getElementById(i).value = '');
+        document.getElementById('pm_currency').value = 'INR';
         selectBilling('monthly');
-        document.querySelector('#planModal h2').textContent = 'New Plan';
-        document.querySelector('#planModal button[onclick="createPlan()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Create Plan`;
+        document.getElementById('planModalTitle').textContent = 'New Plan';
+        document.getElementById('planSaveLabel').textContent = 'Create Plan';
     }
     document.getElementById('planModal').classList.remove('hidden');
 }
 function closePlanModal() { document.getElementById('planModal').classList.add('hidden'); }
 
-function createPlan() {
+function selectBilling(b) {
+    currentBilling = b;
+    ['monthly', 'quarterly', 'yearly', 'one-time'].forEach(x => {
+        const btn = document.getElementById('bc-' + x);
+        if (!btn) return;
+        if (x === b) {
+            btn.classList.add('bg-indigo-50', 'border-indigo-500', 'text-indigo-600');
+            btn.classList.remove('border-gray-200', 'text-gray-600');
+        } else {
+            btn.classList.remove('bg-indigo-50', 'border-indigo-500', 'text-indigo-600');
+            btn.classList.add('border-gray-200', 'text-gray-600');
+        }
+    });
+}
+
+function previewPlanImg(input) {
+    if (input.files && input.files[0]) {
+        const r = new FileReader();
+        r.onload = e => {
+            document.getElementById('planImgThumb').src = e.target.result;
+            document.getElementById('planImgPreview').classList.remove('hidden');
+            document.getElementById('planImgZone').classList.add('hidden');
+        };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+function clearPlanImg() {
+    const inp = document.getElementById('planImgInput');
+    if (inp) inp.value = '';
+    document.getElementById('planImgPreview').classList.add('hidden');
+    document.getElementById('planImgZone').classList.remove('hidden');
+}
+
+function savePlan() {
     const name = document.getElementById('pm_name').value.trim();
     const price = document.getElementById('pm_price').value;
     if (!name || !price) { showToast('Plan name and price are required', 'error'); return; }
@@ -246,58 +321,32 @@ function createPlan() {
     };
 
     const isEdit = editPlanId !== null;
-    fetch(isEdit ? `/api/catalog/plans/${editPlanId}` : '/api/catalog/plans', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-        .then(r => { if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); })
+    api(isEdit ? `${API.plans}/${editPlanId}` : API.plans, isEdit ? 'PUT' : 'POST', payload)
         .then(() => { showToast(isEdit ? 'Plan updated!' : 'Plan created!', 'success'); closePlanModal(); loadPlans(); })
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
+function togglePlanStatus(id) {
+    api(`${API.plans}/${id}/toggle-status`, 'PATCH')
+        .then(() => { showToast('Plan status updated', 'success'); loadPlans(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
 function deletePlan(id) {
     if (!confirm('Delete this plan?')) return;
-    fetch(`/api/catalog/plans/${id}`, { method: 'DELETE' })
-        .then(r => { if (!r.ok) throw new Error(r.status); showToast('Plan deleted', 'success'); loadPlans(); })
+    api(`${API.plans}/${id}`, 'DELETE')
+        .then(() => { showToast('Plan deleted', 'success'); loadPlans(); })
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
-function selectBilling(b) {
-    currentBilling = b;
-    ['monthly', 'quarterly', 'yearly', 'one-time'].forEach(x => {
-        const btn = document.getElementById('bc-' + x);
-        if (!btn) return;
-        if (x === b) { btn.classList.add('sel'); btn.classList.remove('border-gray-200', 'text-gray-600'); }
-        else { btn.classList.remove('sel', 'border-indigo-500', 'bg-indigo-50', 'text-indigo-600'); btn.classList.add('border-gray-200', 'text-gray-600'); }
-    });
-}
-
-function previewPlanImg(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById('planImgThumb').src = e.target.result;
-            document.getElementById('planImgPreview').classList.remove('hidden');
-            document.getElementById('planImgZone').classList.add('hidden');
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-function clearPlanImg() {
-    document.getElementById('planImgInput').value = '';
-    document.getElementById('planImgPreview').classList.add('hidden');
-    document.getElementById('planImgZone').classList.remove('hidden');
-}
-
-// =====================================================================
-//  PRODUCTS  (API)
-// =====================================================================
+// ─────────────────────────────────────────────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════╗
+// ║                       PRODUCTS                          ║
+// ╚══════════════════════════════════════════════════════════╝
+// ─────────────────────────────────────────────────────────────────────────────
 function loadProducts() {
-    fetch('/api/catalog/products')
-        .then(r => r.json())
+    api(API.products)
         .then(data => { products = data; renderProducts(); })
-        .catch(() => showToast('Failed to load products', 'error'));
+        .catch(err => showToast('Failed to load products: ' + err.message, 'error'));
 }
 
 function renderProducts() {
@@ -308,19 +357,25 @@ function renderProducts() {
             (p.sku || '').toLowerCase().includes(q) ||
             (p.category || '').toLowerCase().includes(q))
     );
-    document.getElementById('prodTabCount').textContent = products.length;
-    document.getElementById('productCountBadge').textContent = products.filter(p => p.status === 'active').length;
+
+    const countEl = document.getElementById('prodTabCount');
+    const badgeEl = document.getElementById('productCountBadge');
+    if (countEl) countEl.textContent = products.length;
+    if (badgeEl) badgeEl.textContent = products.filter(p => p.status === 'active').length;
 
     const grid = document.getElementById('productsGrid');
     const empty = document.getElementById('productsEmpty');
+
     if (!filtered.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
 
-    const sym = p => currencySymbols[p.currency] || '₹';
     const catColors = {
-        Investments: 'bg-blue-50 text-blue-700', Insurance: 'bg-emerald-50 text-emerald-700',
-        'Fixed Income': 'bg-violet-50 text-violet-700', Loans: 'bg-orange-50 text-orange-700',
-        'Gold & Jewellery': 'bg-yellow-50 text-yellow-700', General: 'bg-gray-100 text-gray-600'
+        Investments: 'bg-blue-50 text-blue-700',
+        Insurance: 'bg-emerald-50 text-emerald-700',
+        'Fixed Income': 'bg-violet-50 text-violet-700',
+        Loans: 'bg-orange-50 text-orange-700',
+        'Gold & Jewellery': 'bg-yellow-50 text-yellow-700',
+        General: 'bg-gray-100 text-gray-600'
     };
 
     grid.innerHTML = filtered.map(p => {
@@ -329,42 +384,22 @@ function renderProducts() {
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition relative group">
       ${p.img ? `<img src="${p.img}" class="w-full h-24 object-cover rounded-xl mb-4 border border-gray-100">` : ''}
       <div class="flex justify-end gap-1.5 absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition">
-        <button onclick="openProductModal(${p.id})"
-          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                 text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50" title="Edit">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-          </svg>
+        <button onclick="openProductModal(${p.id})" title="Edit"
+          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
         </button>
-        <button onclick="toggleProductStatus(${p.id})"
-          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                 ${p.status === 'active'
-                ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50'
-                : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}"
-          title="${p.status === 'active' ? 'Set Inactive' : 'Set Active'}">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="${p.status === 'active'
-                ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
-                : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/>
-          </svg>
+        <button onclick="toggleProductStatus(${p.id})" title="${p.status === 'active' ? 'Set Inactive' : 'Set Active'}"
+          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center ${p.status === 'active' ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50' : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.status === 'active' ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/></svg>
         </button>
-        <button onclick="deleteProduct(${p.id})"
-          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50" title="Delete">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
+        <button onclick="deleteProduct(${p.id})" title="Delete"
+          class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         </button>
       </div>
       <div class="mb-3">
         <div class="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center mb-2.5">
-          <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-          </svg>
+          <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <p class="text-sm font-bold text-gray-900">${p.name}</p>
@@ -375,22 +410,17 @@ function renderProducts() {
         ${p.description ? `<p class="text-xs text-gray-500 mt-1.5 leading-relaxed">${p.description}</p>` : ''}
       </div>
       <div class="flex items-center justify-between pt-3 border-t border-gray-50">
-        <span class="text-[10px] text-gray-300">Created ${p.createdAt || ''}</span>
-        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">
-          ${p.status === 'active' ? 'Active' : 'Inactive'}
-        </span>
+        <span class="text-[10px] text-gray-300">Created ${p.createdAt ? p.createdAt.split('T')[0] : ''}</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">${p.status === 'active' ? 'Active' : 'Inactive'}</span>
       </div>
     </div>`;
     }).join('');
 }
 
-// editProductId: null = create mode, number = edit mode
-let editProductId = null;
-
+// ── Product Modal ─────────────────────────────────────────────────────────────
 function openProductModal(id) {
     editProductId = id || null;
     clearProdImg();
-
     if (editProductId) {
         const p = products.find(x => x.id === editProductId);
         if (!p) return;
@@ -400,72 +430,28 @@ function openProductModal(id) {
         document.getElementById('prd_currency').value = p.currency || 'INR';
         document.getElementById('prd_category').value = p.category || 'General';
         document.getElementById('prd_desc').value = p.description || '';
-        document.querySelector('#productModal h2').textContent = 'Edit Product';
-        document.querySelector('#productModal button[onclick="createProduct()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Save Changes`;
+        document.getElementById('productModalTitle').textContent = 'Edit Product';
+        document.getElementById('prodSaveLabel').textContent = 'Save Changes';
     } else {
-        ['prd_name', 'prd_sku', 'prd_price', 'prd_desc'].forEach(id => document.getElementById(id).value = '');
-        document.querySelector('#productModal h2').textContent = 'New Product';
-        document.querySelector('#productModal button[onclick="createProduct()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Create Product`;
+        ['prd_name', 'prd_sku', 'prd_price', 'prd_desc'].forEach(i => document.getElementById(i).value = '');
+        document.getElementById('prd_currency').value = 'INR';
+        document.getElementById('prd_category').value = 'Investments';
+        document.getElementById('productModalTitle').textContent = 'New Product';
+        document.getElementById('prodSaveLabel').textContent = 'Create Product';
     }
     document.getElementById('productModal').classList.remove('hidden');
 }
 function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
-function createProduct() {
-    const name = document.getElementById('prd_name').value.trim();
-    const sku = document.getElementById('prd_sku').value.trim();
-    if (!name || !sku) { showToast('Product name and SKU are required', 'error'); return; }
-
-    const imgThumb = document.getElementById('prodImgThumb');
-    const img = !document.getElementById('prodImgPreview').classList.contains('hidden') ? imgThumb.src : null;
-
-    const payload = {
-        name,
-        sku,
-        category: document.getElementById('prd_category').value,
-        currency: document.getElementById('prd_currency').value,
-        price: parseFloat(document.getElementById('prd_price').value) || 0,
-        description: document.getElementById('prd_desc').value.trim(),
-        img,
-        status: 'active'
-    };
-
-    const isEdit = editProductId !== null;
-    fetch(isEdit ? `/api/catalog/products/${editProductId}` : '/api/catalog/products', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-        .then(r => { if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); })
-        .then(() => { showToast(isEdit ? 'Product updated!' : 'Product created!', 'success'); closeProductModal(); loadProducts(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-
-function toggleProductStatus(id) {
-    fetch(`/api/catalog/products/${id}/toggle-status`, { method: 'PATCH' })
-        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(() => { showToast('Product status updated', 'success'); loadProducts(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-
-function deleteProduct(id) {
-    if (!confirm('Delete this product?')) return;
-    fetch(`/api/catalog/products/${id}`, { method: 'DELETE' })
-        .then(r => { if (!r.ok) throw new Error(r.status); showToast('Product deleted', 'success'); loadProducts(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-
 function previewProdImg(input) {
     if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
+        const r = new FileReader();
+        r.onload = e => {
             document.getElementById('prodImgThumb').src = e.target.result;
             document.getElementById('prodImgPreview').classList.remove('hidden');
             document.getElementById('prodImgZone').classList.add('hidden');
         };
-        reader.readAsDataURL(input.files[0]);
+        r.readAsDataURL(input.files[0]);
     }
 }
 function clearProdImg() {
@@ -475,14 +461,52 @@ function clearProdImg() {
     document.getElementById('prodImgZone')?.classList.remove('hidden');
 }
 
-// =====================================================================
-//  TEMPLATES  (API)
-// =====================================================================
+function saveProduct() {
+    const name = document.getElementById('prd_name').value.trim();
+    const sku = document.getElementById('prd_sku').value.trim();
+    if (!name || !sku) { showToast('Product name and SKU are required', 'error'); return; }
+
+    const imgPreview = document.getElementById('prodImgPreview');
+    const imgThumb = document.getElementById('prodImgThumb');
+    const img = (imgPreview && !imgPreview.classList.contains('hidden')) ? imgThumb.src : null;
+
+    const payload = {
+        name, sku,
+        category: document.getElementById('prd_category').value,
+        currency: document.getElementById('prd_currency').value,
+        price: parseFloat(document.getElementById('prd_price').value) || 0,
+        description: document.getElementById('prd_desc').value.trim(),
+        img,
+        status: 'active'
+    };
+
+    const isEdit = editProductId !== null;
+    api(isEdit ? `${API.products}/${editProductId}` : API.products, isEdit ? 'PUT' : 'POST', payload)
+        .then(() => { showToast(isEdit ? 'Product updated!' : 'Product created!', 'success'); closeProductModal(); loadProducts(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function toggleProductStatus(id) {
+    api(`${API.products}/${id}/toggle-status`, 'PATCH')
+        .then(() => { showToast('Product status updated', 'success'); loadProducts(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+function deleteProduct(id) {
+    if (!confirm('Delete this product?')) return;
+    api(`${API.products}/${id}`, 'DELETE')
+        .then(() => { showToast('Product deleted', 'success'); loadProducts(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════╗
+// ║                   MSG TEMPLATES                         ║
+// ╚══════════════════════════════════════════════════════════╝
+// ─────────────────────────────────────────────────────────────────────────────
 function loadTemplates() {
-    fetch('/api/catalog/templates')
-        .then(r => r.json())
+    api(API.templates)
         .then(data => { templates = data; renderTemplates(); })
-        .catch(() => showToast('Failed to load templates', 'error'));
+        .catch(err => showToast('Failed to load templates: ' + err.message, 'error'));
 }
 
 function renderTemplates() {
@@ -492,11 +516,17 @@ function renderTemplates() {
         ((t.title || '').toLowerCase().includes(q) ||
             (t.category || '').toLowerCase().includes(q))
     );
-    document.getElementById('tmplTabCount').textContent = templates.length;
-    document.getElementById('tmplCountBadge').textContent = templates.filter(t => t.status === 'active').length;
+
+    const countEl = document.getElementById('tmplTabCount');
+    const badgeEl = document.getElementById('tmplCountBadge');
+    if (countEl) countEl.textContent = templates.length;
+    if (badgeEl) badgeEl.textContent = templates.filter(t => t.status === 'active').length;
 
     const grid = document.getElementById('templatesGrid');
-    if (!filtered.length) { grid.innerHTML = '<p class="text-gray-500 text-sm">No templates found.</p>'; return; }
+    const empty = document.getElementById('templatesEmpty');
+
+    if (!filtered.length) { grid.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
+    if (empty) empty.classList.add('hidden');
 
     const catColors = {
         'Payment Reminder': 'bg-blue-50 text-blue-700',
@@ -508,7 +538,6 @@ function renderTemplates() {
         'General': 'bg-gray-100 text-gray-600'
     };
 
-    // channels may come back as comma-delimited string from server
     const parseChannels = t => {
         if (Array.isArray(t.channelList)) return t.channelList;
         if (typeof t.channels === 'string' && t.channels)
@@ -521,49 +550,29 @@ function renderTemplates() {
         const channels = parseChannels(t);
         const escaped = (t.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         return `
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition group tmpl-card relative">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition group relative">
       <div class="flex items-start justify-between mb-3">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
           <div>
             <p class="text-sm font-bold text-gray-900">${t.title}</p>
             <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${catCls}">${t.category}</span>
           </div>
         </div>
-        <div class="flex gap-1.5 tmpl-actions opacity-0 group-hover:opacity-100 transition">
-          <button onclick="openTemplateModal(${t.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50" title="Edit">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-            </svg>
+        <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition">
+          <button onclick="openTemplateModal(${t.id})" title="Edit"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
           </button>
-          <button onclick="toggleTemplateStatus(${t.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   ${t.status === 'active'
-                ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50'
-                : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}"
-            title="${t.status === 'active' ? 'Set Inactive' : 'Set Active'}">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="${t.status === 'active'
-                ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
-                : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/>
-            </svg>
+          <button onclick="toggleTemplateStatus(${t.id})" title="${t.status === 'active' ? 'Set Inactive' : 'Set Active'}"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center ${t.status === 'active' ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50' : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.status === 'active' ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/></svg>
           </button>
-          <button onclick="deleteTemplate(${t.id})"
-            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                   text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50" title="Delete">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
+          <button onclick="deleteTemplate(${t.id})" title="Delete"
+            class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           </button>
         </div>
       </div>
@@ -572,25 +581,16 @@ function renderTemplates() {
         <p class="text-xs text-gray-600 font-mono leading-relaxed line-clamp-3">${escaped.replace(/\n/g, '<br>')}</p>
       </div>
       <div class="flex items-center justify-between">
-        <div class="flex gap-1">
-          ${channels.map(c => `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">${c}</span>`).join('')}
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">
-            ${t.status === 'active' ? 'Active' : 'Inactive'}
-          </span>
-          <button onclick="useTemplate(${t.id})" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">Use →</button>
-        </div>
+        <div class="flex gap-1">${channels.map(c => `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">${c}</span>`).join('')}</div>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">${t.status === 'active' ? 'Active' : 'Inactive'}</span>
       </div>
     </div>`;
     }).join('');
 }
 
-let editTemplateId = null;
-
+// ── Template Modal ────────────────────────────────────────────────────────────
 function openTemplateModal(id) {
     editTemplateId = id || null;
-
     if (editTemplateId) {
         const t = templates.find(x => x.id === editTemplateId);
         if (!t) return;
@@ -598,25 +598,21 @@ function openTemplateModal(id) {
         document.getElementById('tm_category').value = t.category || 'General';
         document.getElementById('tm_desc').value = t.description || '';
         document.getElementById('tm_content').value = t.content || '';
-
-        // channels
         const ch = Array.isArray(t.channelList) ? t.channelList
             : (t.channels || '').split(',').map(s => s.trim()).filter(Boolean);
         document.getElementById('tm_wa').checked = ch.includes('WhatsApp');
         document.getElementById('tm_sms').checked = ch.includes('SMS');
         document.getElementById('tm_email').checked = ch.includes('Email');
-
-        document.querySelector('#templateModal h2').textContent = 'Edit AI Template';
-        document.querySelector('#templateModal button[onclick="createTemplate()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Save Template`;
+        document.getElementById('templateModalTitle').textContent = 'Edit AI Template';
+        document.getElementById('tmplSaveLabel').textContent = 'Save Changes';
     } else {
-        ['tm_title', 'tm_desc', 'tm_content'].forEach(id => document.getElementById(id).value = '');
+        ['tm_title', 'tm_desc', 'tm_content'].forEach(i => document.getElementById(i).value = '');
+        document.getElementById('tm_category').value = 'Payment Reminder';
         document.getElementById('tm_wa').checked = true;
         document.getElementById('tm_sms').checked = false;
         document.getElementById('tm_email').checked = false;
-        document.querySelector('#templateModal h2').textContent = 'New AI Template';
-        document.querySelector('#templateModal button[onclick="createTemplate()"]').innerHTML =
-            `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Save AI Template`;
+        document.getElementById('templateModalTitle').textContent = 'New AI Template';
+        document.getElementById('tmplSaveLabel').textContent = 'Save AI Template';
     }
     document.getElementById('templateModal').classList.remove('hidden');
 }
@@ -626,18 +622,18 @@ function generateTemplateContent() {
     const cat = document.getElementById('tm_category').value;
     const desc = document.getElementById('tm_desc').value;
     const map = {
-        'Payment Reminder': `Hi {customer_name}! 👋\n\nThis is a friendly reminder that your {plan_name} payment of {amount} is due on {due_date}.\n\nPlease pay to avoid disruption.\n\nFor queries: {business_phone}\n\n— {business_name}`,
+        'Payment Reminder': `Hi {customer_name}! 👋\n\nThis is a friendly reminder that your {plan_name} payment of {amount} is due on {due_date}.\n\nPlease pay to avoid disruption.\nQueries: {business_phone}\n\n— {business_name}`,
         'Festival Greeting': `🎉 {festival} Greetings, {customer_name}!\n\nWishing you joy and prosperity.\n\nSpecial offer: {offer_details}\nValid till: {offer_expiry}\n\n— {business_name}`,
         'Promotion Announcement': `🎊 Special Offer for {customer_name}!\n\n{offer_title}\n{offer_description}\n\nView: {promo_link}\n⏰ Valid till {offer_expiry}\n\n— {business_name}`,
         'Birthday Wish': `🎂 Happy Birthday, {customer_name}!\n\nAs a birthday treat:\n🎁 {offer_details}\n\nWith warm wishes,\n{business_name}`,
-        'Policy Renewal': `⚠️ Renewal Reminder, {customer_name}\n\nYour {plan_name} is due for renewal on {due_date}.\n\nRenew now: {renewal_link}\nFor help: {business_phone}\n\n— {business_name}`,
-        'Anniversary': `🎊 Happy Anniversary, {customer_name}!\n\nThank you for being with us. As a token of appreciation:\n🎁 {offer_details}\n\n— {business_name}`,
-        'General': `Hi {customer_name},\n\n${desc || 'We have an important update for you.'}\n\nContact us at {business_phone}\n\n— {business_name}`,
+        'Policy Renewal': `⚠️ Renewal Reminder, {customer_name}\n\nYour {plan_name} is due on {due_date}.\n\nRenew now: {renewal_link}\nHelp: {business_phone}\n\n— {business_name}`,
+        'Anniversary': `🎊 Happy Anniversary, {customer_name}!\n\nThank you for being with us.\n🎁 {offer_details}\n\n— {business_name}`,
+        'General': `Hi {customer_name},\n\n${desc || 'We have an important update for you.'}\n\nContact us at {business_phone}\n\n— {business_name}`
     };
     document.getElementById('tm_content').value = map[cat] || map['General'];
 }
 
-function createTemplate() {
+function saveTemplate() {
     const title = document.getElementById('tm_title').value.trim();
     const content = document.getElementById('tm_content').value.trim();
     if (!title || !content) { showToast('Title and content are required', 'error'); return; }
@@ -652,383 +648,258 @@ function createTemplate() {
         category: document.getElementById('tm_category').value,
         description: document.getElementById('tm_desc').value.trim(),
         content,
-        channels: channels.join(','),   // stored as comma-delimited
+        channels: channels.join(','),   // backend stores as comma-delimited string
         status: 'active'
     };
 
     const isEdit = editTemplateId !== null;
-    fetch(isEdit ? `/api/catalog/templates/${editTemplateId}` : '/api/catalog/templates', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-        .then(r => { if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); })
+    api(isEdit ? `${API.templates}/${editTemplateId}` : API.templates, isEdit ? 'PUT' : 'POST', payload)
         .then(() => { showToast(isEdit ? 'Template updated!' : 'Template saved!', 'success'); closeTemplateModal(); loadTemplates(); })
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
-
-
-// =====================================================================
-//  Report TEMPLATES  (API)
-// =====================================================================
-
-
-
-let rtemplates = [];
-let rtColumns = [];
-
-function addColumn(value = '') {
-    const id = Date.now();
-    rtColumns.push({ id, value });
-
-    renderColumns();
-}
-function createRTTemplate() {
-
-    const title = document.getElementById('rt_title').value.trim();
-    const columns = rtColumns.map(c => c.value.trim()).filter(c => c);
-
-    if (!title) {
-        showToast('Title is required', 'error');
-        return;
-    }
-
-    if (!columns.length) {
-        showToast('Add at least one column', 'error');
-        return;
-    }
-
-    const data = {
-        title: title,
-        category: document.getElementById('rt_category').value,
-        description: document.getElementById('rt_desc').value,
-        columns: columns.join(','), // ✅ IMPORTANT FIX
-        price: parseFloat(document.getElementById('rt_price').value) || 0,
-        showTotal: document.getElementById('rt_total').checked,
-        status: "active"
-    };
-
-    if (rtEditId) {
-        // UPDATE
-        fetch(`/api/catalog/rtemplates/${rtEditId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-            .then(r => {
-                if (!r.ok) throw new Error('Failed to save');
-                return r.json();
-            })
-            .then(() => {
-                showToast('Report Template created', 'success');
-                closeRTModal();
-                resetRTModal();     // ✅ clear form
-                loadRTemplates();   // ✅ reload from backend
-            })
-            .catch(err => showToast(err.message, 'error'));
-    } else {
-        // CREATE
-        fetch('/api/catalog/rtemplates', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-            .then(r => {
-                if (!r.ok) throw new Error('Failed to save');
-                return r.json();
-            })
-            .then(() => {
-                showToast('Report Template created', 'success');
-                closeRTModal();
-                resetRTModal();     // ✅ clear form
-                loadRTemplates();   // ✅ reload from backend
-            })
-            .catch(err => showToast(err.message, 'error'));
-    }
-}
-function resetRTModal() {
-    document.getElementById('rt_title').value = '';
-    document.getElementById('rt_category').value = '';
-    document.getElementById('rt_desc').value = '';
-    document.getElementById('rt_price').value = '';
-    document.getElementById('rt_total').checked = true;
-
-    rtColumns = [];
-    renderColumns();
-}
-function renderColumns() {
-    const container = document.getElementById('rtColumnsContainer');
-
-    container.innerHTML = rtColumns.map(c => `
-        <div class="flex gap-2">
-            <input value="${c.value}"
-                oninput="updateColumn(${c.id}, this.value)"
-                class="flex-1 px-3 py-2 border rounded-xl text-sm"
-                placeholder="Column name">
-            <button onclick="removeColumn(${c.id})" class="text-red-500">✖</button>
-        </div>
-    `).join('');
-}
-
-function updateColumn(id, value) {
-    const col = rtColumns.find(c => c.id === id);
-    if (col) col.value = value;
-}
-
-function removeColumn(id) {
-    rtColumns = rtColumns.filter(c => c.id !== id);
-    renderColumns();
-}
-
-function loadRTemplates() {
-    fetch('/api/catalog/rtemplates')
-        .then(r => r.json())
-        .then(data => {
-            rtemplates = data;
-            renderRTemplates();
-        })
-        .catch(() => showToast('Failed to load report templates', 'error'));
-}
-// ================= RT MODAL =================
-
-function openRTModal() {
-    resetRTModal();
-    document.getElementById('rtModal').classList.remove('hidden');
-}
-
-function closeRTModal() {
-    document.getElementById('rtModal').classList.add('hidden');
-}
-
-
-function renderRTemplates() {
-    const grid = document.getElementById('rtGrid');
-    const badge = document.getElementById('rtBadge');
-
-    if (badge) badge.textContent = rtemplates.length;
-
-    if (!rtemplates.length) {
-        grid.innerHTML = '<p class="text-gray-500 text-sm">No templates found</p>';
-        return;
-    }
-
-    grid.innerHTML = rtemplates.map(t => {
-
-        const cols = ((t.columns || '') + '').split(',').filter(c => c);
-
-        return `
-        <div class="group bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition">
-
-          <!-- HEADER -->
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                📊
-              </div>
-              <div>
-                <p class="text-sm font-bold text-gray-900">${t.title}</p>
-                ${t.category ? `
-                  <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">
-                    ${t.category}
-                  </span>` : ''}
-              </div>
-            </div>
-
-            <!-- ACTIONS -->
-            <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition">
-
-              <button onclick="openRTEdit(${t.id})"
-                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                       text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50"
-                title="Edit">
-                <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-            </svg>
-</div>
-              </button>
-
-              <button onclick="toggleRTemplate(${t.id})"
-                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                       ${t.status === 'active'
-                ? 'text-emerald-500 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50'
-                : 'text-gray-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50'}"
-                title="${t.status === 'active' ? 'Set Inactive' : 'Set Active'}">
-               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="${t.status === 'active'
-                ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'
-                : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/>
-            </svg>
-              </button>
-
-              <button onclick="deleteRTemplate(${t.id})"
-                class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center
-                       text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50"
-                title="Delete">
-               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-              </button>
-
-            </div>
-          </div>
-
-          <!-- DESCRIPTION -->
-          ${t.description ? `
-            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${t.description}</p>
-          ` : ''}
-
-          <!-- COLUMNS -->
-          <div class="flex flex-wrap gap-1 mb-3">
-            ${cols.map(c => `
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600">
-                ${c}
-              </span>
-            `).join('')}
-          </div>
-
-          <!-- PRICE -->
-          <div class="bg-gray-50 rounded-xl p-3 mb-3 flex items-center justify-between">
-            <span class="text-xs text-gray-500">Price</span>
-            <span class="text-sm font-bold text-indigo-600">₹${t.price || 0}</span>
-          </div>
-
-          <!-- FOOTER -->
-          <div class="flex items-center justify-between">
-
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold
-              ${t.status === 'active'
-                ? 'bg-emerald-50 text-emerald-600'
-                : 'bg-gray-100 text-gray-400'}">
-              ${t.status === 'active' ? 'Active' : 'Inactive'}
-            </span>
-
-            <button onclick="useRTemplate(${t.id})"
-              class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">
-              Use →
-            </button>
-
-          </div>
-
-        </div>
-        `;
-    }).join('');
-}
-
-let rtEditId = null;
-
-function openRTEdit(id) {
-    const t = rtemplates.find(x => x.id === id);
-    if (!t) return;
-
-    rtEditId = id;
-
-    // open modal
-    openRTModal();
-
-    // fill values
-    document.getElementById('rt_title').value = t.title || '';
-    document.getElementById('rt_category').value = t.category || '';
-    document.getElementById('rt_desc').value = t.description || '';
-    document.getElementById('rt_price').value = t.price || 0;
-    document.getElementById('rt_total').checked = t.showTotal ?? true;
-
-    // columns
-    rtColumns = [];
-    const cols = ((t.columns || '') + '').split(',').filter(c => c);
-
-    cols.forEach(c => addColumn(c));
-}
-
-function deleteRTemplate(id) {
-    if (!confirm('Delete this template?')) return;
-
-    fetch(`/api/catalog/rtemplates/${id}`, { method: 'DELETE' })
-        .then(() => {
-            showToast('Deleted', 'success');
-            loadRTemplates();
-        });
-}
-
-function toggleRTemplate(id) {
-    fetch(`/api/catalog/rtemplates/${id}/toggle-status`, { method: 'PATCH' })
-        .then(() => {
-            showToast('Updated', 'success');
-            loadRTemplates();
-        });
-}
-
-
-
-
-
-
-
-
-
 function toggleTemplateStatus(id) {
-    fetch(`/api/catalog/templates/${id}/toggle-status`, { method: 'PATCH' })
-        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    api(`${API.templates}/${id}/toggle-status`, 'PATCH')
         .then(() => { showToast('Template status updated', 'success'); loadTemplates(); })
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
-
 function deleteTemplate(id) {
     if (!confirm('Delete this template?')) return;
-    fetch(`/api/catalog/templates/${id}`, { method: 'DELETE' })
-        .then(r => { if (!r.ok) throw new Error(r.status); showToast('Template deleted', 'success'); loadTemplates(); })
+    api(`${API.templates}/${id}`, 'DELETE')
+        .then(() => { showToast('Template deleted', 'success'); loadTemplates(); })
         .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
-function useTemplate(id) { showToast('Template selected! Available when creating reminders.', 'success'); }
+// ─────────────────────────────────────────────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════╗
+// ║                  REPORT TEMPLATES                       ║
+// ╚══════════════════════════════════════════════════════════╝
+// ─────────────────────────────────────────────────────────────────────────────
+function loadRTemplates() {
+    api(API.rtemplates)
+        .then(data => { rtemplates = data; renderRTemplates(); })
+        .catch(err => showToast('Failed to load report templates: ' + err.message, 'error'));
+}
 
-// =====================================================================
-//  TAB SWITCHING
-// =====================================================================
+function renderRTemplates() {
+    const grid = document.getElementById('rtGrid');
+    const empty = document.getElementById('rtEmpty');
+    const badge = document.getElementById('rtBadge');
+    if (badge) badge.textContent = rtemplates.length;
 
-// =====================================================================
-//  TOAST
-// =====================================================================
-function showToast(msg, type = 'success') {
-    let container = document.getElementById('toastContainer');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'toastContainer';
-        container.className = 'fixed bottom-24 md:bottom-6 right-4 z-[100] flex flex-col gap-2';
-        document.body.appendChild(container);
+    if (!rtemplates.length) {
+        grid.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
     }
-    const colors = { success: 'bg-emerald-600', error: 'bg-red-500', info: 'bg-indigo-600' };
-    const toast = document.createElement('div');
-    toast.className = `${colors[type] || colors.success} text-white text-sm font-medium px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 fade-in`;
-    toast.innerHTML = msg;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    if (empty) empty.classList.add('hidden');
+
+    const catColors = {
+        'Blood Test': 'bg-red-50 text-red-700',
+        'Radiology': 'bg-violet-50 text-violet-700',
+        'Cardiology': 'bg-pink-50 text-pink-700',
+        'Pathology': 'bg-amber-50 text-amber-700',
+        'Urology': 'bg-cyan-50 text-cyan-700',
+        'Prescription': 'bg-emerald-50 text-emerald-700',
+        'General Checkup': 'bg-blue-50 text-blue-700',
+        'Custom': 'bg-gray-100 text-gray-600'
+    };
+
+    grid.innerHTML = rtemplates.map(t => {
+        // columns stored as comma-delimited string in the DB
+        const cols = ((t.columns || '') + '').split(',').map(c => c.trim()).filter(Boolean);
+        const catCls = catColors[t.category] || 'bg-gray-100 text-gray-600';
+        const isActive = t.status === 'active';
+
+        return `
+    <div class="group bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition fade-in">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-xl">📋</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900 leading-snug">${t.title}</p>
+            <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${catCls}">${t.category || 'Custom'}</span>
+          </div>
+        </div>
+        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+          <button onclick="openRTModal(${t.id})" title="Edit"
+            class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center text-gray-500 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+          <button onclick="toggleRTStatus(${t.id})" title="${isActive ? 'Set Inactive' : 'Set Active'}"
+            class="w-7 h-7 rounded-lg flex items-center justify-center transition ${isActive ? 'bg-emerald-50 text-emerald-500 hover:bg-orange-50 hover:text-orange-500' : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500'}">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${isActive ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/></svg>
+          </button>
+          <button onclick="deleteRT(${t.id})" title="Delete"
+            class="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-400 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </div>
+      ${t.description ? `<p class="text-xs text-gray-500 mb-3 leading-relaxed line-clamp-2">${t.description}</p>` : ''}
+      <div class="flex flex-wrap gap-1.5 mb-3">
+        ${cols.map(c => `<span class="text-[10px] px-2 py-1 rounded-lg bg-gray-100 text-gray-600 font-medium">${c}</span>`).join('')}
+        ${t.showTotal ? `<span class="text-[10px] px-2 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-semibold">∑ Grand Total</span>` : ''}
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-gray-400">${cols.length} columns</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">${isActive ? 'Active' : 'Inactive'}</span>
+        </div>
+        ${t.price ? `<p class="text-sm font-bold text-emerald-600">₹${Number(t.price).toLocaleString('en-IN')}</p>` : ''}
+      </div>
+    </div>`;
+    }).join('');
 }
 
-// =====================================================================
-//  MOBILE NAV
-// =====================================================================
-function openMobileNav() {
-    document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)';
-    document.getElementById('mobileNavBg').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-function closeMobileNav() {
-    document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)';
-    document.getElementById('mobileNavBg').classList.add('hidden');
-    document.body.style.overflow = '';
+// ── RT Modal ──────────────────────────────────────────────────────────────────
+function openRTModal(id) {
+    editRTId = id || null;
+    rtCols = [];
+
+    if (editRTId) {
+        const t = rtemplates.find(x => x.id === editRTId);
+        if (!t) return;
+        document.getElementById('rt_title').value = t.title || '';
+        document.getElementById('rt_desc').value = t.description || '';
+        document.getElementById('rt_price').value = t.price || '';
+        document.getElementById('rt_category').value = t.category || 'Blood Test';
+        document.getElementById('rt_total').checked = t.showTotal !== false;
+        document.getElementById('rtModalTitle').textContent = 'Edit Report Template';
+        document.getElementById('rtSaveLabel').textContent = 'Save Changes';
+        const cols = ((t.columns || '') + '').split(',').map(c => c.trim()).filter(Boolean);
+        rtCols = cols.map((v, i) => ({ uid: Date.now() + i, value: v }));
+    } else {
+        document.getElementById('rt_title').value = '';
+        document.getElementById('rt_desc').value = '';
+        document.getElementById('rt_price').value = '';
+        document.getElementById('rt_category').value = 'Blood Test';
+        document.getElementById('rt_total').checked = true;
+        document.getElementById('rtModalTitle').textContent = 'Create Report Template';
+        document.getElementById('rtSaveLabel').textContent = 'Save Template';
+    }
+    renderRTCols();
+    document.getElementById('rtModal').classList.remove('hidden');
 }
 
-// =====================================================================
-//  INIT
-// =====================================================================
+function openRTWithPreset(type) {
+    openRTModal(null);
+    const presets = {
+        lab: { category: 'Blood Test', cols: ['Test Name', 'Value', 'Reference Range', 'Unit', 'Status/Flag'] },
+        radiology: { category: 'Radiology', cols: ['Region', 'Findings', 'Impression', 'Radiologist'] },
+        prescription: { category: 'Prescription', cols: ['Medicine Name', 'Dosage', 'Frequency', 'Duration', 'Instructions'] },
+        blank: { category: 'Custom', cols: ['Column 1', 'Column 2'] }
+    };
+    const p = presets[type] || presets.blank;
+    document.getElementById('rt_category').value = p.category;
+    rtCols = p.cols.map((v, i) => ({ uid: Date.now() + i, value: v }));
+    renderRTCols();
+}
+
+function closeRTModal() { document.getElementById('rtModal').classList.add('hidden'); }
+
+// ── Column editor ─────────────────────────────────────────────────────────────
+function addRTColumn() {
+    rtCols.push({ uid: Date.now() + Math.random(), value: '' });
+    renderRTCols();
+    // focus the new input
+    const inputs = document.querySelectorAll('.rt-col-input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+}
+function removeRTCol(uid) {
+    rtCols = rtCols.filter(c => c.uid !== uid);
+    renderRTCols();
+}
+function updateRTCol(uid, val) {
+    const c = rtCols.find(x => x.uid === uid);
+    if (c) c.value = val;
+}
+function renderRTCols() {
+    const cont = document.getElementById('rtColumnsContainer');
+    if (!rtCols.length) {
+        cont.innerHTML = `
+      <div class="text-center py-6 border-2 border-dashed border-gray-200 rounded-2xl">
+        <p class="text-xs text-gray-400 mb-2">No columns yet</p>
+        <button type="button" onclick="addRTColumn()" class="text-xs text-indigo-600 font-semibold hover:underline">+ Add your first column</button>
+      </div>`;
+        return;
+    }
+    cont.innerHTML = rtCols.map((c, i) => `
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 font-bold flex-shrink-0">${i + 1}</div>
+      <input type="text" value="${c.value.replace(/"/g, '&quot;')}"
+        placeholder="Column name (e.g. Test Name, Value, Reference Range)"
+        oninput="updateRTCol(${c.uid}, this.value)"
+        class="rt-col-input flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50">
+      <button onclick="removeRTCol(${c.uid})"
+        class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-100 flex-shrink-0">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+// ── Save RT ───────────────────────────────────────────────────────────────────
+function saveRTTemplate() {
+    const title = document.getElementById('rt_title').value.trim();
+    if (!title) { showToast('Please enter a template title', 'error'); return; }
+
+    const cols = rtCols.map(c => c.value.trim()).filter(Boolean);
+    if (!cols.length) { showToast('Please add at least one column', 'error'); return; }
+
+    const payload = {
+        title,
+        category: document.getElementById('rt_category').value,
+        description: document.getElementById('rt_desc').value.trim(),
+        columns: cols.join(','),          // stored as comma-delimited string
+        price: parseFloat(document.getElementById('rt_price').value) || 0,
+        showTotal: document.getElementById('rt_total').checked,
+        status: 'active'
+    };
+
+    const isEdit = editRTId !== null;
+    api(isEdit ? `${API.rtemplates}/${editRTId}` : API.rtemplates, isEdit ? 'PUT' : 'POST', payload)
+        .then(() => { showToast(isEdit ? 'Template updated!' : 'Report template created!', 'success'); closeRTModal(); loadRTemplates(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+function toggleRTStatus(id) {
+    api(`${API.rtemplates}/${id}/toggle-status`, 'PATCH')
+        .then(() => { showToast('Status updated', 'success'); loadRTemplates(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+function deleteRT(id) {
+    if (!confirm('Delete this report template?')) return;
+    api(`${API.rtemplates}/${id}`, 'DELETE')
+        .then(() => { showToast('Template deleted', 'success'); loadRTemplates(); })
+        .catch(err => showToast('Error: ' + err.message, 'error'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUMMARY (header badges from server)
+// ─────────────────────────────────────────────────────────────────────────────
+function loadSummary() {
+    api(API.summary)
+        .then(data => {
+            const planBadge = document.getElementById('planCountBadge');
+            const prodBadge = document.getElementById('productCountBadge');
+            if (planBadge) planBadge.textContent = data.activePlans || 0;
+            if (prodBadge) prodBadge.textContent = data.activeProducts || 0;
+        })
+        .catch(() => { /* non-critical — individual loaders update their own badges */ });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // init tab indicator on Plans tab
+    const firstTab = document.getElementById('ct-plans');
+    if (firstTab) moveIndicator(firstTab);
+
+    // load all data from Spring Boot
     loadPlans();
     loadProducts();
     loadTemplates();
     loadRTemplates();
+    loadSummary();
 });

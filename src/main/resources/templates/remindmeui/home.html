@@ -522,6 +522,33 @@
 		function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
 		function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
 	</script>
+	
+	<script>
+function toggleSub(menuId) {
+    const subMenu = document.getElementById('sub-' + menuId);
+    const chevron = document.getElementById('ch-' + menuId);
+    
+    if (subMenu) {
+        // Toggle the hidden class
+        const isCollapsed = subMenu.classList.toggle('hidden');
+        
+        // Rotate chevron
+        if (chevron) {
+            chevron.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+    }
+}
+
+// Logic to keep it open if on the reports page
+window.addEventListener('DOMContentLoaded', () => {
+    // You can set this logic based on your activePage variable
+    const activePage = "[[${activePage}]]"; 
+    if (activePage === 'reports') {
+        toggleSub('reports');
+    }
+});
+</script>
+
 </body>
 
 </html>

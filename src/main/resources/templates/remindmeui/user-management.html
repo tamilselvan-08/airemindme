@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Reminder Me</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fb;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Sidebar -->
+    <div th:replace="~{remindmeui/fragments/layout :: sidebar(activePage='users')}"></div>
+
+    <!-- Mobile nav -->
+    <div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='users')}"></div>
+    <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
+        onclick="closeMobileNav()"></div>
+    <div id="mobileNavDrawer"
+        class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300"
+        style="transform:translateX(-100%)">
+        <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+                        class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg></div>
+                <div>
+                    <p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
+                    <p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
+                </div>
+            </div><button onclick="closeMobileNav()"
+                class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+                    class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg></button>
+        </div>
+        <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-0.5">
+            <a href="home.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg><span class="text-sm font-semibold">Home</span></a>
+            <a href="customers.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg><span class="text-sm font-semibold">Customers</span></a>
+            <a href="engagement.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg><span class="text-sm font-semibold">Engage</span></a>
+            <a href="promotions.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg><span class="text-sm font-semibold">Promotions</span></a>
+            <a href="appointments.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg><span class="text-sm font-semibold">Appointments</span></a>
+            <a href="reports.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg><span class="text-sm font-semibold">Reports</span></a>
+            <a href="user-management.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg class="w-5 h-5"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg><span class="text-sm font-semibold">Users</span></a>
+            <a href="settings.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg><span class="text-sm font-semibold">Settings</span></a>
+        </nav>
+        <div class="px-3 py-3 border-t border-gray-100 flex-shrink-0">
+            <div class="flex items-center gap-2.5 px-2 py-1.5">
+                <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+                        class="text-white text-xs font-bold">A</span></div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+                    <p class="text-[10px] text-gray-400 truncate mt-0.5">Acme Financial Services</p>
+                </div>
+            </div><button onclick="window.location.href='login.html'"
+                class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 mt-1 transition"><svg
+                    class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg><span class="text-sm font-medium">Sign Out</span></button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="md:ml-56 min-h-screen pb-24 md:pb-0 pt-14 md:pt-0">
+        <div
+            class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 flex items-center justify-between sticky top-14 md:top-0 z-20">
+            <div>
+                <p class="text-xs text-gray-400 mb-1"><a href="home.html" class="hover:text-indigo-600">Home</a> / <span
+                        class="text-gray-700">Users</span></p>
+                <h1 class="text-xl font-bold text-gray-900">User Management</h1>
+            </div>
+            <button onclick="openModal('addUserModal')"
+                class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                Add User
+            </button>
+        </div>
+
+        <div class="px-4 md:px-6 py-5 max-w-5xl mx-auto">
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-gray-900" id="statTotal">5</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Total Users</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-indigo-600" id="statAdmins">1</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Admins</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-emerald-600" id="statActive">4</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Active</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                    <p class="text-2xl font-bold text-gray-400" id="statInactive">1</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Inactive</p>
+                </div>
+            </div>
+
+            <!-- Search + Filter -->
+            <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                <div class="relative flex-1"><svg
+                        class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg><input id="userSearch" type="text" placeholder="Search users..." oninput="renderUsers()"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="relative"><select id="roleFilter" onchange="renderUsers()"
+                        class="pl-4 pr-10 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                        <option value="">All Roles</option>
+                        <option>Admin</option>
+                        <option>Doctor</option>
+                        <option>Staff</option>
+                        <option>Receptionist</option>
+                        <option>Lab Technician</option>
+                        <option>Barber</option>
+                        <option>Consultant</option>
+                    </select><svg
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg></div>
+            </div>
+
+            <div id="userList" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav Mobile -->
+    <div
+        class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-1 pb-2 pt-1 flex items-end justify-around z-30">
+        <a href="home.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg><span class="text-[10px] font-medium">Home</span></a>
+        <a href="customers.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg><span class="text-[10px] font-medium">Customers</span></a>
+        <div class="relative flex flex-col items-center" style="margin-bottom:8px"><button
+                onclick="openModal('addUserModal')"
+                class="w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-300 -mt-5"><svg
+                    class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg></button><span class="text-[10px] font-medium text-indigo-600 mt-0.5">Add</span></div>
+        <a href="user-management.html" class="flex flex-col items-center gap-0.5 text-indigo-600 px-2 py-1"><svg
+                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg><span class="text-[10px] font-medium">Users</span></a>
+        <a href="settings.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg><span class="text-[10px] font-medium">Settings</span></a>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="addUserModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('addUserModal')"></div>
+        <div
+            class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[95vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-center pt-3 pb-1 md:hidden">
+                <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+            </div>
+            <div class="flex items-center justify-between px-5 pt-4 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center"><svg
+                            class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg></div>
+                    <h2 id="modalTitle" class="text-base font-bold text-gray-900">Add New User</h2>
+                </div>
+                <button onclick="closeModal('addUserModal')"
+                    class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+                        class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="px-5 pb-6 flex flex-col gap-4">
+                <input type="hidden" id="editUserId">
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">First Name *</label><input
+                            type="text" id="uFirstName" placeholder="Arjun"
+                            class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Last Name *</label><input
+                            type="text" id="uLastName" placeholder="Sharma"
+                            class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Email Address *</label><input
+                        type="email" id="uEmail" placeholder="name@company.com"
+                        class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Phone Number</label><input type="tel"
+                        id="uPhone" placeholder="+91 98765 43210"
+                        class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div><label class="text-sm font-medium text-gray-700 mb-2 block">Role *</label>
+                    <div class="grid grid-cols-2 gap-2" id="roleGrid">
+                        <button type="button" onclick="selRole('Admin')" id="role-Admin"
+                            class="py-3 px-4 rounded-2xl border-2 border-indigo-400 bg-indigo-50 text-sm font-semibold text-indigo-700 text-left transition">👑
+                            Admin</button>
+                        <button type="button" onclick="selRole('Doctor')" id="role-Doctor"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">🩺
+                            Doctor</button>
+                        <button type="button" onclick="selRole('Receptionist')" id="role-Receptionist"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">📋
+                            Receptionist</button>
+                        <button type="button" onclick="selRole('Lab Technician')" id="role-Lab Technician"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">🧪
+                            Lab Technician</button>
+                        <button type="button" onclick="selRole('Barber')" id="role-Barber"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">💇
+                            Barber</button>
+                        <button type="button" onclick="selRole('Consultant')" id="role-Consultant"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">💼
+                            Consultant</button>
+                        <button type="button" onclick="selRole('Staff')" id="role-Staff"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">👤
+                            Staff</button>
+                        <button type="button" onclick="selRole('Nurse')" id="role-Nurse"
+                            class="py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition">🏥
+                            Nurse</button>
+                    </div>
+                    <input type="hidden" id="uRole" value="Admin">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-2 block">Permissions</label>
+                    <div class="grid grid-cols-2 gap-2" id="permGrid">
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                id="perm-appointments" checked class="rounded"><span
+                                class="text-sm text-gray-700">Appointments</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="perm-reports"
+                                checked class="rounded"><span class="text-sm text-gray-700">Reports</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="perm-customers"
+                                class="rounded"><span class="text-sm text-gray-700">Customers</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="perm-engage"
+                                class="rounded"><span class="text-sm text-gray-700">Engage</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                id="perm-promotions" class="rounded"><span
+                                class="text-sm text-gray-700">Promotions</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="perm-settings"
+                                class="rounded"><span class="text-sm text-gray-700">Settings</span></label>
+                    </div>
+                </div>
+                <div><label class="text-sm font-medium text-gray-700 mb-2 block">Status</label>
+                    <div class="flex gap-2"><button type="button" onclick="selStatus('Active')" id="st-Active"
+                            class="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white transition">Active</button><button
+                            type="button" onclick="selStatus('Inactive')" id="st-Inactive"
+                            class="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">Inactive</button>
+                    </div>
+                    <input type="hidden" id="uStatus" value="Active">
+                </div>
+                <button onclick="saveUser()"
+                    class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-semibold flex items-center justify-center gap-2 hover:bg-indigo-700 transition"><svg
+                        class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg><span id="saveLabel">Add User</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="delModal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('delModal')"></div>
+        <div class="relative bg-white rounded-3xl w-full max-w-sm mx-4 shadow-2xl p-6 text-center">
+            <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4"><svg
+                    class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg></div>
+            <h3 class="text-base font-bold text-gray-900 mb-1">Remove User?</h3>
+            <p class="text-sm text-gray-500 mb-5">This will remove <span id="delUserName"
+                    class="font-semibold text-gray-700">this user</span> from the system.</p>
+            <div class="flex gap-3"><button onclick="closeModal('delModal')"
+                    class="flex-1 py-3 rounded-2xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50">Keep</button><button
+                    onclick="doDelete()"
+                    class="flex-1 py-3 rounded-2xl bg-red-600 text-white font-semibold hover:bg-red-700">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast"
+        class="hidden fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 px-5 py-3 bg-gray-900 text-white rounded-2xl shadow-2xl">
+        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p id="toastMsg" class="text-sm font-medium">Done!</p>
+    </div>
+
+    <script>
+        const roleColors = { Admin: 'bg-indigo-100 text-indigo-700', Doctor: 'bg-blue-100 text-blue-700', Receptionist: 'bg-pink-100 text-pink-700', 'Lab Technician': 'bg-purple-100 text-purple-700', Barber: 'bg-orange-100 text-orange-700', Consultant: 'bg-teal-100 text-teal-700', Staff: 'bg-gray-100 text-gray-700', Nurse: 'bg-rose-100 text-rose-700' };
+        const roleIcons = { Admin: '👑', Doctor: '🩺', Receptionist: '📋', 'Lab Technician': '🧪', Barber: '💇', Consultant: '💼', Staff: '👤', Nurse: '🏥' };
+        const rolePerms = {
+            Admin: ['appointments', 'reports', 'customers', 'engage', 'promotions', 'settings'],
+            Doctor: ['appointments', 'reports'],
+            Receptionist: ['appointments', 'customers'],
+            'Lab Technician': ['appointments', 'reports'],
+            Barber: ['appointments'],
+            Consultant: ['appointments', 'reports'],
+            Staff: ['appointments'],
+            Nurse: ['appointments', 'reports']
+        };
+
+        let users = [
+            { id: 1, name: 'Arjun Sharma', email: 'admin@acmefinancial.com', phone: '+91 98765 43210', role: 'Admin', status: 'Active', joined: 'Jan 2024', perms: ['appointments', 'reports', 'customers', 'engage', 'promotions', 'settings'] },
+            { id: 2, name: 'Dr. Meena Iyer', email: 'meena@acmefinancial.com', phone: '+91 99887 12345', role: 'Doctor', status: 'Active', joined: 'Feb 2024', perms: ['appointments', 'reports'] },
+            { id: 3, name: 'Priya Nair', email: 'priya@acmefinancial.com', phone: '+91 88776 65432', role: 'Receptionist', status: 'Active', joined: 'Mar 2024', perms: ['appointments', 'customers'] },
+            { id: 4, name: 'Rajan Das', email: 'rajan@acmefinancial.com', phone: '+91 77665 54321', role: 'Lab Technician', status: 'Active', joined: 'Mar 2024', perms: ['appointments', 'reports'] },
+            { id: 5, name: 'Sunita Patil', email: 'sunita@acmefinancial.com', phone: '+91 66554 43210', role: 'Staff', status: 'Inactive', joined: 'Apr 2024', perms: ['appointments'] }
+        ];
+        let deleteId = null, editId = null, selRoleVal = 'Admin', selStatusVal = 'Active';
+
+        function renderUsers() {
+            const search = (document.getElementById('userSearch').value || '').toLowerCase();
+            const rFilter = document.getElementById('roleFilter').value;
+            const filtered = users.filter(u =>
+                (!search || u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search) || u.role.toLowerCase().includes(search)) &&
+                (!rFilter || u.role === rFilter)
+            );
+            const list = document.getElementById('userList');
+            list.innerHTML = '';
+            if (!filtered.length) { list.innerHTML = `<div class="text-center py-16 bg-white rounded-2xl border border-gray-100"><p class="text-sm text-gray-500">No users found</p></div>`; return; }
+            filtered.forEach(u => {
+                const initials = u.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                list.innerHTML += `
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+            <div class="w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-white text-sm font-bold">${initials}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                <p class="text-sm font-bold text-gray-900">${u.name}</p>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${roleColors[u.role] || 'bg-gray-100 text-gray-700'}">${roleIcons[u.role] || ''} ${u.role}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${u.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}">${u.status}</span>
+              </div>
+              <p class="text-xs text-gray-500">${u.email} · ${u.phone}</p>
+              <p class="text-[10px] text-gray-400 mt-0.5">Permissions: ${u.perms.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ')}</p>
+            </div>
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <a href="user-detail.html?id=${u.id}" class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></a>
+              <button onclick="editUser(${u.id})" class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+              ${u.id !== 1 ? `<button onclick="promptDelete(${u.id})" class="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
+            </div>
+          </div>`;
+            });
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').textContent = users.length;
+            document.getElementById('statAdmins').textContent = users.filter(u => u.role === 'Admin').length;
+            document.getElementById('statActive').textContent = users.filter(u => u.status === 'Active').length;
+            document.getElementById('statInactive').textContent = users.filter(u => u.status === 'Inactive').length;
+        }
+
+        function selRole(r) {
+            selRoleVal = r;
+            document.getElementById('uRole').value = r;
+            document.querySelectorAll('#roleGrid button').forEach(b => {
+                b.className = b.id === 'role-' + r
+                    ? 'py-3 px-4 rounded-2xl border-2 border-indigo-400 bg-indigo-50 text-sm font-semibold text-indigo-700 text-left transition'
+                    : 'py-3 px-4 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-600 text-left hover:border-gray-300 transition';
+            });
+            // Auto-set permissions
+            const perms = rolePerms[r] || [];
+            ['appointments', 'reports', 'customers', 'engage', 'promotions', 'settings'].forEach(p => {
+                const cb = document.getElementById('perm-' + p);
+                if (cb) cb.checked = perms.includes(p);
+            });
+        }
+
+        function selStatus(s) {
+            selStatusVal = s;
+            document.getElementById('uStatus').value = s;
+            document.getElementById('st-Active').className = s === 'Active' ? 'flex-1 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white transition' : 'flex-1 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+            document.getElementById('st-Inactive').className = s === 'Inactive' ? 'flex-1 py-2.5 rounded-xl text-sm font-semibold bg-gray-500 text-white transition' : 'flex-1 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+        }
+
+        function openAddUser() {
+            editId = null;
+            document.getElementById('modalTitle').textContent = 'Add New User';
+            document.getElementById('saveLabel').textContent = 'Add User';
+            document.getElementById('editUserId').value = '';
+            ['uFirstName', 'uLastName', 'uEmail', 'uPhone'].forEach(id => document.getElementById(id).value = '');
+            selRole('Admin'); selStatus('Active');
+            openModal('addUserModal');
+        }
+
+        function editUser(id) {
+            const u = users.find(x => x.id === id);
+            if (!u) return;
+            editId = id;
+            document.getElementById('modalTitle').textContent = 'Edit User';
+            document.getElementById('saveLabel').textContent = 'Save Changes';
+            document.getElementById('editUserId').value = id;
+            const parts = u.name.split(' ');
+            document.getElementById('uFirstName').value = parts[0] || '';
+            document.getElementById('uLastName').value = parts.slice(1).join(' ') || '';
+            document.getElementById('uEmail').value = u.email;
+            document.getElementById('uPhone').value = u.phone;
+            selRole(u.role);
+            u.perms.forEach(p => { const cb = document.getElementById('perm-' + p); if (cb) cb.checked = true; });
+            selStatus(u.status);
+            openModal('addUserModal');
+        }
+
+        function saveUser() {
+            const fn = document.getElementById('uFirstName').value.trim();
+            const ln = document.getElementById('uLastName').value.trim();
+            const em = document.getElementById('uEmail').value.trim();
+            if (!fn || !em) { alert('Name and email are required.'); return; }
+            const perms = ['appointments', 'reports', 'customers', 'engage', 'promotions', 'settings'].filter(p => document.getElementById('perm-' + p)?.checked);
+            if (editId) {
+                const u = users.find(x => x.id === editId);
+                if (u) { Object.assign(u, { name: fn + ' ' + ln, email: em, phone: document.getElementById('uPhone').value, role: selRoleVal, status: selStatusVal, perms }); }
+                showToast('User updated successfully');
+            } else {
+                users.push({ id: Date.now(), name: fn + ' ' + ln, email: em, phone: document.getElementById('uPhone').value, role: selRoleVal, status: selStatusVal, joined: 'Mar 2026', perms });
+                showToast('User added & invite sent');
+            }
+            closeModal('addUserModal'); renderUsers();
+        }
+
+        function promptDelete(id) {
+            deleteId = id;
+            const u = users.find(x => x.id === id);
+            document.getElementById('delUserName').textContent = u ? u.name : 'this user';
+            openModal('delModal');
+        }
+        function doDelete() {
+            users = users.filter(u => u.id !== deleteId);
+            closeModal('delModal'); renderUsers();
+            showToast('User removed');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3000); }
+        function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
+
+        // override Add button
+        document.querySelector('[onclick="openModal(\'addUserModal\')"]') && (document.querySelectorAll('[onclick="openModal(\'addUserModal\')"]').forEach(b => b.onclick = openAddUser));
+
+        renderUsers();
+    </script>
+</body>
+
+</html>

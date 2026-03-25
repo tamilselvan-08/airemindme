@@ -30,10 +30,6 @@ import com.server.realsync.util.SecurityUtil;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-
-
-
-
 @Controller
 @RequestMapping("/")
 @Tag(name = "Home API", description = "HomeController APIs")
@@ -177,23 +173,42 @@ public class HomeController {
 	}
 
 	@GetMapping("/catalog.html")
-public String getCatalog(Model model) {
+	public String getCatalog(Model model) {
 
-    Account account = SecurityUtil.getCurrentAccountId();
+		Account account = SecurityUtil.getCurrentAccountId();
 
-    List<CatalogPlan> plans = settingsPlanService.getByAccountId(account.getId());
+		List<CatalogPlan> plans = settingsPlanService.getByAccountId(account.getId());
 
-    model.addAttribute("plans",       plans);
-    model.addAttribute("totalPlans",  plans.size());
-    model.addAttribute("activePlans", settingsPlanService.countActiveByAccountId(account.getId()));
+		model.addAttribute("plans", plans);
+		model.addAttribute("totalPlans", plans.size());
+		model.addAttribute("activePlans", settingsPlanService.countActiveByAccountId(account.getId()));
 
-    return "remindmeui/catalog";
-}
+		return "remindmeui/catalog";
+	}
+
+
+	@GetMapping("/engagement.html")
+	public String engagement(Model model) {
+		
+		return "remindmeui/engagement";
+	}
+	
+	@GetMapping("/user-management.html")
+	public String users(Model model) {
+		model.addAttribute("activePage", "users");
+		return "remindmeui/user-management";
+	}
 
 	@GetMapping("/reports.html")
 	public String getAdminReport(Model model) {
 
 		return "remindme/reports";
+	}
+
+	@GetMapping("/report-history")
+	public String reportHistory(Model model) {
+		model.addAttribute("activePage", "reports");
+		return "report-history";
 	}
 
 	@GetMapping("/settings.html")

@@ -1,334 +1,1152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Business Reports - Reminder Me</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                50: "#f0fdf4",
-                100: "#dcfce7",
-                200: "#bbf7d0",
-                300: "#86efac",
-                400: "#4ade80",
-                500: "#48B26F",
-                600: "#3a9360",
-                700: "#15803d",
-              },
-            },
-            fontFamily: { sans: ["Inter", "sans-serif"] },
-          },
-        },
-      };
-    </script>
-  </head>
-  <body class="font-sans bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
-      <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
-      >
-        <a href="dashboard.html" class="inline-flex items-center space-x-3">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets%2Ffbb0194a6d774fff8617236e5030fdfd%2F8eed054b31ff4abfa882868a9f63cc71?format=webp&width=800"
-            alt="REMINDERme logo"
-            class="w-[200px] h-[54px] object-contain"
-          />
-        </a>
-        <div class="flex items-center space-x-3">
-          <a
-            href="dashboard.html"
-            class="px-3 py-2 text-sm rounded-lg border border-gray-200 hover:bg-gray-50"
-            >Back to Dashboard</a
-          >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - Reminder Me</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fb;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    .report-card.selected {
+      border-color: #6366f1 !important;
+      background: #eef2ff;
+    }
+
+    .report-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 2px solid #d1d5db;
+      background: white;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: white;
+    }
+
+    .report-card.selected .report-checkbox {
+      background: #6366f1;
+      border-color: #6366f1;
+    }
+
+    .bar-fill {
+      transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .nav-chevron {
+      transition: transform 0.2s ease;
+    }
+
+    .subnav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      transition: all 0.15s;
+    }
+
+    .subnav-link:hover {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .subnav-link.active {
+      background: #eef2ff;
+      color: #4f46e5;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- ══════════════ SIDEBAR DESKTOP ══════════════ -->
+  <div class="hidden md:flex fixed left-0 top-0 h-screen w-60 bg-white border-r border-gray-100 flex-col z-30 no-print">
+    <div class="px-4 pt-5 pb-3"><a href="home.html" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+            class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg></div>
+        <div>
+          <p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
+          <p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
+        </div>
+      </a></div>
+    <nav class="flex-1 px-3 py-2 overflow-y-auto">
+      <a href="home.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>Home</a>
+      <a href="customers.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>Customers</a>
+      <a href="engagement.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>Engage</a>
+      <a href="promotions.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>Promotions</a>
+      <a href="appointments.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>Appointments</a>
+      <!-- REPORTS — collapsible sub-menu -->
+      <div class="mb-0.5">
+        <button onclick="toggleSub('reports')" id="btn-reports"
+          class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-indigo-600 text-white mb-1">
+          <div class="flex items-center gap-3"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg><span class="text-sm font-semibold">Reports</span></div>
+          <svg id="ch-reports" class="nav-chevron w-4 h-4 text-white/80" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="sub-reports" class="ml-2 pl-3 border-l-2 border-indigo-100 space-y-0.5 pb-1">
+          <a href="reports.html" id="subnav-dashboard" class="subnav-link active"><svg class="w-3.5 h-3.5 flex-shrink-0"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-3a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
+            </svg>Dashboard</a>
+          <a href="reports.html#generated" id="subnav-generated" class="subnav-link"><svg
+              class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>Reports Generated</a>
+          <a href="report-history.html" class="subnav-link"><svg class="w-3.5 h-3.5 flex-shrink-0" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>History</a>
         </div>
       </div>
-    </header>
+      <a href="user-management.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>Users</a>
+      <a href="settings.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 mb-0.5 text-sm font-medium"><svg
+          class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.11-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>Settings</a>
+    </nav>
+    <div class="px-4 py-4 border-t border-gray-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+            class="text-white text-sm font-bold">A</span></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+          <p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial Services</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Title and timeframe -->
-      <div
-        class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
-      >
+  <!-- Mobile Header -->
+  <div
+    class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-40 h-14 flex items-center justify-between px-4 shadow-sm no-print">
+    <button onclick="openMobileNav()"
+      class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg></button>
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+          class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg></div><span class="text-sm font-bold text-gray-900">Reports</span>
+    </div>
+    <button onclick="openModal('createReportModal')"
+      class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 text-white"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg></button>
+  </div>
+  <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm no-print"
+    onclick="closeMobileNav()"></div>
+  <div id="mobileNavDrawer"
+    class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300 no-print"
+    style="transform:translateX(-100%)">
+    <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+            class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg></div>
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
-            Business Reports
-          </h1>
-          <p class="text-gray-600">
-            Customers, promotions, and reminders — detailed analytics
-          </p>
+          <p class="text-sm font-bold text-gray-900">Reminder Me</p>
+        </div>
+      </div><button onclick="closeMobileNav()"
+        class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><svg class="w-4 h-4"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+    </div>
+    <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-0.5">
+      <a href="home.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 text-sm font-semibold">Home</a>
+      <a href="customers.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 text-sm font-semibold">Customers</a>
+      <a href="appointments.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 text-sm font-semibold">Appointments</a>
+      <!-- Reports collapsible mobile -->
+      <div>
+        <button onclick="toggleSub('mob-reports')"
+          class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-indigo-600 text-white mb-1">
+          <span class="text-sm font-semibold flex items-center gap-2"><svg class="w-4 h-4" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>Reports</span>
+          <svg id="ch-mob-reports" class="nav-chevron w-4 h-4 text-white/80" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="sub-mob-reports" class="ml-3 pl-3 border-l-2 border-indigo-100 space-y-0.5 pb-1">
+          <a href="reports.html" class="subnav-link active">Dashboard</a>
+          <a href="reports.html#generated" class="subnav-link">Reports Generated</a>
+          <a href="report-history.html" class="subnav-link">History</a>
+        </div>
+      </div>
+      <a href="user-management.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 text-sm font-semibold">Users</a>
+      <a href="settings.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 text-sm font-semibold">Settings</a>
+    </nav>
+  </div>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <div class="md:ml-60 min-h-screen pb-32 md:pb-6 pt-14 md:pt-0">
+
+    <!-- Page Header -->
+    <div class="bg-white border-b border-gray-100 px-4 md:px-6 py-4 sticky top-14 md:top-0 z-20 no-print">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <p class="text-xs text-gray-400"><a href="home.html" class="hover:text-indigo-600">Home</a> / <span
+              class="text-gray-700" id="breadcrumbTab">Reports</span></p>
+          <h1 class="text-xl font-bold text-gray-900">Lab Reports</h1>
         </div>
         <div class="flex items-center gap-2">
-          <label class="text-sm text-gray-600">Timeframe</label>
-          <select
-            id="timeframe"
-            class="px-3 py-2 border border-gray-300 rounded-lg"
-          >
-            <option value="30">Last 30 days</option>
-            <option value="90">Last 90 days</option>
-            <option value="365">Last 12 months</option>
-          </select>
+          <a href="report-history.html"
+            class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition"><svg
+              class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>History</a>
+          <button onclick="openModal('createReportModal')"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm"><svg
+              class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg><span class="hidden sm:inline">New Report</span></button>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div class="flex border-b border-gray-100 -mb-4">
+        <button onclick="switchTab('dashboard')" id="mt-dashboard"
+          class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 flex-shrink-0"><svg
+            class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-3a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
+          </svg>Dashboard</button>
+        <button onclick="switchTab('generated')" id="mt-generated"
+          class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex-shrink-0"><svg
+            class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>Reports Generated<span id="genBadge"
+            class="ml-1.5 bg-indigo-100 text-indigo-600 text-[10px] px-1.5 py-0.5 rounded-full font-bold">12</span></button>
+        <a href="report-history.html"
+          class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex-shrink-0"><svg
+            class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>History<svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg></a>
+      </div>
+    </div>
+
+    <!-- ════ DASHBOARD TAB ════ -->
+    <div id="tab-dashboard" class="px-4 md:px-6 py-6 max-w-6xl mx-auto">
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl font-bold text-gray-900" id="d-total">12</p>
+          <p class="text-xs text-gray-500 mt-0.5">Total Reports</p>
+          <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center mt-2"><svg
+              class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg></div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl font-bold text-emerald-600" id="d-paid">8</p>
+          <p class="text-xs text-gray-500 mt-0.5">Paid</p>
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center mt-2"><svg
+              class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg></div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl font-bold text-orange-500" id="d-unpaid">4</p>
+          <p class="text-xs text-gray-500 mt-0.5">Unpaid</p>
+          <div class="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center mt-2"><svg
+              class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg></div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl font-bold text-blue-500" id="d-sent">3</p>
+          <p class="text-xs text-gray-500 mt-0.5">Sent</p>
+          <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center mt-2"><svg
+              class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg></div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <p class="text-2xl font-bold text-amber-500" id="d-progress">5</p>
+          <p class="text-xs text-gray-500 mt-0.5">In Progress</p>
+          <div class="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center mt-2"><svg
+              class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-bold text-gray-900">Revenue Overview</p><span
+              class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">This Month</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="text-center p-3 bg-gray-50 rounded-2xl">
+              <p class="text-[10px] text-gray-400 mb-1">Total Billed</p>
+              <p id="rev-total" class="text-lg font-bold text-gray-900">₹0</p>
+            </div>
+            <div class="text-center p-3 bg-emerald-50 rounded-2xl">
+              <p class="text-[10px] text-gray-400 mb-1">Collected</p>
+              <p id="rev-collected" class="text-lg font-bold text-emerald-600">₹0</p>
+            </div>
+            <div class="text-center p-3 bg-orange-50 rounded-2xl">
+              <p class="text-[10px] text-gray-400 mb-1">Outstanding</p>
+              <p id="rev-outstanding" class="text-lg font-bold text-orange-500">₹0</p>
+            </div>
+          </div>
+          <p class="text-xs font-semibold text-gray-500 mb-3">Monthly Volume</p>
+          <div class="flex items-end gap-2 h-20">
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-100 rounded-t-lg" style="height:35%"></div><span
+                class="text-[9px] text-gray-400">Oct</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-200 rounded-t-lg" style="height:50%"></div><span
+                class="text-[9px] text-gray-400">Nov</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-300 rounded-t-lg" style="height:65%"></div><span
+                class="text-[9px] text-gray-400">Dec</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-400 rounded-t-lg" style="height:45%"></div><span
+                class="text-[9px] text-gray-400">Jan</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-500 rounded-t-lg" style="height:78%"></div><span
+                class="text-[9px] text-gray-400">Feb</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="w-full bg-indigo-600 rounded-t-lg" style="height:100%"></div><span
+                class="text-[9px] text-indigo-600 font-bold">Mar</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm font-bold text-gray-900 mb-4">Channel Distribution</p>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-xs text-gray-600 flex items-center gap-1.5"><span
+                    class="w-2 h-2 rounded-full bg-green-500"></span>WhatsApp</span><span
+                  class="text-xs font-bold">5</span></div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="bar-fill h-full bg-green-500 rounded-full" style="width:72%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-xs text-gray-600 flex items-center gap-1.5"><span
+                    class="w-2 h-2 rounded-full bg-violet-500"></span>Email</span><span
+                  class="text-xs font-bold">2</span></div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="bar-fill h-full bg-violet-500 rounded-full" style="width:28%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-xs text-gray-600 flex items-center gap-1.5"><span
+                    class="w-2 h-2 rounded-full bg-blue-500"></span>SMS</span><span class="text-xs font-bold">0</span>
+              </div>
+              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="bar-fill h-full bg-blue-500 rounded-full" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <p class="text-sm font-bold text-gray-900 mt-5 mb-3">Status</p>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between"><span
+                class="text-xs text-gray-600 flex items-center gap-2"><span
+                  class="w-2 h-2 rounded-full bg-blue-500"></span>Shared/Sent</span><span id="d2-shared"
+                class="text-xs font-bold">3</span></div>
+            <div class="flex items-center justify-between"><span
+                class="text-xs text-gray-600 flex items-center gap-2"><span
+                  class="w-2 h-2 rounded-full bg-emerald-500"></span>Completed</span><span id="d2-completed"
+                class="text-xs font-bold">5</span></div>
+            <div class="flex items-center justify-between"><span
+                class="text-xs text-gray-600 flex items-center gap-2"><span
+                  class="w-2 h-2 rounded-full bg-orange-400"></span>Draft</span><span id="d2-draft"
+                class="text-xs font-bold">4</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm font-bold text-gray-900 mb-4">Most Requested Tests</p>
+          <div id="topTests" class="space-y-3"></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-bold text-gray-900">Recent Reports</p><button onclick="switchTab('generated')"
+              class="text-xs text-indigo-600 font-medium hover:underline">View all</button>
+          </div>
+          <div id="recentReports" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ REPORTS GENERATED TAB ════ -->
+    <div id="tab-generated" class="hidden px-4 md:px-6 py-5 max-w-6xl mx-auto">
+
+      <!-- Filters -->
+      <div class="space-y-3 mb-4">
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <!-- Customer -->
+          <div class="relative sm:w-48 flex-shrink-0">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <select id="custFilter" onchange="onFilter()"
+              class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+              <option value="">All Patients</option>
+            </select>
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <!-- Phone search -->
+          <div class="relative sm:w-48 flex-shrink-0">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <input type="text" id="phoneInput" placeholder="Phone number..." oninput="onFilter()"
+              class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <!-- Test search -->
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search test name..." oninput="onFilter()"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <!-- Status pills -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="setStatusFilter('all')" id="sf-all"
+              class="px-3 py-1.5 rounded-full bg-indigo-600 text-white text-xs font-semibold">All</button>
+            <button onclick="setStatusFilter('Draft')" id="sf-Draft"
+              class="px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-semibold">Draft</button>
+            <button onclick="setStatusFilter('Completed')" id="sf-Completed"
+              class="px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-semibold">Completed</button>
+            <button onclick="setStatusFilter('Shared')" id="sf-Shared"
+              class="px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-semibold">Sent</button>
+          </div>
+          <!-- View toggle -->
+          <div class="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+            <button onclick="setView('list')" id="vw-list"
+              class="px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800 transition">List</button>
+            <button onclick="setView('group')" id="vw-group"
+              class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-gray-700 transition">By
+              Patient</button>
+          </div>
         </div>
       </div>
 
-      <!-- KPI Cards -->
-      <div
-        id="kpis"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-      ></div>
-
-      <!-- Charts grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-semibold text-gray-900">Customers Growth</h3>
-            <span class="text-xs text-gray-500" id="customers-range"></span>
-          </div>
-          <canvas id="customersChart" height="140"></canvas>
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-semibold text-gray-900">Reminders Status</h3>
-            <span class="text-xs text-gray-500" id="reminders-range"></span>
-          </div>
-          <canvas id="remindersChart" height="140"></canvas>
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-semibold text-gray-900">Promotions Performance</h3>
-            <span class="text-xs text-gray-500" id="promotions-range"></span>
-          </div>
-          <canvas id="promotionsChart" height="140"></canvas>
-        </div>
-
-        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-semibold text-gray-900">Engagement Funnel</h3>
-            <span class="text-xs text-gray-500" id="funnel-range"></span>
-          </div>
-          <canvas id="funnelChart" height="140"></canvas>
+      <!-- Selection toolbar -->
+      <div class="flex items-center justify-between mb-3">
+        <p id="filterCount" class="text-sm text-gray-500">12 reports</p>
+        <div class="flex items-center gap-2">
+          <button onclick="selectAll()" class="text-xs text-indigo-600 font-semibold hover:underline">Select
+            All</button>
+          <span class="text-gray-200">|</span>
+          <button onclick="clearSelection()" class="text-xs text-gray-500 font-medium hover:underline">Clear</button>
         </div>
       </div>
-    </main>
 
-    <script>
-      function getLS(key, fallback) {
-        try {
-          return JSON.parse(
-            localStorage.getItem(key) || JSON.stringify(fallback),
-          );
-        } catch (e) {
-          return fallback;
-        }
+      <!-- Multi-customer warning -->
+      <div id="multiCustWarning"
+        class="hidden mb-3 flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-2xl">
+        <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+          <p class="text-xs font-bold text-amber-800" id="multiCustMsg">Reports from 2 different patients selected</p>
+          <p class="text-[10px] text-amber-600 mt-0.5">Each patient will receive their own separate combined report. Use
+            "By Patient" view to select per patient easily.</p>
+        </div>
+        <button onclick="clearSelection()"
+          class="ml-auto text-xs text-amber-700 font-semibold hover:underline flex-shrink-0">Clear</button>
+      </div>
+
+      <div id="reportList" class="space-y-2 mb-4"></div>
+      <div class="flex items-center justify-between">
+        <p id="pageLabel" class="text-xs text-gray-400"></p>
+        <div id="pagination" class="flex items-center gap-1"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════ SELECTION BAR ════ -->
+  <div id="selectionBar" class="hidden fixed bottom-16 md:bottom-0 md:left-60 left-0 right-0 z-30 no-print">
+    <div class="bg-gray-900 text-white px-4 md:px-6 py-3 flex items-center gap-3 shadow-2xl">
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-bold" id="selCount">0 selected</p>
+        <p class="text-xs text-gray-400" id="selCustomerNames">—</p>
+      </div>
+      <span class="text-sm font-bold text-emerald-400 flex-shrink-0" id="selTotal">₹0</span>
+      <button onclick="openSendModal()"
+        class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-400 transition flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+        Send Reports
+      </button>
+      <button onclick="clearSelection()"
+        class="w-8 h-8 rounded-xl bg-gray-700 flex items-center justify-center text-gray-300 hover:bg-gray-600 flex-shrink-0"><svg
+          class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <div
+    class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-2 pb-2 pt-1 flex items-end justify-around z-20 no-print">
+    <a href="home.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="customers.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg><span class="text-[10px] font-medium">Patients</span></a>
+    <div class="relative flex flex-col items-center" style="margin-bottom:8px"><button
+        onclick="openModal('createReportModal')"
+        class="w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-300 -mt-5"><svg
+          class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg></button><span class="text-[10px] font-medium text-indigo-600 mt-0.5">New</span></div>
+    <a href="reports.html" class="flex flex-col items-center gap-0.5 text-indigo-600 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg><span class="text-[10px] font-medium">Reports</span></a>
+    <a href="settings.html" class="flex flex-col items-center gap-0.5 text-gray-400 px-2 py-1"><svg class="w-5 h-5"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.11-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg><span class="text-[10px] font-medium">Settings</span></a>
+  </div>
+
+  <!-- ════ CREATE REPORT MODAL ════ -->
+  <div id="createReportModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center no-print">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('createReportModal')"></div>
+    <div class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[95vh] overflow-y-auto shadow-2xl">
+      <div class="flex justify-center pt-3 pb-1 md:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+      </div>
+      <div class="flex items-center justify-between px-5 pt-4 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center"><svg
+              class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg></div>
+          <h2 class="text-base font-bold text-gray-900">New Report</h2>
+        </div><button onclick="closeModal('createReportModal')"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><svg class="w-4 h-4" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="px-5 pb-6 space-y-4">
+        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Patient <span
+              class="text-red-400">*</span></label>
+          <div class="relative"><select id="rCustomer"
+              class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+              <option value="">Select patient...</option>
+              <option>Rajesh Kumar</option>
+              <option>Anjali Singh</option>
+              <option>Mohammed Ibrahim</option>
+              <option>Sunita Patel</option>
+              <option>Vikram Nair</option>
+              <option>Priya Mehta</option>
+              <option>Amit Gupta</option>
+              <option>Kiran Bose</option>
+              <option>Deepa Krishnan</option>
+              <option>Suresh Reddy</option>
+            </select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg></div>
+        </div>
+        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Test Type <span
+              class="text-red-400">*</span></label>
+          <div class="relative"><input type="text" id="mTestInput" placeholder="Search 265+ tests..."
+              oninput="filterModalTests()" onfocus="showModalDrop()" onblur="setTimeout(hideModalDrop,200)"
+              class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div id="mTestDrop"
+              class="hidden absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-2xl shadow-xl mt-1 max-h-52 overflow-y-auto">
+              <div id="mTestDropInner"></div>
+            </div>
+          </div><input type="hidden" id="mTestId">
+          <div id="mTestInfo"
+            class="hidden mt-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between gap-2">
+            <div>
+              <p id="mTestName" class="text-xs font-bold text-gray-800"></p>
+              <p id="mTestSpec" class="text-[10px] text-gray-500 mt-0.5"></p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p id="mTestMrp" class="text-sm font-bold text-emerald-700"></p>
+              <p id="mTestTat" class="text-[10px] text-gray-400"></p>
+            </div>
+          </div>
+        </div>
+        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Result / Findings</label><textarea
+            id="rResult" rows="2" placeholder="Enter test results..."
+            class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl"><input type="checkbox" id="rPaid"
+            class="rounded w-4 h-4"><label for="rPaid" class="text-sm font-medium text-gray-700 cursor-pointer">Invoice
+            Paid</label></div>
+        <div class="flex gap-3"><button onclick="saveReport('Draft')"
+            class="flex-1 py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-semibold text-sm hover:bg-indigo-50">Save
+            Draft</button><button onclick="saveReport('Completed')"
+            class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700">Mark
+            Complete</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ SEND REPORTS MODAL ════ -->
+  <div id="sendModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center no-print">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('sendModal')"></div>
+    <div class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-xl max-h-[96vh] overflow-y-auto shadow-2xl">
+      <div class="flex justify-center pt-3 pb-1 md:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+      </div>
+      <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center"><svg
+              class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg></div>
+          <div>
+            <h2 class="text-base font-bold text-gray-900">Send Reports</h2>
+            <p id="sendModalSubtitle" class="text-xs text-gray-400 mt-0.5">0 reports</p>
+          </div>
+        </div>
+        <button onclick="closeModal('sendModal')"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><svg class="w-4 h-4" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="px-5 py-4 space-y-4">
+        <!-- Patient groups with contact fields -->
+        <div id="sendModalGroups" class="space-y-4"></div>
+        <!-- Grand total -->
+        <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-2xl border border-indigo-100"><span
+            class="text-sm font-bold text-indigo-800">Grand Total (MRP)</span><span id="sendModalTotal"
+            class="text-xl font-bold text-indigo-600">₹0</span></div>
+        <!-- PDF attachments -->
+        <div class="border border-dashed border-gray-200 rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-gray-600 flex items-center gap-1.5"><svg class="w-4 h-4 text-red-500"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              </svg>PDF Attachments</p>
+            <button onclick="downloadAllPDFs()"
+              class="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"><svg
+                class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>Download All</button>
+          </div>
+          <div id="pdfList" class="space-y-1.5"></div>
+          <p class="text-[10px] text-gray-400 mt-2">📌 Each report will open as a printable PDF in a new tab.</p>
+        </div>
+        <!-- Channel selector -->
+        <div>
+          <p class="text-xs font-semibold text-gray-500 mb-2">Send via</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="setChannel('wa')" id="ch-wa"
+              class="py-3 rounded-2xl text-sm font-semibold bg-green-500 text-white flex flex-col items-center gap-1"><svg
+                class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>WhatsApp</button>
+            <button onclick="setChannel('email')" id="ch-email"
+              class="py-3 rounded-2xl text-sm font-semibold bg-gray-100 text-gray-600 flex flex-col items-center gap-1 hover:bg-gray-200"><svg
+                class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>Email</button>
+            <button onclick="setChannel('sms')" id="ch-sms"
+              class="py-3 rounded-2xl text-sm font-semibold bg-gray-100 text-gray-600 flex flex-col items-center gap-1 hover:bg-gray-200"><svg
+                class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>SMS</button>
+          </div>
+        </div>
+        <!-- Message preview -->
+        <div class="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+          <p class="text-[10px] font-semibold text-gray-400 mb-1.5">MESSAGE PREVIEW</p>
+          <p id="msgPreview" class="text-xs text-gray-700 leading-relaxed whitespace-pre-line"></p>
+        </div>
+        <!-- Send button -->
+        <button onclick="executeSend()" id="sendExecuteBtn"
+          class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 transition flex items-center justify-center gap-2 shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          Send via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"
+    class="hidden fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 px-5 py-3 bg-gray-900 text-white rounded-2xl shadow-2xl no-print">
+    <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <p id="toastMsg" class="text-sm font-medium">Done!</p>
+  </div>
+
+  <script>
+    // ══════════ LAB TESTS (265 tests compact) ══════════
+    const LAB_TESTS = [
+      [1, "17 OH Progesterone", 1200, 550, "Serum", "1 Day"], [2, "24 Hrs Urine Chloride", 120, 110, "24Hr Urine", "2 Hrs"], [3, "24 Hrs Urine Creatinine", 200, 150, "24Hr Urine", "2 Hrs"], [4, "24 Hrs Urine Protein", 175, 175, "24Hr Urine", "2 Hrs"], [5, "24 Hrs Urine Uric Acid", 150, 125, "24Hr Urine", "2 Hrs"], [6, "Absolute Eosinophil Count", 180, 100, "EDTA Blood", "2 Hrs"], [7, "Acid Phosphatase (Total)", 480, 150, "Serum", "2 Hrs"], [8, "Activated Partial Thromboplastin Time (APTT)", 300, 150, "Citrate Plasma", "2 Hrs"], [9, "Adenosine Deaminase (ADA)", 780, 500, "Serum/Fluid", "4 Hrs"], [10, "AFB Culture", 600, 350, "Specimen", "42 Days"], [11, "AFB Smear Study", 150, 100, "Specimen", "4 Hrs"], [12, "Albumin", 80, 60, "Serum", "1 Day"], [13, "Alkaline Phosphatase (ALP)", 120, 90, "Serum", "2 Hrs"], [14, "Alpha Feto Protein (AFP)", 600, 250, "Serum", "6 Hrs"], [15, "ALT / SGPT", 120, 50, "Serum", "4 Hrs"], [16, "Ammonia", 550, 400, "EDTA Plasma", "4 Hrs"], [17, "Amylase", 400, 150, "Serum", "2 Hrs"], [18, "Anti Cardiolipin IgG Ab", 800, 500, "Serum", "2 Days"], [19, "Anti CMV IgG Ab", 600, 300, "Serum", "1 Day"], [20, "Anti CMV IgM Ab", 600, 300, "Serum", "1 Day"], [21, "Anti Cyclic Citrullinated Peptides (ACCP)", 1200, 600, "Serum", "4 Hrs"], [22, "Anti Dengue IgM Ab", 900, 500, "Serum", "1 Day"], [23, "Anti ds DNA Ab", 650, 400, "Serum", "2 Days"], [24, "Anti HAV Ab Total", 750, 400, "Serum", "1 Day"], [25, "Anti HAV IgM Ab", 720, 400, "Serum", "6 Hrs"], [26, "Anti HBc Ab Total", 720, 450, "Serum", "1 Day"], [27, "Anti HBe", 720, 450, "Serum", "1 Day"], [28, "Anti HBs", 720, 450, "Serum", "1 Day"], [29, "Anti HCV Ab - CLIA", 720, 450, "Serum", "6 Hrs"], [30, "Anti Herpes Simplex Virus IgG Ab", 750, 450, "Serum", "1 Day"], [31, "Anti Herpes Simplex Virus IgM Ab", 750, 450, "Serum", "1 Day"], [32, "Anti HEV IgM Ab", 600, 500, "Serum", "1 Day"], [33, "Anti Mitochondrial (AMA) Ab", 1200, 900, "Serum", "3 Days"], [34, "Anti Mullerian Hormone (AMH)", 1800, 900, "Serum", "6 Hrs"], [35, "Anti Nuclear Abs Profile", 3000, 2200, "Serum", "1 Day"], [36, "Anti Nuclear Antibody (ANA)", 700, 450, "Serum", "1 Day"], [37, "Anti TPO Ab", 800, 500, "Serum", "6 Hrs"], [38, "Anti Toxoplasma IgG Ab", 700, 500, "Serum", "1 Day"], [39, "Anti TTG IgA Ab", 1600, 1200, "Serum", "3 Days"], [40, "Anti Varicella Zoster IgG Ab", 1500, 1100, "Serum", "2 Days"], [41, "AST / SGOT", 120, 50, "Serum", "2 Hrs"], [42, "Bacterial Culture & Sensitivity", 450, 180, "Specimen", "2 Days"], [43, "Beta 2 Microglobulin", 1650, 1400, "Serum", "1 Day"], [44, "Bilirubin", 180, 50, "Serum", "2 Hrs"], [45, "Biopsy - Large Specimen", 1020, 800, "Formalin", "4 Days"], [46, "Biopsy - Small Specimen", 480, 300, "Formalin", "4 Days"], [47, "Blood C/S RAPID Aerobic", 1100, 750, "Bactalert", "5 Days"], [48, "Blood Urea Nitrogen (BUN)", 110, 50, "Serum", "2 Hrs"], [49, "Body Fluid Analysis", 600, 180, "Body Fluid", "4 Hrs"], [50, "C Peptide (F)", 1000, 500, "Serum", "1 Day"], [51, "CA 125", 900, 400, "Serum", "4 Hrs"], [52, "CA 15-3", 900, 550, "Serum", "1 Day"], [53, "CA 19.9", 900, 400, "Serum", "4 Hrs"], [54, "Calcium", 180, 50, "Serum", "2 Hrs"], [55, "Carcino Embryonic Antigen (CEA)", 600, 300, "Serum", "4 Hrs"], [56, "CD 4", 1400, 1000, "EDTA Blood", "4 Days"], [57, "CD 4 & CD 8 Count", 2500, 2000, "EDTA Blood", "1 Day"], [58, "Ceruloplasmin", 900, 550, "Serum", "1 Day"], [59, "Chloride (Cl)", 120, 100, "Serum", "1 Hrs"], [60, "Cholesterol", 110, 55, "Serum", "2 Hrs"], [61, "Coagulation Profile", 1600, 1000, "Citrate Plasma", "1 Day"], [62, "Complement 3 (C3)", 600, 350, "Serum", "1 Day"], [63, "Complement 4 (C4)", 600, 350, "Serum", "1 Day"], [64, "Complete Blood Count (CBC)", 250, 100, "EDTA Blood", "30 mins"], [65, "Copper", 720, 500, "Serum", "1 Day"], [66, "Cortisol", 500, 350, "Serum", "4 Hrs"], [67, "CPK - MB", 480, 250, "Serum", "1 Day"], [68, "CPK / CK", 480, 200, "Serum", "4 Hrs"], [69, "C-Reactive Protein (CRP) Quantitative", 450, 150, "Serum", "2 Hrs"], [70, "HSCRP", 600, 450, "Serum", "6 Hrs"], [71, "Creatinine", 120, 50, "Serum", "2 Hrs"], [72, "CSF Analysis", 600, 225, "CSF", "2 Hrs"], [73, "D-Dimer (Quantitative)", 750, 600, "Citrate Plasma", "4 Hrs"], [74, "Direct Coombs Test (DCT)", 500, 350, "EDTA Blood", "1 Day"], [75, "Electrolytes (K, Cl, Na, HC03)", 450, 150, "Serum", "2 Hrs"], [76, "Erythrocyte Sedimentation Rate (ESR)", 100, 30, "EDTA Blood", "2 Hrs"], [77, "Estradiol", 480, 250, "Serum", "4 Hrs"], [78, "Factor IX Assay", 1920, 1500, "Citrate Plasma", "1 Day"], [79, "Factor VIII Assay", 2500, 1450, "Citrate Plasma", "2 Days"], [80, "Ferritin", 600, 300, "Serum", "4 Hrs"], [81, "Fibrinogen", 900, 720, "Citrate Plasma", "4 Hrs"], [82, "Folate (Folic Acid)", 780, 300, "Serum", "4 Hrs"], [83, "Free T3 (FT3)", 180, 70, "Serum", "4 Hrs"], [84, "Free T3, Free T4, TSH", 500, 140, "Serum", "4 Hrs"], [85, "Free T4 (FT4)", 180, 70, "Serum", "4 Hrs"], [86, "FSH", 300, 100, "Serum", "4 Hrs"], [87, "G6PD Activity", 800, 600, "Hep. Blood", "1 Day"], [88, "Gamma GT (GGT)", 120, 60, "Serum", "4 Hrs"], [89, "eGFR", 120, 100, "Serum", "2 Hrs"], [90, "Glucose (F)", 60, 30, "Fl.Plasma", "1 Hrs"], [91, "Glucose (PP)", 60, 30, "Fl.Plasma", "1 Hrs"], [92, "Glucose (R)", 60, 30, "Fl.Plasma", "1 Hrs"], [93, "Glucose Tolerance Test GTT", 480, 250, "Fl.Plasma", "3 Hrs"], [94, "Grouping & Rh Typing", 100, 50, "EDTA Blood", "1 Hrs"], [95, "Growth Hormone", 900, 450, "Serum", "1 Day"], [96, "Haptoglobin", 1500, 1300, "Serum", "1 Day"], [97, "HBA1c", 500, 175, "EDTA Blood", "2 Hrs"], [98, "HBsAg - CLIA", 350, 200, "Serum", "4 Hrs"], [99, "HBV PCR (Qualitative)", 2500, 2300, "EDTA Blood", "2 Days"], [100, "HBV PCR (Quantitative)", 5200, 3800, "EDTA Blood", "2 Days"], [101, "HCV (Elisa)", 1000, 550, "Serum", "1 Day"], [102, "HCV PCR (Quantitative)", 5200, 3800, "EDTA Blood", "3 Days"], [103, "HDL Cholesterol", 150, 90, "Serum", "2 Hrs"], [104, "Heavy Metal Poisoning", 6500, 6000, "EDTA Blood", "3 Days"], [105, "Hematocrit (PCV)", 60, 50, "EDTA Blood", "1 Hrs"], [106, "Hemoglobin (HB)", 100, 50, "EDTA Blood", "1 Hrs"], [107, "Hemoglobin Electrophoresis", 1500, 1000, "EDTA Blood", "3 Days"], [108, "HIV - CLIA", 500, 300, "Serum", "4 Hrs"], [109, "HIV - ELISA", 900, 500, "Serum", "1 Day"], [110, "HIV:1 PCR (Quantitative)", 4800, 3500, "EDTA Blood", "2 Days"], [111, "HLA B 27", 2400, 1900, "EDTA Blood", "3 Days"], [112, "Homocysteine", 1200, 720, "Serum", "12 Hrs"], [113, "HPV DNA PCR (Qualitative)", 4800, 3500, "Cervical Swab", "2 Days"], [114, "Immunoglobulin A (IGA)", 450, 350, "Serum", "1 Day"], [115, "Immunoglobulin E (IgE)", 550, 250, "Serum", "4 Hrs"], [116, "Immunoglobulin G (IGG)", 550, 350, "Serum", "1 Day"], [117, "Insulin (F)", 700, 300, "Serum", "4 Hrs"], [118, "Interleukin-6", 3000, 2700, "Serum", "3 Days"], [119, "Iron", 300, 100, "Serum", "2 Hrs"], [120, "Iron Profile", 2000, 900, "Serum", "1 Day"], [121, "Lactate", 1000, 650, "Fl.Plasma", "1 Day"], [122, "LDH", 300, 130, "Serum", "2 Hrs"], [123, "LDL Cholesterol", 180, 120, "Serum", "2 Hrs"], [124, "Leptospirosis IgG/IgM Ab", 600, 400, "Serum", "4 Hrs"], [125, "LH", 240, 110, "Serum", "4 Hrs"], [126, "Lipase", 360, 200, "Serum", "4 Hrs"], [127, "Lipid Profile", 550, 200, "Serum", "4 Hrs"], [128, "Lithium", 800, 550, "Serum", "1 Day"], [129, "Liver Function Test", 600, 200, "Serum", "4 Hrs"], [130, "Lupus Anticoagulant", 550, 500, "Citrate Plasma", "6 Hrs"], [131, "Magnesium", 300, 150, "Serum", "2 Hrs"], [132, "Malarial Parasite (MP) Smear Study", 150, 90, "EDTA Blood", "4 Hrs"], [133, "Motion Routine", 120, 50, "Stool Sample", "2 Hrs"], [134, "MTB-CBNAAT", 3000, 2500, "Sputum", "2 Days"], [135, "NT_proBNP", 2400, 1300, "Serum", "6 Hrs"], [136, "Osmolality", 420, 230, "Serum", "4 Hrs"], [137, "PAP SMEAR", 350, 150, "Fluid", "1 Day"], [138, "PAP SMEAR (LBC)", 600, 450, "LBC", "2 Days"], [139, "Parathyroid Hormone (PTH)", 900, 450, "EDTA Plasma", "6 Hrs"], [140, "Peripheral Smear", 250, 100, "EDTA Blood", "1 Day"], [141, "Phosphorous", 120, 45, "Serum", "4 Hrs"], [142, "Platelet Count", 120, 100, "EDTA Blood", "2 Hrs"], [143, "Potassium (K)", 150, 100, "Serum", "2 Hrs"], [144, "Prenatal Screening First Trimester", 1650, 900, "Serum", "2 Days"], [145, "Procalcitonin (PcT)", 1500, 1000, "Serum", "4 Hrs"], [146, "Progesterone", 500, 250, "Serum", "4 Hrs"], [147, "Prolactin", 240, 130, "Serum", "4 Hrs"], [148, "Total PSA", 500, 250, "Serum", "4 Hrs"], [149, "Free PSA", 600, 450, "Serum", "6 Hrs"], [150, "Protein C", 1400, 1000, "Citrate Plasma", "2 Days"], [151, "Protein Electrophoresis", 780, 450, "Serum", "2 Days"], [152, "Protein S", 1400, 1000, "Citrate Plasma", "2 Days"], [153, "Prothrombin Time", 200, 100, "Citrate Plasma", "2 Hrs"], [154, "Pus for Culture & Sensitivity", 450, 180, "Sterile Container", "3 Days"], [155, "RA Factor (Quantitative)", 450, 150, "Serum", "4 Hrs"], [156, "Random Urine Albumin Creatinine Ratio (ACR)", 450, 300, "Urine", "1 Day"], [157, "RBC Folate", 1500, 1350, "EDTA Blood", "4 Hrs"], [158, "Renal Stone Analysis", 360, 200, "Stone", "1 Day"], [159, "Renin Activity (PRA)", 3450, 3050, "EDTA Blood", "3 Days"], [160, "Reticulocyte Count", 150, 70, "EDTA Blood", "1 Day"], [161, "RFT (Urea, Creatinine, Uric Acid)", 380, 150, "Serum", "2 Hrs"], [162, "Scrub Typhus IgG & IgM Ab", 600, 350, "Serum", "4 Hrs"], [163, "Semen Analysis", 500, 250, "Semen", "6 Hrs"], [164, "Sodium (NA)", 150, 100, "Serum", "2 Hrs"], [165, "Sputum Culture & Sensitivity", 600, 250, "Sterile Container", "3 Days"], [166, "Stool Occult Blood", 120, 50, "Stool", "2 Hrs"], [167, "TB (PCR)", 2400, 2000, "Clinical Fluid", "2 Days"], [168, "TB QUANTIFERON", 3000, 2500, "Hep. Blood", "3 Days"], [169, "Testosterone (Total)", 600, 275, "Serum", "4 Hrs"], [170, "Thyroid Function Test (TFT)", 400, 90, "Serum", "4 Hrs"], [171, "Thyroglobulin (TG)", 1200, 720, "Serum", "1 Day"], [172, "ToRCH IgG", 1500, 900, "Serum", "1 Day"], [173, "ToRCH IgM", 1500, 900, "Serum", "1 Day"], [174, "Total Iron Binding Capacity (TIBC)", 420, 250, "Serum", "6 Hrs"], [175, "Total Protein & Albumin", 180, 50, "Serum", "2 Hrs"], [176, "Total T3", 120, 50, "Serum", "4 Hrs"], [177, "Total T3, T4, TSH, Free T3, FT4", 900, 250, "Serum", "4 Hrs"], [178, "Total T4", 120, 50, "Serum", "4 Hrs"], [179, "Total β-hCG (BHCG)", 500, 250, "Serum", "4 Hrs"], [180, "Transferrin", 900, 750, "Serum", "1 Day"], [181, "Triglycerides", 110, 55, "Serum", "2 Hrs"], [182, "Trop I (Quantitative)", 900, 400, "Serum", "4 Hrs"], [183, "Trop T (Qualitative)", 900, 550, "EDTA Blood", "4 Hrs"], [184, "TSH", 120, 50, "Serum", "4 Hrs"], [185, "Urea", 120, 50, "Serum", "2 Hrs"], [186, "Uric Acid", 140, 55, "Serum", "2 Hrs"], [187, "Urine Complete Analysis", 120, 50, "Urine", "2 Hrs"], [188, "Urine Culture & Sensitivity", 450, 150, "Sterile Container", "3 Days"], [189, "Urine Pregnancy Test (BHCG)", 125, 80, "Urine", "1 Hrs"], [190, "Urine Routine Examination", 120, 35, "Urine", "2 Hrs"], [191, "Urine Sugar (F)", 50, 30, "Urine", "30 mins"], [192, "VDRL (Qualitative)", 180, 90, "Serum", "4 Hrs"], [193, "VDRL (Quantitative)", 480, 300, "Serum", "4 Hrs"], [194, "Vitamin B12", 720, 350, "Serum", "4 Hrs"], [195, "Vitamin D Total (25 OH)", 900, 450, "Serum", "4 Hrs"], [196, "Vitamin D3", 2500, 2000, "Serum", "4 Days"], [197, "Widal Test", 200, 90, "Serum", "1 Day"], [198, "Zinc", 600, 300, "Serum", "1 Day"], [199, "Dengue NS1 Antigen", 900, 500, "Serum", "1 Day"], [200, "Grams Stain", 120, 75, "Specimen", "4 Hrs"], [201, "Glucose Challenge Test (GCT)", 100, 70, "Fl.Plasma", "1 Hrs"], [202, "FNAC (Done in Lab)", 600, 250, "NA", "2 Days"], [203, "Semen Fructose Test", 360, 200, "Semen", "2 Hrs"], [204, "Anti Streptolysin O (ASO) - Quantitative", 600, 200, "Serum", "4 Hrs"], [205, "HIV Westernblot", 2800, 2500, "Serum", "3 Days"], [206, "Testosterone (Free)", 720, 400, "Serum", "2 Days"], [207, "Cortisol (8 am)", 500, 350, "Serum", "4 Hrs"], [208, "Cortisol (4 pm)", 500, 350, "Serum", "4 Hrs"], [209, "Insulin (PP)", 700, 300, "Serum", "4 Hrs"], [210, "CD 8", 1400, 1000, "EDTA Blood", "4 Days"], [211, "Immunoglobulin M (IGM)", 450, 350, "Serum", "1 Day"], [212, "Indirect Coombs Test (ICT)", 500, 300, "Serum", "1 Day"], [213, "LE Cells", 300, 150, "Serum", "1 Day"], [214, "Lipase", 360, 200, "Serum", "4 Hrs"], [215, "Lipoprotein (a)", 1000, 650, "Serum", "1 Day"], [216, "Anti Sm (Smith) Ab", 2000, 1800, "Serum", "2 Days"], [217, "Anti Smooth Muscle (ASMA) Ab", 2200, 2000, "Serum", "2 Days"], [218, "Stool Hanging Drop", 150, 100, "Stool", "4 Hrs"], [219, "Sickling Test", 360, 200, "EDTA Blood", "2 Days"], [220, "Fungal Culture & Sensitivity", 450, 300, "Sterile Container", "21 Days"], [221, "Bleeding Time (BT)", 100, 30, "Support", "1 Hrs"], [222, "Clotting Time (CT)", 100, 50, "Support", "1 Hrs"], [223, "Bone Marrow Study", 2000, 1500, "Bone Marrow", "2 Days"], [224, "Cryptococcus Stain (India ink CSF)", 200, 150, "Fluid", "1 Day"], [225, "Osmotic Fragility", 900, 600, "Hep. Blood", "1 Day"], [226, "Paul Bunnel Test", 700, 500, "Serum", "1 Day"], [227, "Filariasis IgG & IgM Ab", 700, 600, "Serum", "4 Hrs"], [228, "Anti GAD Ab", 3500, 2500, "Serum", "2 Days"], [229, "Anti GBM Ab", 1900, 1500, "Serum", "3 Days"], [230, "HCV PCR (Qualitative)", 2500, 2300, "EDTA Blood", "3 Days"], [231, "HIV:1 PCR (Qualitative)", 3000, 2200, "EDTA Blood", "2 Days"], [232, "Cholinesterase", 720, 450, "Serum", "2 Hrs"], [233, "C Peptide (PP)", 1000, 500, "Serum", "1 Day"], [234, "Prenatal Screening Second Trimester", 2700, 1300, "Serum", "2 Days"], [235, "Protein Electrophoresis", 780, 450, "Serum", "2 Days"], [236, "Anti Thrombin III", 1500, 1300, "Citrate Plasma", "1 Day"], [237, "Anti HBc IgM Ab", 720, 450, "Serum", "1 Day"], [238, "Beta 2 Glycoprotein IgG Ab", 720, 450, "Serum", "2 Days"], [239, "Ionised Calcium (ISE)", 650, 450, "Serum", "4 Hrs"], [240, "Body Fluid Cytology", 500, 400, "Body Fluid", "4 Hrs"], [241, "Coagulation Profile", 1600, 1000, "Citrate Plasma", "1 Day"], [242, "Factor XIII Activity", 600, 400, "Citrate Plasma", "2 Days"], [243, "Microfilaria (MF) Smear", 120, 120, "EDTA Blood", "2 Hrs"], [244, "Nasal Swab", 400, 200, "Swab", "2 Days"], [245, "Ear Swab", 400, 200, "Swab", "1 Day"], [246, "Conjunctival Swab C/S", 500, 250, "Swab", "2 Days"], [247, "PAP SMEAR (LBC)", 600, 450, "LBC", "2 Days"], [248, "Gall Stone Analysis", 300, 250, "Stone", "1 Day"], [249, "Skin Scrapping", 200, 100, "Sterile Container", "4 Hrs"], [250, "Water Culture", 300, 180, "Sterile Container", "3 Days"], [251, "Weil Felix Test", 480, 90, "Serum", "1 Day"], [252, "Stool Culture", 400, 200, "Sterile Container", "2 Days"], [253, "Stool for Clostridium Difficile", 2500, 2000, "Stool", "1 Day"], [254, "Throat Swab", 400, 250, "Swab", "2 Days"], [255, "Urethral Swab C/S", 400, 200, "Swab", "2 Days"], [256, "Open Plate Culture", 1500, 700, "Blood agar", "78 Hrs"], [257, "AFB Sputum 1&2", 500, 300, "Specimen", "4 Hrs"], [258, "Urine Bence Jones Protein (BJP)", 180, 150, "Urine", "4 Hrs"], [259, "Urine Osmolality", 420, 250, "Urine", "4 Hrs"], [260, "Random Urine Microalbumin", 360, 250, "Urine", "6 Hrs"], [261, "Urine Chyluria", 300, 225, "Urine", "4 Hrs"], [262, "Urine THC", 600, 450, "Urine", "1 Day"], [263, "Urine Cocaine", 600, 450, "Urine", "1 Day"], [264, "Urine Benzodiazepine", 600, 400, "Urine", "4 Hrs"], [265, "Angiotensin Converting Enzyme (ACE)", 900, 650, "Serum", "4 Hrs"]
+    ];
+
+    // ══════════ REPORT DATA ══════════
+    const todayStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    let reports = [
+      { id: 1, customer: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh.kumar@gmail.com', testId: 64, testName: 'Complete Blood Count (CBC)', mrp: 250, paid: true, specimen: 'EDTA Blood', tat: '30 mins', date: '15 Mar 2026', status: 'Shared', result: 'Hb: 14.2 g/dL, WBC: 7500/µL' },
+      { id: 2, customer: 'Anjali Singh', phone: '9123456789', email: 'anjali.singh@gmail.com', testId: 190, testName: 'Urine Routine Examination', mrp: 120, paid: true, specimen: 'Urine', tat: '2 Hrs', date: '14 Mar 2026', status: 'Completed', result: 'Clear, pH 6.5, Protein: Negative' },
+      { id: 3, customer: 'Mohammed Ibrahim', phone: '9988776655', email: 'ibrahim@gmail.com', testId: 170, testName: 'Thyroid Function Test (TFT)', mrp: 400, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '13 Mar 2026', status: 'Shared', result: 'TSH: 2.4 µIU/mL — Normal' },
+      { id: 4, customer: 'Sunita Patel', phone: '9871234560', email: 'sunita.patel@gmail.com', testId: 127, testName: 'Lipid Profile', mrp: 550, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '12 Mar 2026', status: 'Draft', result: '' },
+      { id: 5, customer: 'Vikram Nair', phone: '9765432100', email: 'vikram.nair@gmail.com', testId: 129, testName: 'Liver Function Test', mrp: 600, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '11 Mar 2026', status: 'Completed', result: 'Total Bilirubin: 0.8, AST: 32 U/L' },
+      { id: 6, customer: 'Priya Mehta', phone: '9654321098', email: 'priya.mehta@gmail.com', testId: 184, testName: 'TSH', mrp: 120, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '10 Mar 2026', status: 'Shared', result: 'TSH: 4.8 µIU/mL — Borderline High' },
+      { id: 7, customer: 'Amit Gupta', phone: '9543210987', email: 'amit.gupta@gmail.com', testId: 97, testName: 'HBA1c', mrp: 500, paid: true, specimen: 'EDTA Blood', tat: '2 Hrs', date: '09 Mar 2026', status: 'Completed', result: 'HbA1c: 7.2%' },
+      { id: 8, customer: 'Kiran Bose', phone: '9432109876', email: 'kiran.bose@gmail.com', testId: 80, testName: 'Ferritin', mrp: 600, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '08 Mar 2026', status: 'Draft', result: '' },
+      { id: 9, customer: 'Deepa Krishnan', phone: '9321098765', email: 'deepa.k@gmail.com', testId: 194, testName: 'Vitamin B12', mrp: 720, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '07 Mar 2026', status: 'Completed', result: 'B12: 312 pg/mL' },
+      { id: 10, customer: 'Suresh Reddy', phone: '9210987654', email: 'suresh.r@gmail.com', testId: 73, testName: 'D-Dimer (Quantitative)', mrp: 750, paid: true, specimen: 'Citrate Plasma', tat: '4 Hrs', date: '06 Mar 2026', status: 'Completed', result: 'D-Dimer: 0.42 µg/mL FEU' },
+      { id: 11, customer: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh.kumar@gmail.com', testId: 127, testName: 'Lipid Profile', mrp: 550, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '05 Mar 2026', status: 'Draft', result: '' },
+      { id: 12, customer: 'Anjali Singh', phone: '9123456789', email: 'anjali.singh@gmail.com', testId: 184, testName: 'TSH', mrp: 120, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '04 Mar 2026', status: 'Completed', result: 'TSH: 1.8 µIU/mL — Normal' }
+    ];
+
+    // ══════════ STATE ══════════
+    let activeTab = 'dashboard', statusFilter = 'all', custFilter = '', phoneFilter = '', searchFilter = '';
+    let selectedIds = new Set(), page = 1, viewMode = 'list', sendChannel = 'wa';
+    const PER_PAGE = 8;
+    const statusColors = { Draft: 'bg-orange-100 text-orange-700', Completed: 'bg-emerald-100 text-emerald-700', Shared: 'bg-blue-100 text-blue-700' };
+
+    // ══════════ SIDEBAR TOGGLE ══════════
+    function toggleSub(id) {
+      const sub = document.getElementById('sub-' + id);
+      const ch = document.getElementById('ch-' + id);
+      if (!sub) return;
+      const hidden = sub.classList.contains('hidden');
+      sub.classList.toggle('hidden', !hidden);
+      if (ch) ch.style.transform = hidden ? 'rotate(180deg)' : '';
+    }
+
+    // ══════════ HASH ROUTING ══════════
+    function initFromHash() {
+      const hash = window.location.hash;
+      if (hash === '#generated') switchTab('generated');
+      else switchTab('dashboard');
+      // sidebar sub-menu: force open
+      const ch = document.getElementById('ch-reports');
+      if (ch) ch.style.transform = 'rotate(180deg)';
+      const chM = document.getElementById('ch-mob-reports');
+      if (chM) chM.style.transform = 'rotate(180deg)';
+      // set active subnav
+      const snd = document.getElementById('subnav-dashboard');
+      const sng = document.getElementById('subnav-generated');
+      if (hash === '#generated') {
+        if (snd) snd.classList.remove('active');
+        if (sng) sng.classList.add('active');
+      } else {
+        if (sng) sng.classList.remove('active');
+        if (snd) snd.classList.add('active');
       }
-      function daysAgo(n) {
-        const d = new Date();
-        d.setDate(d.getDate() - n);
-        return d;
-      }
-      function fmt(d) {
-        return d.toISOString().slice(0, 10);
-      }
+    }
 
-      function synthesizeSeries(days) {
-        const labels = [];
-        const data = [];
-        for (let i = days - 1; i >= 0; i--) {
-          labels.push(fmt(daysAgo(i)));
-          data.push(Math.floor(5 + Math.random() * 20));
-        }
-        return { labels, data };
-      }
+    // ══════════ TAB SWITCH ══════════
+    function switchTab(t) {
+      activeTab = t;
+      ['dashboard', 'generated'].forEach(x => {
+        const p = document.getElementById('tab-' + x);
+        const b = document.getElementById('mt-' + x);
+        if (!p || !b) return;
+        if (x === t) { p.classList.remove('hidden'); b.classList.add('border-indigo-600', 'text-indigo-600'); b.classList.remove('border-transparent', 'text-gray-500'); }
+        else { p.classList.add('hidden'); b.classList.remove('border-indigo-600', 'text-indigo-600'); b.classList.add('border-transparent', 'text-gray-500'); }
+      });
+      document.getElementById('breadcrumbTab').textContent = t === 'dashboard' ? 'Dashboard' : 'Reports Generated';
+      if (t === 'dashboard') renderDashboard();
+      if (t === 'generated') { buildCustFilter(); renderReports(); }
+      if (t === 'generated') window.history.replaceState(null, '', '#generated');
+      else window.history.replaceState(null, '', '#');
+    }
 
-      function buildData(days) {
-        const customers = getLS("reminderMe_customers", []);
-        const promos = getLS("reminderMe_promotions", []);
-        const reminders = getLS("reminderMe_reminders", []);
+    // ══════════ DASHBOARD ══════════
+    function renderDashboard() {
+      const total = reports.length, paid = reports.filter(r => r.paid).length, unpaid = reports.filter(r => !r.paid).length;
+      const sent = reports.filter(r => r.status === 'Shared').length, inprog = reports.filter(r => r.status === 'Completed').length, draft = reports.filter(r => r.status === 'Draft').length;
+      document.getElementById('d-total').textContent = total; document.getElementById('d-paid').textContent = paid; document.getElementById('d-unpaid').textContent = unpaid;
+      document.getElementById('d-sent').textContent = sent; document.getElementById('d-progress').textContent = inprog;
+      document.getElementById('d2-shared').textContent = sent; document.getElementById('d2-completed').textContent = inprog; document.getElementById('d2-draft').textContent = draft;
+      document.getElementById('genBadge').textContent = total;
+      const totalRev = reports.reduce((s, r) => s + r.mrp, 0), coll = reports.filter(r => r.paid).reduce((s, r) => s + r.mrp, 0);
+      document.getElementById('rev-total').textContent = '₹' + totalRev.toLocaleString('en-IN');
+      document.getElementById('rev-collected').textContent = '₹' + coll.toLocaleString('en-IN');
+      document.getElementById('rev-outstanding').textContent = '₹' + (totalRev - coll).toLocaleString('en-IN');
+      const tc = {}; reports.forEach(r => { tc[r.testName] = (tc[r.testName] || 0) + 1; });
+      const top = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 5), mx = top[0]?.[1] || 1;
+      document.getElementById('topTests').innerHTML = top.map(([n, c]) => `<div><div class="flex justify-between mb-1"><span class="text-xs text-gray-700 truncate flex-1 mr-2">${n}</span><span class="text-xs font-bold">${c}</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="bar-fill h-full bg-indigo-500 rounded-full" style="width:${Math.round(c / mx * 100)}%"></div></div></div>`).join('');
+      document.getElementById('recentReports').innerHTML = reports.slice(0, 5).map(r => `<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-sm flex-shrink-0">🧪</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">${r.testName}</p><p class="text-[10px] text-gray-400">${r.customer} · ${r.date}</p></div><span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColors[r.status]} flex-shrink-0">${r.status}</span></div>`).join('');
+    }
 
-        const series = synthesizeSeries(days);
-        const customersCount =
-          customers.length || 180 + Math.floor(Math.random() * 40);
-        const remindersCount =
-          reminders.length || 1200 + Math.floor(Math.random() * 500);
-        const promosCount = promos.length || 14 + Math.floor(Math.random() * 6);
+    // ══════════ REPORTS GENERATED ══════════
+    function buildCustFilter() {
+      const names = [...new Set(reports.map(r => r.customer))].sort();
+      const sel = document.getElementById('custFilter');
+      sel.innerHTML = '<option value="">All Patients</option>' + names.map(n => `<option value="${n}"${n === custFilter ? ' selected' : ''}>${n}</option>`).join('');
+    }
+    function getFiltered() {
+      return reports.filter(r => {
+        const mS = statusFilter === 'all' || r.status === statusFilter;
+        const mC = !custFilter || r.customer === custFilter;
+        const mP = !phoneFilter || r.phone.includes(phoneFilter);
+        const mQ = !searchFilter || r.testName.toLowerCase().includes(searchFilter) || r.customer.toLowerCase().includes(searchFilter);
+        return mS && mC && mP && mQ;
+      });
+    }
+    function onFilter() {
+      custFilter = document.getElementById('custFilter').value;
+      phoneFilter = (document.getElementById('phoneInput').value || '').trim();
+      searchFilter = (document.getElementById('searchInput').value || '').toLowerCase();
+      page = 1; renderReports();
+    }
+    function setStatusFilter(f) {
+      statusFilter = f; page = 1;
+      ['all', 'Draft', 'Completed', 'Shared'].forEach(x => { const b = document.getElementById('sf-' + x); b.className = x === f ? 'px-3 py-1.5 rounded-full bg-indigo-600 text-white text-xs font-semibold' : 'px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-semibold hover:border-gray-300'; });
+      renderReports();
+    }
+    function setView(v) {
+      viewMode = v;
+      document.getElementById('vw-list').className = v === 'list' ? 'px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800 transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-gray-700 transition';
+      document.getElementById('vw-group').className = v === 'group' ? 'px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800 transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-gray-700 transition';
+      renderReports();
+    }
+    function renderReports() {
+      const filtered = getFiltered();
+      document.getElementById('filterCount').textContent = filtered.length + ' report' + (filtered.length !== 1 ? 's' : '');
+      document.getElementById('genBadge').textContent = reports.length;
+      const list = document.getElementById('reportList');
+      list.innerHTML = '';
+      if (!filtered.length) { list.innerHTML = '<div class="text-center py-16 bg-white rounded-2xl border border-gray-100"><p class="text-sm text-gray-500">No reports found</p></div>'; document.getElementById('pagination').innerHTML = ''; return; }
+      if (viewMode === 'group') { renderGroupView(filtered); return; }
+      const start = (page - 1) * PER_PAGE, slice = filtered.slice(start, start + PER_PAGE);
+      document.getElementById('pageLabel').textContent = `Showing ${start + 1}–${Math.min(start + PER_PAGE, filtered.length)} of ${filtered.length}`;
+      slice.forEach(r => { list.innerHTML += buildReportCard(r); });
+      renderPagination(filtered.length);
+    }
 
-        // Reminder breakdown (dummy if none)
-        const rDelivered = Math.floor(remindersCount * 0.72);
-        const rRead = Math.floor(remindersCount * 0.58);
-        const rFailed = Math.max(0, remindersCount - rDelivered);
+    function renderGroupView(filtered) {
+      const groups = {};
+      filtered.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
+      document.getElementById('pageLabel').textContent = '';
+      document.getElementById('pagination').innerHTML = '';
+      let html = '';
+      Object.entries(groups).forEach(([cust, rs]) => {
+        const subT = rs.reduce((s, r) => s + r.mrp, 0);
+        const allSel = rs.every(r => selectedIds.has(r.id));
+        html += `<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+      <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border-b border-gray-100">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${cust.charAt(0)}</div>
+        <div class="flex-1 min-w-0"><p class="text-sm font-bold text-gray-900">${cust}</p><p class="text-xs text-gray-400">${rs.length} report${rs.length !== 1 ? 's' : ''} · ₹${subT.toLocaleString('en-IN')}</p></div>
+        <button onclick="selectCustomer('${cust}')" class="text-xs ${allSel ? 'text-red-500' : 'text-indigo-600'} font-semibold hover:underline flex-shrink-0">${allSel ? 'Deselect All' : 'Select All'}</button>
+      </div>
+      <div class="divide-y divide-gray-50">${rs.map(r => buildReportCard(r, 'compact')).join('')}</div>
+    </div>`;
+      });
+      document.getElementById('reportList').innerHTML = html;
+    }
 
-        // Promotions performance
-        const pSent = promosCount * 1000;
-        const pDelivered = Math.floor(pSent * 0.9);
-        const pRead = Math.floor(pSent * 0.65);
-        const pClicked = Math.floor(pSent * 0.22);
+    function buildReportCard(r, compact = '') {
+      const sel = selectedIds.has(r.id);
+      return `<div id="card-${r.id}" class="report-card ${compact ? '' : 'bg-white rounded-2xl border border-gray-100 shadow-sm'} ${sel ? 'selected' : ''} p-3 md:p-4 cursor-pointer hover:border-indigo-200 transition ${compact ? '' : 'border'}" onclick="toggleSelect(${r.id})">
+    <div class="flex items-center gap-3">
+      <div class="report-checkbox">${sel ? '✓' : ''}</div>
+      <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-sm">🧪</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap mb-0.5">
+          <p class="text-sm font-bold text-gray-900">${r.testName}</p>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${r.paid ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}">${r.paid ? 'Paid' : 'Unpaid'}</span>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-medium text-gray-600">${r.customer}</span>
+          <span class="text-gray-300">·</span><span class="text-xs text-gray-400">${r.date}</span>
+          <span class="text-gray-300">·</span><span class="text-xs font-bold text-emerald-600">₹${r.mrp.toLocaleString('en-IN')}</span>
+          <span class="text-gray-300">·</span><span class="text-xs text-gray-400">📱 ${r.phone}</span>
+        </div>
+        ${r.result ? `<p class="text-[10px] text-gray-500 mt-0.5 italic truncate">${r.result}</p>` : ''}
+      </div>
+      <div class="flex items-center gap-1 flex-shrink-0 ml-1" onclick="event.stopPropagation()">
+        <a href="report-detail.html?id=${r.id}" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-semibold hover:bg-indigo-100">View</a>
+        <button onclick="quickDelete(${r.id})" class="w-7 h-7 rounded-xl bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-100"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+      </div>
+    </div>
+  </div>`;
+    }
 
-        return {
-          series,
-          customersCount,
-          remindersCount,
-          promosCount,
-          rDelivered,
-          rRead,
-          rFailed,
-          pSent,
-          pDelivered,
-          pRead,
-          pClicked,
-        };
-      }
+    function renderPagination(total) {
+      const el = document.getElementById('pagination');
+      const tp = Math.ceil(total / PER_PAGE);
+      if (tp <= 1) { el.innerHTML = ''; return; }
+      let s = Math.max(1, page - 2), e = Math.min(tp, s + 4); if (e - s < 4) s = Math.max(1, e - 4);
+      el.innerHTML = `<button onclick="goPage(${page - 1})" ${page === 1 ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 disabled:opacity-40 text-sm">‹</button>` +
+        Array.from({ length: e - s + 1 }, (_, i) => `<button onclick="goPage(${s + i})" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium ${s + i === page ? 'bg-indigo-600 text-white' : 'border border-gray-200 text-gray-600 hover:bg-gray-50'}">${s + i}</button>`).join('') +
+        `<button onclick="goPage(${page + 1})" ${page === tp ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 disabled:opacity-40 text-sm">›</button>`;
+    }
+    function goPage(p) { const t = Math.ceil(getFiltered().length / PER_PAGE); if (p < 1 || p > t) return; page = p; renderReports(); }
 
-      const ctx = {};
-      let charts = [];
-      function render() {
-        const days = parseInt(document.getElementById("timeframe").value, 10);
-        const d = buildData(days);
-        const rangeLabel = `Last ${days} days`;
+    // ══════════ MULTI-SELECT ══════════
+    function toggleSelect(id) {
+      if (selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
+      renderReports(); updateSelectionBar();
+    }
+    function selectAll() { getFiltered().forEach(r => selectedIds.add(r.id)); renderReports(); updateSelectionBar(); }
+    function clearSelection() { selectedIds.clear(); renderReports(); updateSelectionBar(); }
+    function selectCustomer(name) {
+      const rs = reports.filter(r => r.customer === name);
+      const allSel = rs.every(r => selectedIds.has(r.id));
+      rs.forEach(r => allSel ? selectedIds.delete(r.id) : selectedIds.add(r.id));
+      renderReports(); updateSelectionBar();
+    }
+    function updateSelectionBar() {
+      const bar = document.getElementById('selectionBar');
+      const count = selectedIds.size;
+      if (!count) { bar.classList.add('hidden'); document.getElementById('multiCustWarning').classList.add('hidden'); return; }
+      bar.classList.remove('hidden');
+      const selR = reports.filter(r => selectedIds.has(r.id));
+      const custs = [...new Set(selR.map(r => r.customer))];
+      const total = selR.reduce((s, r) => s + r.mrp, 0);
+      document.getElementById('selCount').textContent = count + ' report' + (count !== 1 ? 's' : '') + ' selected';
+      document.getElementById('selCustomerNames').textContent = custs.length === 1 ? custs[0] : custs.join(', ');
+      document.getElementById('selTotal').textContent = '₹' + total.toLocaleString('en-IN');
+      // Multi-customer warning
+      const warn = document.getElementById('multiCustWarning');
+      if (custs.length > 1) { warn.classList.remove('hidden'); document.getElementById('multiCustMsg').textContent = `Reports from ${custs.length} different patients selected — use "By Patient" view to manage per-patient selections`; }
+      else { warn.classList.add('hidden'); }
+    }
 
-        // KPIs
-        const kpis = [
-          { label: "Customers", value: d.customersCount.toLocaleString() },
-          { label: "Reminders Sent", value: d.remindersCount.toLocaleString() },
-          { label: "Promotions", value: d.promosCount.toLocaleString() },
-          { label: "Delivery Rate", value: "98%" },
-        ];
-        document.getElementById("kpis").innerHTML = kpis
-          .map(
-            (k) => `
-          <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <p class="text-sm text-gray-600">${k.label}</p>
-            <p class="text-2xl font-bold text-gray-900">${k.value}</p>
-          </div>`,
-          )
-          .join("");
+    // ══════════ SEND MODAL ══════════
+    function openSendModal() {
+      if (!selectedIds.size) { showToast('Select at least one report'); return; }
+      const selR = reports.filter(r => selectedIds.has(r.id));
+      const groups = {};
+      selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = { reports: [], contact: { email: r.email || '', phone: r.phone || '' } }; groups[r.customer].reports.push(r); });
+      const gc = Object.keys(groups).length;
+      document.getElementById('sendModalSubtitle').textContent = `${selR.length} report${selR.length !== 1 ? 's' : ''} · ${gc} patient${gc !== 1 ? 's' : ''}`;
+      const totalMrp = selR.reduce((s, r) => s + r.mrp, 0);
+      document.getElementById('sendModalTotal').textContent = '₹' + totalMrp.toLocaleString('en-IN');
+      // Render groups
+      document.getElementById('sendModalGroups').innerHTML = Object.entries(groups).map(([cust, g]) => `
+    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${cust.charAt(0)}</div>
+        <div class="flex-1"><p class="text-sm font-bold text-gray-900">${cust}</p><p class="text-xs text-gray-400">${g.reports.length} test${g.reports.length !== 1 ? 's' : ''} · ₹${g.reports.reduce((s, r) => s + r.mrp, 0).toLocaleString('en-IN')}</p></div>
+      </div>
+      <!-- Contact fields -->
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div><label class="text-[10px] font-semibold text-gray-500 mb-1 block">📱 Phone</label><input type="tel" id="phone-${cust.replace(/ /g, '_')}" value="${g.contact.phone}" placeholder="Enter phone..." class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+        <div><label class="text-[10px] font-semibold text-gray-500 mb-1 block">📧 Email</label><input type="email" id="email-${cust.replace(/ /g, '_')}" value="${g.contact.email}" placeholder="Enter email..." class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+      </div>
+      <!-- Reports list -->
+      <div class="space-y-1.5">
+        ${g.reports.map(r => `<div class="flex items-center justify-between bg-white rounded-xl px-3 py-2 border border-gray-100"><div class="min-w-0 flex-1"><p class="text-xs font-semibold text-gray-800 truncate">${r.testName}</p>${r.result ? `<p class="text-[10px] text-gray-500">${r.result}</p>` : ''}</div><span class="text-xs font-bold text-emerald-600 ml-3 flex-shrink-0">₹${r.mrp.toLocaleString('en-IN')}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+      // PDF list
+      document.getElementById('pdfList').innerHTML = selR.map(r => `
+    <div class="flex items-center justify-between py-1.5">
+      <div class="flex items-center gap-2 min-w-0 flex-1"><div class="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><span class="text-xs text-gray-700 truncate">${r.customer}_${r.testName.replace(/ /g, '_')}.pdf</span></div>
+      <button onclick="downloadSinglePDF(${r.id})" class="text-xs text-indigo-600 font-medium hover:underline flex-shrink-0 ml-2">Open</button>
+    </div>`).join('');
+      setChannel('wa');
+      openModal('sendModal');
+    }
 
-        // Ranges
-        document.getElementById("customers-range").textContent = rangeLabel;
-        document.getElementById("reminders-range").textContent = rangeLabel;
-        document.getElementById("promotions-range").textContent = rangeLabel;
-        document.getElementById("funnel-range").textContent = rangeLabel;
+    function setChannel(ch) {
+      sendChannel = ch;
+      const map = { wa: 'bg-green-500 text-white', email: 'bg-violet-500 text-white', sms: 'bg-blue-500 text-white' };
+      const labels = { wa: 'WhatsApp', email: 'Email', sms: 'SMS' };
+      ['wa', 'email', 'sms'].forEach(c => { const el = document.getElementById('ch-' + c); el.className = `py-3 rounded-2xl text-sm font-semibold flex flex-col items-center gap-1 transition ${c === ch ? map[c] : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`; });
+      document.getElementById('sendExecuteBtn').innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>Send via ${labels[ch]}`;
+      // Update preview
+      const selR = reports.filter(r => selectedIds.has(r.id));
+      const groups = {}; selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
+      const firstCust = Object.keys(groups)[0];
+      const fg = groups[firstCust];
+      const total = fg.reduce((s, r) => s + r.mrp, 0);
+      let preview = `Hello ${firstCust},\n\nYour lab reports are ready:\n\n${fg.map((r, i) => `${i + 1}. ${r.testName}: ${r.result || 'Result pending'} — ₹${r.mrp}`).join('\n')}\n\nTotal: ₹${total.toLocaleString('en-IN')}\n\nView / Download PDF: https://reminderme.app/reports/${Date.now()}`;
+      if (Object.keys(groups).length > 1) preview += `\n\n(+ ${Object.keys(groups).length - 1} more patient${Object.keys(groups).length > 2 ? 's' : ''} will receive separate messages)`;
+      document.getElementById('msgPreview').textContent = preview.length > 300 ? preview.slice(0, 297) + '...' : preview;
+    }
 
-        // Destroy old charts
-        charts.forEach((c) => c.destroy());
-        charts = [];
+    function downloadSinglePDF(reportId) {
+      const r = reports.find(x => x.id === reportId);
+      if (!r) return;
+      const html = `<!DOCTYPE html><html><head><title>${r.testName} - ${r.customer}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#fff;padding:32px;max-width:700px;margin:0 auto;color:#111827}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e5e7eb}.logo{font-size:18px;font-weight:800;color:#4f46e5}.badge{background:#eef2ff;color:#4f46e5;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.field{background:#f9fafb;padding:12px;border-radius:10px}.label{font-size:10px;color:#6b7280;margin-bottom:4px;text-transform:uppercase;font-weight:600}.value{font-size:14px;font-weight:600;color:#111827}.result{background:#ecfdf5;border:1px solid #d1fae5;padding:16px;border-radius:12px;margin:20px 0}.result .label{color:#065f46}.result .value{color:#065f46;font-size:15px}.price-box{background:#eff6ff;border:1px solid #bfdbfe;padding:12px 16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;text-align:center;font-size:11px;color:#9ca3af}</style></head><body><div class="header"><div><div class="logo">🧪 Reminder Me</div><p style="font-size:12px;color:#6b7280;margin-top:4px">Lab Report</p></div><div class="badge">${r.status}</div></div><div class="grid"><div class="field"><div class="label">Patient Name</div><div class="value">${r.customer}</div></div><div class="field"><div class="label">Phone</div><div class="value">${r.phone || '—'}</div></div><div class="field"><div class="label">Test Name</div><div class="value">${r.testName}</div></div><div class="field"><div class="label">Date</div><div class="value">${r.date}</div></div><div class="field"><div class="label">Specimen</div><div class="value">${r.specimen || '—'}</div></div><div class="field"><div class="label">TAT</div><div class="value">${r.tat || '—'}</div></div></div>${r.result ? `<div class="result"><div class="label">Result / Findings</div><div class="value" style="margin-top:6px">${r.result}</div></div>` : ''}<div class="price-box"><span style="font-size:13px;font-weight:600;color:#1e40af">MRP</span><span style="font-size:20px;font-weight:800;color:#1d4ed8">₹${r.mrp.toLocaleString('en-IN')}</span></div><div class="footer">Powered by Reminder Me · reminderme.app · Report ID: RPT-${r.id}</div></body></html>`;
+      const w = window.open('', '_blank');
+      w.document.write(html); w.document.close();
+      setTimeout(() => w.print(), 600);
+    }
 
-        // Customers growth (line)
-        charts.push(
-          new Chart(document.getElementById("customersChart"), {
-            type: "line",
-            data: {
-              labels: d.series.labels,
-              datasets: [
-                {
-                  label: "New Customers",
-                  data: d.series.data,
-                  borderColor: "#48B26F",
-                  backgroundColor: "rgba(72,178,111,.15)",
-                  tension: 0.35,
-                  fill: true,
-                },
-              ],
-            },
-            options: {
-              plugins: { legend: { display: false } },
-              scales: { x: { ticks: { maxTicksLimit: 6 } } },
-            },
-          }),
-        );
+    function downloadAllPDFs() {
+      const selR = reports.filter(r => selectedIds.has(r.id));
+      if (!selR.length) { showToast('No reports selected'); return; }
+      selR.forEach((r, i) => setTimeout(() => downloadSinglePDF(r.id), i * 300));
+      showToast(`Opening ${selR.length} PDFs for printing/download`);
+    }
 
-        // Reminders status (doughnut)
-        charts.push(
-          new Chart(document.getElementById("remindersChart"), {
-            type: "doughnut",
-            data: {
-              labels: ["Delivered", "Read", "Failed"],
-              datasets: [
-                {
-                  data: [d.rDelivered, d.rRead, d.rFailed],
-                  backgroundColor: ["#86efac", "#48B26F", "#fca5a5"],
-                },
-              ],
-            },
-            options: { plugins: { legend: { position: "bottom" } } },
-          }),
-        );
+    function executeSend() {
+      const selR = reports.filter(r => selectedIds.has(r.id));
+      const groups = {}; selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
+      Object.entries(groups).forEach(([cust, rs]) => {
+        const custKey = cust.replace(/ /g, '_');
+        const phone = (document.getElementById('phone-' + custKey) || {}).value || rs[0].phone || '';
+        const email = (document.getElementById('email-' + custKey) || {}).value || rs[0].email || '';
+        const total = rs.reduce((s, r) => s + r.mrp, 0);
+        const tests = rs.map((r, i) => `${i + 1}. ${r.testName}: ${r.result || 'Result pending'} — ₹${r.mrp}`).join('\n');
+        const msg = encodeURIComponent(`Hello ${cust},\n\nYour lab reports are ready:\n\n${tests}\n\nTotal: ₹${total.toLocaleString('en-IN')}\n\nView Reports: https://reminderme.app/reports/${Date.now()}\n\nThank you.\n— Reminder Me`);
+        if (sendChannel === 'wa') window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
+        else if (sendChannel === 'email') window.open(`mailto:${email}?subject=Your Lab Reports from Reminder Me&body=${decodeURIComponent(msg)}`, '_blank');
+        else if (sendChannel === 'sms') window.open(`sms:${phone}?&body=${decodeURIComponent(msg)}`, '_blank');
+      });
+      selR.forEach(r => { r.status = 'Shared'; });
+      closeModal('sendModal'); clearSelection(); renderReports(); renderDashboard();
+      showToast(`Reports sent to ${Object.keys(groups).length} patient${Object.keys(groups).length !== 1 ? 's' : ''}!`);
+    }
 
-        // Promotions bar
-        charts.push(
-          new Chart(document.getElementById("promotionsChart"), {
-            type: "bar",
-            data: {
-              labels: ["Sent", "Delivered", "Read", "Clicked"],
-              datasets: [
-                {
-                  data: [d.pSent, d.pDelivered, d.pRead, d.pClicked],
-                  backgroundColor: ["#d1fae5", "#86efac", "#48B26F", "#10b981"],
-                },
-              ],
-            },
-            options: {
-              plugins: { legend: { display: false } },
-              scales: {
-                y: {
-                  ticks: { callback: (v) => Intl.NumberFormat().format(v) },
-                },
-              },
-            },
-          }),
-        );
+    // ══════════ CREATE MODAL ══════════
+    let mTestData = null;
+    function filterModalTests() { const q = (document.getElementById('mTestInput').value || '').toLowerCase().trim(); const inner = document.getElementById('mTestDropInner'); if (!q) { inner.innerHTML = '<div class="px-4 py-3 text-xs text-gray-400 text-center">Type to search...</div>'; return; } const res = LAB_TESTS.filter(t => t[1].toLowerCase().includes(q)).slice(0, 15); inner.innerHTML = res.length ? res.map(t => `<div onclick="selectModalTest(${t[0]})" class="px-4 py-2.5 hover:bg-indigo-50 cursor-pointer flex items-center justify-between gap-2 border-b border-gray-50 last:border-0"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-800 truncate">${t[1]}</p><p class="text-[10px] text-gray-400">${t[4]}</p></div><p class="text-sm font-bold text-emerald-600 flex-shrink-0">₹${t[2]}</p></div>`).join('') : '<div class="px-4 py-3 text-xs text-gray-400 text-center">No tests found</div>'; }
+    function showModalDrop() { document.getElementById('mTestDrop').classList.remove('hidden'); filterModalTests(); }
+    function hideModalDrop() { document.getElementById('mTestDrop').classList.add('hidden'); }
+    function selectModalTest(id) { const t = LAB_TESTS.find(x => x[0] === id); if (!t) return; mTestData = t; document.getElementById('mTestInput').value = t[1]; document.getElementById('mTestId').value = id; document.getElementById('mTestDrop').classList.add('hidden'); document.getElementById('mTestInfo').classList.remove('hidden'); document.getElementById('mTestName').textContent = t[1]; document.getElementById('mTestSpec').textContent = `Specimen: ${t[4]}`; document.getElementById('mTestMrp').textContent = `₹${t[2].toLocaleString('en-IN')} (B2B: ₹${t[3]})`; document.getElementById('mTestTat').textContent = `TAT: ${t[5]}`; }
+    function saveReport(status) { const cust = document.getElementById('rCustomer').value; const testId = parseInt(document.getElementById('mTestId').value); const t = LAB_TESTS.find(x => x[0] === testId); if (!cust || !t) { alert('Please select a patient and test type.'); return; } const ex = reports.find(r => r.customer === cust); reports.unshift({ id: Date.now(), customer: cust, phone: ex?.phone || '', email: ex?.email || '', testId, testName: t[1], mrp: t[2], paid: document.getElementById('rPaid').checked, specimen: t[4], tat: t[5], date: todayStr, status, result: document.getElementById('rResult').value, notes: '' }); closeModal('createReportModal'); document.getElementById('rCustomer').value = ''; document.getElementById('mTestInput').value = ''; document.getElementById('mTestId').value = ''; document.getElementById('rResult').value = ''; document.getElementById('rPaid').checked = false; document.getElementById('mTestInfo').classList.add('hidden'); mTestData = null; buildCustFilter(); renderReports(); renderDashboard(); showToast(status === 'Draft' ? 'Saved as draft' : 'Report created!'); }
+    function quickDelete(id) { if (!confirm('Delete this report?')) return; reports = reports.filter(r => r.id !== id); selectedIds.delete(id); buildCustFilter(); renderReports(); renderDashboard(); updateSelectionBar(); showToast('Report deleted'); }
 
-        // Funnel (horizontal bar)
-        charts.push(
-          new Chart(document.getElementById("funnelChart"), {
-            type: "bar",
-            data: {
-              labels: ["Audience", "Delivered", "Read", "Clicked", "Converted"],
-              datasets: [
-                {
-                  data: [
-                    d.pSent,
-                    d.pDelivered,
-                    d.pRead,
-                    d.pClicked,
-                    Math.floor(d.pClicked * 0.35),
-                  ],
-                  backgroundColor: [
-                    "#e5e7eb",
-                    "#d1fae5",
-                    "#86efac",
-                    "#48B26F",
-                    "#15803d",
-                  ],
-                },
-              ],
-            },
-            options: {
-              indexAxis: "y",
-              plugins: { legend: { display: false } },
-              scales: {
-                x: {
-                  ticks: { callback: (v) => Intl.NumberFormat().format(v) },
-                },
-              },
-            },
-          }),
-        );
-      }
+    // ══════════ HELPERS ══════════
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3500); }
+    function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
 
-      document.getElementById("timeframe").addEventListener("change", render);
-      render();
-    </script>
-  </body>
+    // Close test dropdown outside click
+    document.addEventListener('click', e => { const i = document.getElementById('mTestInput'); const d = document.getElementById('mTestDrop'); if (i && d && !i.contains(e.target) && !d.contains(e.target)) d.classList.add('hidden'); });
+
+    // INIT
+    initFromHash();
+  </script>
+</body>
+
 </html>
