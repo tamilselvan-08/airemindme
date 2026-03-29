@@ -1,5 +1,7 @@
 /* ================= SAVE CUSTOMER ================= */
 
+/* ================= SAVE CUSTOMER ================= */
+
 function saveCustomer(e) {
     e.preventDefault();
 
@@ -27,14 +29,21 @@ function saveCustomer(e) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(customer)
     })
-        .then(res => {
-            if (!res.ok) throw new Error("Save failed");
+        .then(async res => {
+            if (!res.ok) {
+                const errorData = await res.json();
+                // Pass exactly what the backend says
+                throw new Error(errorData.message || "Save failed");
+            }
             return res.json();
         })
         .then(() => {
             location.reload();
         })
-        .catch(err => alert("Error saving: " + err.message));
+        .catch(err => {
+            // Display ONLY the exact error message in the popup
+            alert(err.message); 
+        });
 }
 
 

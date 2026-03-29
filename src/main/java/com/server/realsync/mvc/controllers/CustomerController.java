@@ -164,4 +164,19 @@ public class CustomerController {
 
         return ResponseEntity.ok(page.getContent());
     }
+
+    @GetMapping("/api/customers/my-customers")
+    public ResponseEntity<?> getMyCustomers() {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        if (account == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        List<Customer> customers = customerService.getByAccountId(account.getId());
+
+        return ResponseEntity.ok(customers);
+    }
+
 }

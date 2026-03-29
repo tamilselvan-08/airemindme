@@ -7,11 +7,6 @@
   <title>Promotions - Reminder Me</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Prevent flash before CSS loads -->
-  <script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
-
-  <!-- Theme CSS -->
-  <link rel="stylesheet" th:href="@{/css/theme.css}">
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -43,13 +38,142 @@
 
 <body class="bg-gray-50">
 
-
   <!-- Sidebar -->
-  <div th:replace="~{remindmeui/fragments/layout :: sidebar(activePage='promotions')}"></div>
+  <div class="hidden md:flex fixed left-0 top-0 h-screen w-56 bg-white border-r border-gray-100 flex-col z-30">
+    <div class="px-4 pt-5 pb-3"><a href="home.html" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+            class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg></div>
+        <div>
+          <p class="text-sm font-bold text-gray-900 leading-none">Reminder Me</p>
+          <p class="text-[10px] text-gray-400 mt-0.5">Business Dashboard</p>
+        </div>
+      </a></div>
+    <nav class="flex-1 px-3 py-2 overflow-y-auto">
+      <a href="home.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg><span class="text-sm font-medium">Home</span></a>
+      <a href="customers.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg><span class="text-sm font-medium">Customers</span></a>
+      <a href="engagement.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg><span class="text-sm font-medium">Engage</span></a>
+      <a href="promotions.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-indigo-600 text-white mb-1"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg><span class="text-sm font-semibold">Promotions</span></a>
+      <a href="appointments.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg><span class="text-sm font-medium">Appointments</span></a>
+      <a href="reports.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg><span class="text-sm font-medium">Reports</span></a>
+      <a href="user-management.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg><span class="text-sm font-medium">Users</span></a>
+      <a href="settings.html"
+        class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:bg-gray-50 mb-1"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg><span class="text-sm font-medium">Settings</span></a>
+      <div class="mt-6">
+        <p class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Quick Actions</p>
+        <a href="engagement.html"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
+          <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"><svg
+              class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg></div><span class="text-sm">Create Reminder</span>
+        </a>
+        <a href="engagement.html"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
+          <div class="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0"><svg
+              class="w-3.5 h-3.5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg></div><span class="text-sm">Send Greeting</span>
+        </a>
+        <button onclick="openCreateLinkModal()"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
+          <div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0"><svg
+              class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg></div><span class="text-sm">Create Promotion</span>
+        </button>
+        <a href="customers.html"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 mb-1">
+          <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><svg
+              class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg></div><span class="text-sm">Add Customer</span>
+        </a>
+      </div>
+    </nav>
+    <div class="px-4 py-4 border-t border-gray-100">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span
+            class="text-white text-sm font-bold">A</span></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate leading-none">Arjun Sharma</p>
+          <p class="text-xs text-gray-400 truncate mt-0.5">Acme Financial Services</p>
+        </div>
+      </div>
+      <button onclick="window.location.href='login.html'"
+        class="flex items-center gap-2 px-1 py-1 text-gray-500 hover:text-red-600 transition"><svg class="w-4 h-4"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg><span class="text-sm font-medium">Sign Out</span></button>
+    </div>
+  </div>
 
-  <!-- Mobile nav -->
-  <div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='promotions')}"></div>
-
+  <!-- MOBILE HEADER -->
+  <div
+    class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-40 h-14 flex items-center justify-between px-4 shadow-sm">
+    <button onclick="openMobileNav()"
+      class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 transition"><svg
+        class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg></button>
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm"><svg
+          class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg></div><span class="text-sm font-bold text-gray-900">Reminder Me</span>
+    </div>
+    <button onclick="window.location.href='login.html'"
+      class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500 transition"><svg
+        class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg></button>
+  </div>
   <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
     onclick="closeMobileNav()"></div>
   <div id="mobileNavDrawer"
@@ -94,6 +218,23 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg><span class="text-sm font-semibold">Promotions</span></a>
+      <a href="appointments.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg><span class="text-sm font-semibold">Appointments</span></a>
+      <a href="reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg><span class="text-sm font-semibold">Reports</span></a>
+      <a href="user-management.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg><span class="text-sm font-semibold">Users</span></a>
       <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
           class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -142,7 +283,7 @@
 
     <div class="px-4 md:px-6 py-5">
       <!-- Tabs -->
-      <div class="flex items-center gap-3 mb-5 overflow-x-auto">
+      <div class="flex items-center gap-3 mb-5 overflow-x-auto pb-0.5">
         <button onclick="switchPromoTab('catalog')" id="pt-catalog"
           class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-600 text-indigo-600 text-sm font-semibold flex-shrink-0">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,6 +301,14 @@
           My Links <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs ml-1"
             id="linksCount">1</span>
         </button>
+        <button onclick="switchPromoTab('templates')" id="pt-templates"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-gray-200 text-gray-500 text-sm font-semibold hover:border-gray-300 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Templates <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs ml-1">12</span>
+        </button>
       </div>
 
       <!-- CATALOG PANEL -->
@@ -172,7 +321,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input type="text" placeholder="Search plans &amp; products..." oninput="filterCatalog(this.value)"
+            <input id="catalogSearchInput" type="text" placeholder="Search plans &amp; products..."
+              oninput="filterCatalog(this.value)"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
           <div class="flex items-center gap-1">
@@ -238,6 +388,142 @@
             </svg>Create Link</button>
         </div>
         <div id="linksList"></div>
+      </div>
+
+      <!-- TEMPLATES PANEL -->
+      <div id="pp-templates" class="hidden">
+        <!-- Header Info Banner -->
+        <div
+          class="flex items-start gap-3 bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-100 rounded-2xl p-4 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-4.5 h-4.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-violet-800 mb-0.5">Message Templates</p>
+            <p class="text-xs text-violet-600 leading-relaxed">Browse ready-to-use promotion templates. Click
+              <strong>"Use Template"</strong> to pre-fill your message and immediately create a shareable promotion
+              link.
+            </p>
+          </div>
+        </div>
+
+        <!-- Search + Category Filter -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-5">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="tmplSearch" oninput="filterTemplates()" placeholder="Search templates..."
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <!-- Category Pills -->
+        <div class="flex items-center gap-2 flex-wrap mb-5" id="tmplCatPills">
+          <button onclick="setTmplCat('all')" id="tc-all"
+            class="px-3 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold flex-shrink-0 transition">All</button>
+          <button onclick="setTmplCat('seasonal')" id="tc-seasonal"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">🎉
+            Seasonal</button>
+          <button onclick="setTmplCat('product')" id="tc-product"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">🚀
+            Product Launch</button>
+          <button onclick="setTmplCat('vip')" id="tc-vip"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">⭐
+            VIP Offer</button>
+          <button onclick="setTmplCat('financial')" id="tc-financial"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">💰
+            Financial</button>
+          <button onclick="setTmplCat('festival')" id="tc-festival"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">🪔
+            Festival</button>
+          <button onclick="setTmplCat('reengagement')" id="tc-reengagement"
+            class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition">👋
+            Re-engagement</button>
+        </div>
+
+        <!-- Templates Grid -->
+        <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+
+        <!-- Empty State -->
+        <div id="tmplEmpty" class="hidden text-center py-16">
+          <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <p class="text-sm font-semibold text-gray-700 mb-1">No templates found</p>
+          <p class="text-xs text-gray-400">Try a different search or category filter</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPLATE PREVIEW MODAL -->
+  <div id="templatePreviewModal" class="hidden fixed inset-0 z-50 flex items-end md:items-center justify-center">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeTmplPreview()"></div>
+    <div
+      class="relative bg-white rounded-t-3xl md:rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-center pt-3 pb-1 md:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-200"></div>
+      </div>
+      <div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4.5 h-4.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-gray-900" id="previewTmplName">Template Preview</h2>
+            <p class="text-xs text-gray-400" id="previewTmplCatLabel">Category</p>
+          </div>
+        </div>
+        <button onclick="closeTmplPreview()"
+          class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><svg
+            class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="px-6 py-5">
+        <!-- Channel Tags -->
+        <div class="flex items-center gap-2 flex-wrap mb-4" id="previewChannels"></div>
+        <!-- Tone Tag -->
+        <div class="mb-4" id="previewToneWrap"></div>
+        <!-- Message Preview -->
+        <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-5">
+          <p class="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Message Preview</p>
+          <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line" id="previewTmplMsg"></p>
+        </div>
+        <!-- Editable Version -->
+        <div class="mb-5">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-sm font-medium text-gray-700">Edit Before Using</label>
+            <span class="text-xs text-gray-400"><span id="previewCharCount">0</span> chars</span>
+          </div>
+          <textarea id="previewTmplEdit" rows="6"
+            oninput="document.getElementById('previewCharCount').textContent=this.value.length"
+            class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"></textarea>
+        </div>
+        <!-- CTA Buttons -->
+        <div class="flex gap-3">
+          <button onclick="closeTmplPreview()"
+            class="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">Cancel</button>
+          <button onclick="applyTemplateAndCreate()"
+            class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            Use & Create Link
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -536,30 +822,348 @@
       </svg><span class="text-[10px] font-medium">Settings</span></a>
   </div>
 
-  <script>
-    const plans = [
-      { id: 'plan-1', type: 'plan', name: 'Basic SIP', code: '', price: '₹500', priceNote: '/month', desc: 'Start your investment journey with ₹500/month SIP', features: ['Monthly SIP', 'ELSS eligible', 'Online tracking'], img: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=400&q=80', color: 'bg-blue-600' },
-      { id: 'plan-2', type: 'plan', name: 'Wealth Builder', code: '', price: '₹5,000', priceNote: '/month', desc: 'Premium wealth management plan with expert advisory', features: ['Dedicated advisor', 'Quarterly review', 'Tax planning'], img: 'https://images.unsplash.com/photo-1769676391642-de7d70147636?w=400&q=80', color: 'bg-indigo-600' },
-      { id: 'plan-3', type: 'plan', name: 'Term Life Cover', code: '', price: '₹999', priceNote: '/year', desc: '₹1 Crore life cover at just ₹999/year', features: ['₹1Cr cover', 'Online policy', 'Instant approval'], img: 'https://images.unsplash.com/photo-1758084413534-ca441e8376a3?w=400&q=80', color: 'bg-violet-600' },
-    ];
-    const products = [
-      { id: 'prod-1', type: 'product', name: 'Gold ETF Units', code: 'GOLD-ETF-001', price: '₹4,850', priceNote: '', desc: 'Sovereign Gold Bond – digital gold investment', features: [], img: 'https://images.unsplash.com/photo-1768207450151-30c0bf8e8091?w=400&q=80', color: 'bg-yellow-500' },
-      { id: 'prod-2', type: 'product', name: 'ULIP Standard Plan', code: 'ULIP-STD-002', price: '₹12,000', priceNote: '', desc: 'Unit Linked Insurance Plan with market-linked returns', features: [], img: 'https://images.unsplash.com/photo-1750581227597-7372ae99bf0a?w=400&q=80', color: 'bg-orange-500' },
-      { id: 'prod-3', type: 'product', name: 'Corporate FD', code: 'FD-CORP-003', price: '₹10,000', priceNote: '', desc: 'Corporate Fixed Deposit – 8.5% p.a. for 12 months', features: [], img: 'https://images.unsplash.com/photo-1652503698072-175651f77634?w=400&q=80', color: 'bg-emerald-600' },
-    ];
 
+  <script>
+    // =============================================================================
+    // PROMOTIONS MODULE — Consolidated Script
+    // =============================================================================
+
+    // --- State Management ---
+    let plans = [];
+    let products = [];
     let selected = new Set();
     let catFilter = 'all';
-    let savedLinks = [
-      { id: 1, desc: 'Explore our exclusive investment plans designed to grow your...', items: ['Basic SIP', 'Wealth Builder', 'Gold ETF Units'], status: 'active', recipients: 18, views: 42, enquiries: 7, created: '2025-03-01', channels: ['wa', 'em'] }
-    ];
-    let currentRecipients = 17;
+    let catalogSearch = '';
+    let savedLinks = [];
+    let currentRecipients = 0;
 
-    function toggleSelect(id) {
-      if (selected.has(id)) selected.delete(id);
-      else selected.add(id);
-      updateSelectionUI();
-      renderCards();
+    // State for backend sync
+    let state = {
+      selectedGroupId: null,
+      selectedCustomerId: null,
+      targetMode: 'group' // 'group' or 'ind'
+    };
+
+
+    // =============================================================================
+    // API SYNC FUNCTIONS
+    // =============================================================================
+
+    async function loadCatalog() {
+      try {
+        const [planRes, productRes] = await Promise.all([
+          fetch('/api/catalog/plans'),
+          fetch('/api/catalog/products')
+        ]);
+
+        const rawPlans = await planRes.json();
+        const rawProducts = await productRes.json();
+
+        // Normalizing Plans: mapping DB fields like billing_cycle and features
+        plans = rawPlans.map(p => ({
+          id: p.id.toString(),
+          type: 'plan',
+          name: p.name,
+          price: '₹' + (p.price || 0),
+          // Uses the billing_cycle column from your DB
+          priceNote: p.billing_cycle ? ' /' + p.billing_cycle : '',
+          desc: p.description || '',
+          // Splits the features string from DB into an array for the checkmarks
+          features: p.features ? p.features.split(',') : [],
+          img: p.img || 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=80'
+        }));
+
+        // Normalizing Products: mapping DB fields like sku
+        products = rawProducts.map(p => ({
+          id: p.id.toString(),
+          type: 'product',
+          name: p.name,
+          price: '₹' + (p.price || 0),
+          code: p.sku || 'N/A', // Shows the SKU from your DB
+          desc: p.description || '',
+          img: p.img || 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=400&q=80'
+        }));
+
+        renderCards();
+      } catch (err) {
+        console.error("Error loading catalog:", err);
+      }
+    }
+
+    async function loadGroups() {
+      try {
+        const res = await fetch('/api/customer-groups/my-groups');
+        const groups = await res.json();
+        const container = document.getElementById("groupList");
+
+        container.innerHTML = groups.map(g => `
+      <label onclick="selectGroup(${g.id}, ${g.customerCount}, this)" 
+             class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-indigo-300 cursor-pointer bg-white transition-all">
+        <div>
+          <p class="text-sm font-semibold text-gray-900">${g.name}</p>
+          <p class="text-xs text-gray-400">${g.description || 'No description'}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-semibold text-gray-700">${g.customerCount || 0}</span>
+          <div class="radio-indicator w-5 h-5 rounded-full border-2 border-gray-300"></div>
+        </div>
+      </label>
+    `).join('');
+      } catch (e) {
+        console.error("Failed to load groups", e);
+      }
+    }
+
+    async function loadCustomers() {
+      try {
+        const res = await fetch('/api/customers/my-customers');
+        const customers = await res.json();
+        const select = document.querySelector("#indDropdown select");
+
+        select.innerHTML = `<option value="">Choose customer...</option>` +
+          customers.map(c => `<option value="${c.id}">${c.name} (${c.mobile})</option>`).join('');
+
+        select.onchange = (e) => {
+          state.selectedCustomerId = e.target.value ? parseInt(e.target.value) : null;
+          document.getElementById('recipientsCount').textContent = state.selectedCustomerId ? '1' : '0';
+        };
+      } catch (e) {
+        console.error("Failed to load customers", e);
+      }
+    }
+
+    async function loadPromotions() {
+      try {
+        const res = await fetch('/api/promotions');
+        if (!res.ok) throw new Error("Failed to fetch");
+
+        const data = await res.json();
+
+        // Map backend data to frontend UI fields
+        savedLinks = data.map(p => ({
+          id: p.id,
+          desc: p.description || 'No Description',
+          // CRITICAL: Map these names from your join table response
+          items: p.itemNames || [],
+          recipients: p.recipientCount || 0,
+          status: p.status || 'ACTIVE',
+          views: p.views || 0,
+          enquiries: p.enquiries || 0,
+          created: p.createdAt ? p.createdAt.split("T")[0] : 'Recently'
+        }));
+
+        // Update the counter on the Tab
+        const tabCount = document.getElementById('linksCount');
+        if (tabCount) tabCount.textContent = savedLinks.length;
+
+        renderLinks();
+      } catch (e) {
+        console.error("Error loading promotions:", e);
+      }
+    }
+
+    async function createAndSendLink() {
+      const selectedIds = Array.from(selected);
+      const payload = {
+        groupId: state.targetMode === 'group' ? state.selectedGroupId : null,
+        customerId: state.targetMode === 'ind' ? state.selectedCustomerId : null,
+        description: document.getElementById("promoDesc").value,
+        itemIds: selectedIds,
+        sendVia: state.sendVia || 'wa'
+      };
+
+      try {
+        const res = await fetch('/api/promotions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        // Check if the response is actually okay
+        if (res.ok) {
+          // If your backend returns plain text instead of JSON, res.json() will crash.
+          // Let's handle both cases:
+          const contentType = res.headers.get("content-type");
+          let data;
+          if (contentType && contentType.includes("application/json")) {
+            data = await res.json();
+          } else {
+            data = { link: await res.text() }; // Fallback for plain text links
+          }
+
+          // Update UI
+          document.getElementById('generatedUrl').textContent = data.link || "Link generated successfully";
+          document.getElementById('sentToLabel').textContent = "Promotion saved to database";
+
+          goModalStep(3); // Move to success screen
+
+          selected.clear();
+          updateSelectionUI();
+          renderCards();
+
+        } else {
+          const errorMsg = await res.text();
+          alert("Server Error: " + errorMsg);
+        }
+      } catch (e) {
+        console.error("The request worked but the JS failed:", e);
+        // This is where your "Could not connect" error was coming from
+        alert("Promotion added to DB, but UI failed to update. Refresh the page.");
+      }
+    }
+
+
+    // =============================================================================
+    // UI LOGIC
+    // =============================================================================
+
+    function renderCards() {
+      const pg = document.getElementById('plansGrid');
+      const prg = document.getElementById('productsGrid');
+      if (!pg || !prg) return; // Safety check to prevent errors
+
+      // 1. Clear current grids
+      pg.innerHTML = '';
+      prg.innerHTML = '';
+
+      const q = (catalogSearch || '').toLowerCase();
+
+      // 2. Filter logic for Search and Tabs
+      const matchesSearch = item => !q ||
+        (item.name && item.name.toLowerCase().includes(q)) ||
+        (item.desc && item.desc.toLowerCase().includes(q));
+
+      const fPlans = (catFilter === 'products') ? [] : (plans || []).filter(matchesSearch);
+      const fProds = (catFilter === 'plans') ? [] : (products || []).filter(matchesSearch);
+
+      // Fallback images if DB doesn't provide them
+      const planPlaceholder = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=80';
+      const prodPlaceholder = 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=400&q=80';
+
+      // --- Render Plans ---
+      fPlans.forEach(item => {
+        const sel = selected.has(item.id.toString());
+        // Parse features from comma-separated string if needed
+        const featureList = Array.isArray(item.features) ? item.features :
+          (typeof item.features === 'string' ? item.features.split(',') : []);
+
+        pg.innerHTML += `
+      <div onclick="toggleSelect('${item.id}')" class="relative bg-white rounded-2xl border-2 ${sel ? 'border-indigo-600 bg-indigo-50/30' : 'border-gray-200 hover:border-indigo-300'} shadow-sm overflow-hidden cursor-pointer transition-all select-none">
+        <div class="relative h-32 overflow-hidden">
+          <img src="${(item.img && item.img.length > 5) ? item.img : planPlaceholder}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center border-2 ${sel ? 'bg-indigo-600 border-indigo-600 shadow-lg' : 'bg-white/70 border-white'}">
+            ${sel ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' : ''}
+          </div>
+          <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/90 text-[10px] font-bold text-gray-800 uppercase">Plan</span>
+        </div>
+        <div class="p-4">
+          <p class="text-sm font-bold text-gray-900">${item.name || 'Unnamed Plan'}</p>
+          <p class="text-sm font-bold text-indigo-600 mb-1">
+            ${item.price || '₹0'}<span class="text-xs text-gray-400 font-normal"> ${item.priceNote || ''}</span>
+          </p>
+          <p class="text-[11px] text-gray-500 mb-2 line-clamp-2">${item.desc || ''}</p>
+          <div class="flex flex-wrap gap-x-3 gap-y-1">
+            ${featureList.map(f => `<span class="text-[10px] text-emerald-600 font-bold">✓ ${f.trim()}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+      });
+
+      // --- Render Products ---
+      fProds.forEach(item => {
+        const sel = selected.has(item.id.toString());
+        prg.innerHTML += `
+      <div onclick="toggleSelect('${item.id}')" class="relative bg-white rounded-2xl border-2 ${sel ? 'border-indigo-600 bg-indigo-50/30' : 'border-gray-200 hover:border-indigo-300'} shadow-sm overflow-hidden cursor-pointer transition-all select-none">
+        <div class="relative h-32 overflow-hidden">
+          <img src="${(item.img && item.img.length > 5) ? item.img : prodPlaceholder}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center border-2 ${sel ? 'bg-indigo-600 border-indigo-600 shadow-lg' : 'bg-white/70 border-white'}">
+            ${sel ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' : ''}
+          </div>
+          <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/90 text-[10px] font-bold text-gray-800 uppercase">Product</span>
+        </div>
+        <div class="p-4">
+          <p class="text-sm font-bold text-gray-900 mb-0.5">${item.name || 'Unnamed Product'}</p>
+          <p class="text-[10px] text-indigo-400 font-bold mb-1">SKU: ${item.code || 'N/A'}</p>
+          <p class="text-sm font-bold text-indigo-600 mb-1">${item.price || '₹0'}</p>
+          <p class="text-[11px] text-gray-500 line-clamp-2">${item.desc || ''}</p>
+        </div>
+      </div>`;
+      });
+
+      // 3. Show/Hide Section titles based on search results
+      const plansSec = document.getElementById('plansSection');
+      const prodsSec = document.getElementById('productsSection');
+      if (plansSec) plansSec.classList.toggle('hidden', fPlans.length === 0);
+      if (prodsSec) prodsSec.classList.toggle('hidden', fProds.length === 0);
+    }
+
+    function renderLinks() {
+      const el = document.getElementById('linksList');
+      if (!el) return;
+
+      if (savedLinks.length === 0) {
+        el.innerHTML = `
+      <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
+        <p class="text-gray-400 text-sm font-medium">No promotion links created yet.</p>
+        <p class="text-gray-300 text-xs mt-1">Generated links will appear here for tracking.</p>
+      </div>`;
+        return;
+      }
+
+      el.innerHTML = savedLinks.map(l => {
+        const isActive = l.status === 'ACTIVE' || l.status === 'active';
+        const itemsArray = Array.isArray(l.items) ? l.items : [];
+
+        return `
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4 transition-all hover:shadow-md group">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-2xl ${isActive ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-400'} flex items-center justify-center flex-shrink-0 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-bold text-gray-900 truncate">${l.desc || 'Untitled Promotion'}</p>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'}">
+                    ${l.status}
+                  </span>
+                  <p class="text-[11px] text-gray-400 font-medium">Created ${l.created} · <b class="text-gray-600">${l.recipients || 0}</b> recipients</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+              ${itemsArray.length > 0
+            ? itemsArray.map(name => `<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-semibold border border-indigo-100/50">${name}</span>`).join('')
+            : '<span class="text-[11px] text-gray-400 italic">No items attached</span>'
+          }
+            </div>
+            <div class="flex items-center gap-6 text-[11px] text-gray-400">
+              <span class="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <b class="text-gray-600">${l.views || 0}</b> views
+              </span>
+              <span class="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <b class="text-gray-600">${l.enquiries || 0}</b> enquiries
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-gray-50">
+            <button onclick="togglePromoStatus(${l.id}, '${l.status}')" class="p-2.5 rounded-xl border border-gray-200 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all" title="Change Status">
+              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </button>
+            <button onclick="deletePromotion(${l.id})" class="p-2.5 rounded-xl border border-red-100 text-red-400 hover:text-red-600 hover:bg-red-50 transition-all" title="Delete">
+              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+            <button onclick="copyToClipboard('${window.location.origin}/promo/${l.id}', this)" class="px-4 py-2.5 rounded-xl bg-gray-50 text-gray-700 text-xs font-bold hover:bg-gray-100 transition-all">Copy</button>
+            <a href="/promo/${l.id}" target="_blank" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100">Preview</a>
+          </div>
+        </div>
+      </div>`;
+      }).join('');
     }
 
     function updateSelectionUI() {
@@ -589,142 +1193,218 @@
       document.getElementById('barNames').textContent = names.join(', ');
     }
 
-    function clearAll() { selected.clear(); updateSelectionUI(); renderCards(); }
+    function clearAll() {
+      selected.clear();
+      updateSelectionUI();
+      renderCards();
+    }
 
-    function renderCards() {
-      const pg = document.getElementById('plansGrid');
-      const prg = document.getElementById('productsGrid');
-      pg.innerHTML = '';
-      prg.innerHTML = '';
-
-      const filtered = catFilter === 'all' ? { p: plans, pr: products } : catFilter === 'plans' ? { p: plans, pr: [] } : { p: [], pr: products };
-
-      filtered.p.forEach(item => {
-        const sel = selected.has(item.id);
-        pg.innerHTML += `
-          <div onclick="toggleSelect('${item.id}')" class="relative bg-white rounded-2xl border-2 ${sel ? 'border-indigo-500 bg-indigo-50/30' : 'border-gray-200 hover:border-indigo-300'} shadow-sm overflow-hidden cursor-pointer transition-all select-none">
-            <div class="relative h-32 overflow-hidden">
-              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/90 text-xs font-semibold text-gray-800">Plan</span>
-              ${sel ? `<div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg></div>` : `<div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/70 border-2 border-white flex items-center justify-center"></div>`}
-            </div>
-            <div class="p-4">
-              <div class="flex items-start justify-between mb-1">
-                <p class="text-sm font-bold text-gray-900">${item.name}</p>
-              </div>
-              <p class="text-sm font-bold text-indigo-600 mb-1">${item.price}<span class="text-xs text-gray-400 font-normal">${item.priceNote}</span></p>
-              <p class="text-xs text-gray-500 mb-2">${item.desc}</p>
-              ${item.features.length ? `<div class="flex flex-wrap gap-x-3 gap-y-1">${item.features.map(f => `<span class="text-xs text-emerald-600 flex items-center gap-0.5 font-medium">✓ ${f}</span>`).join('')}</div>` : ''}
-            </div>
-          </div>`;
-      });
-
-      filtered.pr.forEach(item => {
-        const sel = selected.has(item.id);
-        prg.innerHTML += `
-          <div onclick="toggleSelect('${item.id}')" class="relative bg-white rounded-2xl border-2 ${sel ? 'border-indigo-500 bg-indigo-50/30' : 'border-gray-200 hover:border-indigo-300'} shadow-sm overflow-hidden cursor-pointer transition-all select-none">
-            <div class="relative h-32 overflow-hidden">
-              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/90 text-xs font-semibold text-gray-800">Product</span>
-              ${sel ? `<div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg></div>` : `<div class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/70 border-2 border-white flex items-center justify-center"></div>`}
-            </div>
-            <div class="p-4">
-              <p class="text-sm font-bold text-gray-900 mb-0.5">${item.name}</p>
-              ${item.code ? `<p class="text-xs text-indigo-400 font-medium mb-0.5">${item.code}</p>` : ''}
-              <p class="text-sm font-bold text-indigo-600 mb-1">${item.price}</p>
-              <p class="text-xs text-gray-500">${item.desc}</p>
-            </div>
-          </div>`;
-      });
-
-      document.getElementById('plansSection').classList.toggle('hidden', filtered.p.length === 0);
-      document.getElementById('productsSection').classList.toggle('hidden', filtered.pr.length === 0);
+    function toggleSelect(id) {
+      const idStr = id.toString(); // Force ID to be a string
+      if (selected.has(idStr)) {
+        selected.delete(idStr);
+      } else {
+        selected.add(idStr);
+      }
+      updateSelectionUI();
+      renderCards();
     }
 
     function setCatFilter(f) {
       catFilter = f;
       ['all', 'plans', 'products'].forEach(x => {
         const b = document.getElementById('cat-' + x);
-        b.className = x === f ? 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium' : 'px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50';
+        b.className = x === f
+          ? 'px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium'
+          : 'px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50';
       });
+      catalogSearch = '';
+      const si = document.getElementById('catalogSearchInput');
+      if (si) si.value = '';
       renderCards();
     }
 
     function filterCatalog(v) {
-      const q = v.toLowerCase();
-      const pg = document.getElementById('plansGrid');
-      const prg = document.getElementById('productsGrid');
-      pg.querySelectorAll('[data-name]').forEach(el => {
-        el.style.display = el.dataset.name.toLowerCase().includes(q) ? '' : 'none';
-      });
-      // Re-render for simplicity
+      catalogSearch = v.trim();
       renderCards();
     }
 
     function switchPromoTab(t) {
-      ['catalog', 'links'].forEach(x => {
+      ['catalog', 'links', 'templates'].forEach(x => {
         document.getElementById('pp-' + x).classList.toggle('hidden', x !== t);
         const btn = document.getElementById('pt-' + x);
-        if (x === t) { btn.classList.add('border-indigo-600', 'text-indigo-600'); btn.classList.remove('border-gray-200', 'text-gray-500'); }
-        else { btn.classList.remove('border-indigo-600', 'text-indigo-600'); btn.classList.add('border-gray-200', 'text-gray-500'); }
+        if (x === t) {
+          btn.classList.add('border-indigo-600', 'text-indigo-600');
+          btn.classList.remove('border-gray-200', 'text-gray-500');
+        } else {
+          btn.classList.remove('border-indigo-600', 'text-indigo-600');
+          btn.classList.add('border-gray-200', 'text-gray-500');
+        }
       });
       if (t === 'links') renderLinks();
+      if (t === 'templates') renderTemplates();
     }
 
-    function renderLinks() {
-      const el = document.getElementById('linksList');
-      if (savedLinks.length === 0) { el.innerHTML = '<div class="text-center py-12 text-gray-400"><p class="text-sm">No promotion links yet</p></div>'; return; }
-      el.innerHTML = savedLinks.map(l => `
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 max-w-lg mb-4">
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-10 h-10 rounded-2xl bg-indigo-100 flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></div>
-            <div>
-              <p class="text-sm font-bold text-gray-900">${l.desc}</p>
-              <span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Active</span>
-              <p class="text-xs text-gray-400 mt-1">Created ${l.created} · ${l.recipients} recipients</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 mb-3">${l.items.map(n => `<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium">${n}</span>`).join('')}</div>
-          <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
-            <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>${l.views} views</span>
-            <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${l.enquiries} enquiries</span>
-          </div>
-          <div class="flex gap-2">
-            <a href="promo-landing.html" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-indigo-700 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Preview</a>
-            <button class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium flex items-center gap-2 hover:bg-gray-50" onclick="navigator.clipboard.writeText('https://promo.reminderme.app/l/'+l.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>Copy</button>
-          </div>
-        </div>`).join('');
+    function selectGroup(id, count, el) {
+      state.selectedGroupId = id;
+      state.selectedCustomerId = null;
+      currentRecipients = count;
+      document.getElementById('recipientsCount').textContent = count;
+
+      // UI highlight
+      document.querySelectorAll('#groupList label').forEach(l => l.classList.replace('border-indigo-500', 'border-gray-200'));
+      el.classList.replace('border-gray-200', 'border-indigo-500');
     }
+
+    function setSendTo(m) {
+      state.targetMode = m;
+      const gBtn = document.getElementById('st-group');
+      const iBtn = document.getElementById('st-ind');
+      const gList = document.getElementById('groupList');
+      const iDrop = document.getElementById('indDropdown');
+
+      if (m === 'group') {
+        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+        gList.classList.remove('hidden');
+        iDrop.classList.add('hidden');
+      } else {
+        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
+        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
+        gList.classList.add('hidden');
+        iDrop.classList.remove('hidden');
+      }
+    }
+
+    function selSendVia(ch) {
+      // Define the active styling for each specific channel
+      const styles = {
+        wa: 'border-green-500 bg-green-50 text-green-700',
+        sms: 'border-blue-500 bg-blue-50 text-blue-700',
+        em: 'border-violet-500 bg-violet-50 text-violet-700'
+      };
+
+      // Loop through all three channel buttons
+      ['wa', 'sms', 'em'].forEach(c => {
+        const btn = document.getElementById('sv-' + c);
+        if (!btn) return;
+
+        if (c === ch) {
+          // Apply the "Selected" look (Bright border and light background)
+          btn.className = `flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 transition ${styles[c]}`;
+
+          // Update the icon inside the button to match the theme
+          const icon = btn.querySelector('svg');
+          if (icon) {
+            icon.classList.remove('text-gray-400');
+            if (c === 'wa') icon.classList.add('text-green-600');
+            if (c === 'sms') icon.classList.add('text-blue-600');
+            if (c === 'em') icon.classList.add('text-violet-600');
+          }
+        } else {
+          // Reset to the "Unselected" look (Gray border)
+          btn.className = 'flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 text-gray-500 hover:border-gray-300 transition';
+
+          // Reset the icon to gray
+          const icon = btn.querySelector('svg');
+          if (icon) {
+            icon.classList.add('text-gray-400');
+            icon.classList.remove('text-green-600', 'text-blue-600', 'text-violet-600');
+          }
+        }
+      });
+
+      // Store the user's choice in the state object for the final API call
+      state.sendVia = ch;
+      console.log("Channel selected:", ch);
+    }
+
+    function removeItemFromSelection(id) {
+      selected.delete(id);
+      populateSelectedItems(); // Refresh the list in the modal
+      updateSelectionUI();     // Refresh the floating bar
+      renderCards();           // Refresh the catalog checkmarks
+
+      // If no items left, close modal
+      if (selected.size === 0) {
+        closeCreateLinkModal();
+      }
+    }
+
+
+    // =============================================================================
+    // MODAL LOGIC
+    // =============================================================================
 
     let modalStep = 1;
+
     function openCreateLinkModal() {
-      document.getElementById('createLinkModal').classList.remove('hidden');
-      goModalStep(1);
-      // Populate selected items
-      populateSelectedItems();
+      const modal = document.getElementById('createLinkModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        // Reset to Step 1 whenever it opens
+        if (typeof goModalStep === "function") {
+          goModalStep(1);
+        }
+        // Load the items into the list
+        if (typeof populateSelectedItems === "function") {
+          populateSelectedItems();
+        }
+      } else {
+        console.error("Modal element 'createLinkModal' not found in HTML.");
+      }
     }
-    function closeCreateLinkModal() { document.getElementById('createLinkModal').classList.add('hidden'); }
+
+    function closeCreateLinkModal() {
+      const modal = document.getElementById('createLinkModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
 
     function populateSelectedItems() {
+      // 1. Combine arrays and ensure we are working with fresh data
       const allItems = [...plans, ...products];
-      const sel = [...selected].map(id => allItems.find(i => i.id === id)).filter(Boolean);
+
+      // 2. Filter using a string-safe comparison
+      const sel = allItems.filter(item => selected.has(item.id.toString()));
       const count = sel.length;
-      document.getElementById('modalStepLabel').textContent = `${count} items selected · Step 1 of 2`;
+
+      // Update the counter in the modal header
+      const stepLabel = document.getElementById('modalStepLabel');
+      if (stepLabel) {
+        stepLabel.textContent = `${count} items selected · Step 1 of 2`;
+      }
+
       const list = document.getElementById('selectedItemsList');
+      if (!list) return;
+
       if (sel.length === 0) {
-        list.innerHTML = '<p class="text-xs text-gray-400 py-2">No items selected. Go back and select some items from the catalog.</p>';
+        list.innerHTML = `
+      <div class="py-8 text-center">
+        <p class="text-xs text-gray-400">No items selected. Go back and select some items from the catalog.</p>
+      </div>`;
       } else {
-        list.innerHTML = sel.map(item => `
-          <div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-indigo-50 border border-indigo-100">
-            <div class="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-gray-900 truncate">${item.name}</p>
-              <p class="text-xs text-indigo-600 font-semibold">${item.price}</p>
-            </div>
-            <span class="text-xs px-2 py-0.5 rounded-full ${item.type === 'plan' ? 'bg-blue-100 text-blue-700' : 'bg-violet-100 text-violet-700'} font-semibold capitalize">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
-          </div>`).join('');
+        // 3. Render the list with the exact UI from your design
+        list.innerHTML = sel.map(item => {
+          const imgSrc = (item.img && item.img.length > 5)
+            ? item.img
+            : 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=80';
+
+          return `
+        <div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-indigo-50 border border-indigo-100 mb-2">
+          <div class="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+            <img src="${imgSrc}" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">${item.name || 'Unnamed Item'}</p>
+            <p class="text-xs text-indigo-600 font-bold">${item.price || '₹0'}</p>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${item.type === 'plan' ? 'bg-blue-100 text-blue-700' : 'bg-violet-100 text-violet-700'}">
+            ${item.type || 'Item'}
+          </span>
+        </div>`;
+        }).join('');
       }
     }
 
@@ -733,9 +1413,14 @@
       [1, 2, 3].forEach(x => document.getElementById('modal-step' + x).classList.add('hidden'));
       document.getElementById('modal-step' + s).classList.remove('hidden');
       document.getElementById('modalProgress').style.width = s === 1 ? '50%' : s === 2 ? '80%' : '100%';
+
       const allItems = [...plans, ...products];
       const count = [...selected].length;
-      const labels = { 1: `${count} items selected · Step 1 of 2`, 2: `${count} items selected · Step 2 of 2`, 3: 'Link Created!' };
+      const labels = {
+        1: `${count} items selected · Step 1 of 2`,
+        2: `${count} items selected · Step 2 of 2`,
+        3: 'Link Created!'
+      };
       document.getElementById('modalStepLabel').textContent = labels[s];
       if (s === 1) populateSelectedItems();
     }
@@ -749,57 +1434,298 @@
       document.getElementById('descCount').textContent = msg.length;
     }
 
-    function setSendTo(m) {
-      const gBtn = document.getElementById('st-group'), iBtn = document.getElementById('st-ind');
-      const gList = document.getElementById('groupList'), iDrop = document.getElementById('indDropdown');
-      if (m === 'group') {
-        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
-        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
-        gList.classList.remove('hidden'); iDrop.classList.add('hidden');
-      } else {
-        iBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-1.5 transition';
-        gBtn.className = 'flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 flex items-center justify-center gap-1.5 transition';
-        gList.classList.add('hidden'); iDrop.classList.remove('hidden');
-        document.getElementById('recipientsCount').textContent = '1';
-      }
-    }
-
-    function selectGroup(count) { currentRecipients = count; document.getElementById('recipientsCount').textContent = count; }
-
-    function selSendVia(ch) {
-      const map = { wa: 'border-green-500 bg-green-50', sms: 'border-blue-500 bg-blue-50', em: 'border-violet-500 bg-violet-50' };
-      ['wa', 'sms', 'em'].forEach(c => {
-        const b = document.getElementById('sv-' + c);
-        if (c === ch) { b.className = `flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 ${map[c]} transition`; }
-        else { b.className = 'flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition'; }
-      });
-    }
-
-    function createAndSendLink() {
-      const allItems = [...plans, ...products];
-      const selItems = [...selected].map(id => allItems.find(i => i.id === id)).filter(Boolean);
-      const url = 'https://promo.reminderme.app/l/' + Math.random().toString(36).substr(2, 9);
-      document.getElementById('generatedUrl').textContent = url;
-      document.getElementById('sentToLabel').textContent = `Sent to All Customers (${currentRecipients} recipients)`;
-      savedLinks.unshift({ id: Date.now(), desc: selItems.map(i => i.name).join(', ') + '...', items: selItems.map(i => i.name), status: 'active', recipients: currentRecipients, views: 0, enquiries: 0, created: new Date().toISOString().split('T')[0], channels: ['wa'] });
-      document.getElementById('linksCount').textContent = savedLinks.length;
-      // Store selected items for promo landing page
-      localStorage.setItem('promoItems', JSON.stringify(selItems));
-      localStorage.setItem('promoRecipients', currentRecipients);
-      goModalStep(3);
-    }
-
     function copyLink() {
       const url = document.getElementById('generatedUrl').textContent;
       navigator.clipboard.writeText(url).then(() => { alert('Link copied!'); });
     }
 
-    // Init
-    renderCards();
-    function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-    function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
+
+    // =============================================================================
+    // TEMPLATES
+    // =============================================================================
+
+    const promoTemplates = [
+      {
+        id: 't1',
+        name: 'Festive Season Sale',
+        category: 'seasonal',
+        categoryLabel: '🎉 Seasonal',
+        categoryColor: 'bg-orange-100 text-orange-700',
+        tone: 'Exciting',
+        toneColor: 'bg-yellow-100 text-yellow-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `🎉 Big Festive Season Sale is HERE!\n\nDear {Customer Name},\n\nThis festive season, we've curated exclusive deals just for you! Our top investment plans and financial products are available at special promotional rates.\n\n✅ Limited time offer\n✅ Specially curated for our customers\n✅ Expert advisory included\n\nClick the link below to explore all available offers and express your interest today. Don't miss out — offer valid while stocks last!\n\nWarm regards,\nAcme Financial Services`
+      },
+      {
+        id: 't2',
+        name: 'VIP Exclusive Offer',
+        category: 'vip',
+        categoryLabel: '⭐ VIP Offer',
+        categoryColor: 'bg-amber-100 text-amber-700',
+        tone: 'Premium',
+        toneColor: 'bg-amber-100 text-amber-700',
+        channels: ['WhatsApp', 'Email'],
+        msg: `⭐ An Exclusive Offer, Just for You.\n\nDear {Customer Name},\n\nAs one of our most valued VIP customers, you have been granted early access to our premium wealth-building portfolio — before it opens to the general public.\n\nThis is our way of saying thank you for your continued trust in Acme Financial Services.\n\n🔒 Private Access | 👑 VIP Benefits | 📈 Premium Returns\n\nTap the link below to unlock your exclusive offer. This invitation is valid for 48 hours only.\n\nWith appreciation,\nAcme Financial Services`
+      },
+      {
+        id: 't3',
+        name: 'New Product Launch',
+        category: 'product',
+        categoryLabel: '🚀 Product Launch',
+        categoryColor: 'bg-blue-100 text-blue-700',
+        tone: 'Bold & Exciting',
+        toneColor: 'bg-blue-100 text-blue-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `🚀 Introducing Something New!\n\nDear {Customer Name},\n\nWe're thrilled to announce the launch of our latest financial product, now available exclusively to our customers.\n\nThis new offering has been designed to deliver:\n✨ Competitive returns\n🛡️ Capital safety\n📊 Complete transparency\n\nBe among the first to explore and invest. Slots are limited — click the link to view the full product details and register your interest.\n\nExcitedly yours,\nAcme Financial Services`
+      },
+      {
+        id: 't4',
+        name: 'Tax Saving Investment',
+        category: 'financial',
+        categoryLabel: '💰 Financial',
+        categoryColor: 'bg-green-100 text-green-700',
+        tone: 'Informative',
+        toneColor: 'bg-green-100 text-green-700',
+        channels: ['WhatsApp', 'Email'],
+        msg: `💰 Save More Tax This Financial Year!\n\nDear {Customer Name},\n\nThe financial year is ending soon. Have you maximised your tax-saving investments?\n\nOur top-rated ELSS and tax-saving plans can help you:\n📉 Reduce your taxable income\n📈 Build long-term wealth\n✅ Get Section 80C benefits up to ₹1.5 Lakhs\n\nDon't wait until the last minute! View our recommended tax-saving plans through the link below and book a free consultation with our advisors.\n\nBest regards,\nAcme Financial Services`
+      },
+      {
+        id: 't5',
+        name: 'Diwali Offer',
+        category: 'festival',
+        categoryLabel: '🪔 Festival',
+        categoryColor: 'bg-yellow-100 text-yellow-700',
+        tone: 'Warm & Celebratory',
+        toneColor: 'bg-orange-100 text-orange-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `🪔 Happy Diwali from Acme Financial Services!\n\nDear {Customer Name},\n\nThis Diwali, illuminate your financial future with our special festive investment offers.\n\nWe believe the festival of lights is the perfect time to ignite your wealth journey:\n💛 Special Diwali plan rates\n🎁 Complimentary financial health check\n🌟 Exclusive loyalty rewards for existing customers\n\nClick the link below to explore our Diwali collection and take the first step toward a prosperous new year.\n\nWishing you joy and prosperity,\nAcme Financial Services`
+      },
+      {
+        id: 't6',
+        name: 'We Miss You — Come Back',
+        category: 'reengagement',
+        categoryLabel: '👋 Re-engagement',
+        categoryColor: 'bg-rose-100 text-rose-700',
+        tone: 'Friendly',
+        toneColor: 'bg-pink-100 text-pink-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `👋 Hi {Customer Name}, We've Missed You!\n\nIt's been a while since we last connected, and we wanted to reach out personally.\n\nA lot has changed since you last visited — we've added exciting new investment products, improved our plans, and introduced better rates that we think you'll love.\n\nHere's what's new for you:\n🆕 Updated product portfolio\n📊 Better returns this quarter\n🎁 Special returning customer offer\n\nWe'd love to have you back. Click the link to explore what's new and reconnect with your financial goals.\n\nWarmly,\nAcme Financial Services`
+      },
+      {
+        id: 't7',
+        name: 'SIP Investment Reminder',
+        category: 'financial',
+        categoryLabel: '💰 Financial',
+        categoryColor: 'bg-green-100 text-green-700',
+        tone: 'Motivational',
+        toneColor: 'bg-emerald-100 text-emerald-700',
+        channels: ['WhatsApp', 'Email'],
+        msg: `📈 Start Your SIP Journey Today!\n\nDear {Customer Name},\n\nDid you know? A SIP of just ₹500/month can grow to ₹1+ Lakh in 10 years through the power of compounding.\n\nOur Systematic Investment Plans are designed for every income level and financial goal:\n💼 Start from ₹500/month\n📅 Flexible monthly schedules\n🔄 Easy stop/modify anytime\n📊 Real-time portfolio tracking\n\nTake the first step toward financial freedom. Click the link to browse our SIP plans and get started today.\n\nYour financial partner,\nAcme Financial Services`
+      },
+      {
+        id: 't8',
+        name: 'Referral Program',
+        category: 'seasonal',
+        categoryLabel: '🎉 Seasonal',
+        categoryColor: 'bg-orange-100 text-orange-700',
+        tone: 'Engaging',
+        toneColor: 'bg-indigo-100 text-indigo-700',
+        channels: ['WhatsApp', 'SMS'],
+        msg: `👥 Refer a Friend — You Both Earn!\n\nDear {Customer Name},\n\nGood things are better when shared! Introduce your friends and family to Acme Financial Services and earn exciting rewards together.\n\n🎁 For You: ₹500 cashback on every successful referral\n🎁 For Your Friend: Exclusive first-time investor discount\n\nSimply share this link with anyone who could benefit from smart financial planning. When they sign up and invest, you both win!\n\nStart sharing today and grow your circle — and your wealth!\n\nWith gratitude,\nAcme Financial Services`
+      },
+      {
+        id: 't9',
+        name: 'Policy Renewal Offer',
+        category: 'financial',
+        categoryLabel: '💰 Financial',
+        categoryColor: 'bg-green-100 text-green-700',
+        tone: 'Urgent & Clear',
+        toneColor: 'bg-red-100 text-red-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `⏰ Your Policy Renewal is Coming Up!\n\nDear {Customer Name},\n\nThis is a friendly reminder that your insurance policy is due for renewal soon. Renewing on time ensures:\n✅ Continuous coverage without gaps\n✅ Loyalty discount on your premium\n✅ No medical re-examination required\n\nAs a valued customer, we've prepared a special renewal bundle with enhanced coverage at the same premium rate.\n\nClick the link below to review your renewal options and confirm your policy in just 2 minutes.\n\nAlways here for you,\nAcme Financial Services`
+      },
+      {
+        id: 't10',
+        name: 'New Customer Welcome',
+        category: 'product',
+        categoryLabel: '🚀 Product Launch',
+        categoryColor: 'bg-blue-100 text-blue-700',
+        tone: 'Warm & Welcoming',
+        toneColor: 'bg-teal-100 text-teal-700',
+        channels: ['WhatsApp', 'Email'],
+        msg: `🎁 Welcome to the Acme Financial Family!\n\nDear {Customer Name},\n\nWe're so glad you're here! As a new member of Acme Financial Services, you have access to our complete range of investment plans, insurance products, and expert financial advisory.\n\nHere's your exclusive welcome gift:\n🎀 First-investment processing fee waived\n📞 Free 30-min advisory session with our expert\n📚 Access to our financial planning toolkit\n\nExplore our handpicked starter products designed especially for new investors. Click the link to get started on your wealth journey!\n\nExcited to have you onboard,\nAcme Financial Services`
+      },
+      {
+        id: 't11',
+        name: 'Upgrade Your Plan',
+        category: 'vip',
+        categoryLabel: '⭐ VIP Offer',
+        categoryColor: 'bg-amber-100 text-amber-700',
+        tone: 'Aspirational',
+        toneColor: 'bg-purple-100 text-purple-700',
+        channels: ['WhatsApp', 'Email'],
+        msg: `⬆️ You're Ready for the Next Level!\n\nDear {Customer Name},\n\nBased on your investment journey with us, we believe you're ready to unlock greater returns with an upgraded plan.\n\nYour current plan is great — but our Wealth Builder Pro offers:\n📈 2x higher return potential\n🧑‍💼 Dedicated relationship manager\n🔍 Quarterly portfolio review\n🏦 Priority access to new products\n\nUpgrading takes less than 5 minutes and you keep all your existing benefits. Click the link below to compare your options and upgrade today.\n\nHere to help you grow,\nAcme Financial Services`
+      },
+      {
+        id: 't12',
+        name: 'Year-End Investment Push',
+        category: 'seasonal',
+        categoryLabel: '🎉 Seasonal',
+        categoryColor: 'bg-orange-100 text-orange-700',
+        tone: 'Motivational',
+        toneColor: 'bg-violet-100 text-violet-700',
+        channels: ['WhatsApp', 'SMS', 'Email'],
+        msg: `📅 Year-End Is Here — Is Your Portfolio Ready?\n\nDear {Customer Name},\n\nWith the year wrapping up, now is the perfect time to review your financial goals and make final investments before the deadline.\n\nDon't let the year end without:\n📊 Maximising your portfolio returns\n💰 Completing your tax-saving investments\n🔄 Reviewing and rebalancing your holdings\n\nOur advisors are available this month for complimentary year-end financial reviews. View our recommended year-end investment products through the link below.\n\nAct now — the clock is ticking!\n\nYour financial partner,\nAcme Financial Services`
+      }
+    ];
+
+    let tmplCatFilter = 'all';
+
+    function setTmplCat(cat) {
+      tmplCatFilter = cat;
+      const cats = ['all', 'seasonal', 'product', 'vip', 'financial', 'festival', 'reengagement'];
+      cats.forEach(c => {
+        const b = document.getElementById('tc-' + c);
+        if (!b) return;
+        if (c === cat) {
+          b.className = 'px-3 py-1.5 rounded-full bg-violet-600 text-white text-xs font-semibold flex-shrink-0 transition';
+        } else {
+          b.className = 'px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-xs font-semibold flex-shrink-0 hover:border-violet-300 hover:text-violet-600 transition';
+        }
+      });
+      renderTemplates();
+    }
+
+    function filterTemplates() {
+      renderTemplates();
+    }
+
+    function renderTemplates() {
+      const searchQ = (document.getElementById('tmplSearch')?.value || '').toLowerCase();
+      const grid = document.getElementById('templatesGrid');
+      const emptyEl = document.getElementById('tmplEmpty');
+      const chIconsMap = {
+        'WhatsApp': `<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 border border-green-100 text-green-700 text-[10px] font-semibold"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>WhatsApp</span>`,
+        'SMS': `<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-semibold"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>SMS</span>`,
+        'Email': `<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-50 border border-violet-100 text-violet-700 text-[10px] font-semibold"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Email</span>`
+      };
+
+      const filtered = promoTemplates.filter(t => {
+        const matchCat = tmplCatFilter === 'all' || t.category === tmplCatFilter;
+        const matchSearch = !searchQ || t.name.toLowerCase().includes(searchQ) || t.msg.toLowerCase().includes(searchQ);
+        return matchCat && matchSearch;
+      });
+
+      grid.innerHTML = '';
+      if (filtered.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+
+      filtered.forEach(t => {
+        const chHtml = t.channels.map(c => chIconsMap[c] || '').join('');
+        const preview = t.msg.replace(/\n/g, ' ').substring(0, 110) + '...';
+        grid.innerHTML += `
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-violet-200 transition p-4 flex flex-col">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex-1 min-w-0 pr-2">
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${t.categoryColor} mb-1.5">${t.categoryLabel}</span>
+            <h3 class="text-sm font-bold text-gray-900 leading-snug">${t.name}</h3>
+          </div>
+          <div class="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 leading-relaxed mb-3 flex-1">${preview}</p>
+        <div class="flex items-center gap-1 flex-wrap mb-3">${chHtml}</div>
+        <div class="flex gap-2">
+          <button onclick="openTmplPreview('${t.id}')" class="flex-1 py-2 rounded-xl border border-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Preview
+          </button>
+          <button onclick="useTemplate('${t.id}')" class="flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            Use Template
+          </button>
+        </div>
+      </div>`;
+      });
+    }
+
+    function openTmplPreview(id) {
+      const t = promoTemplates.find(x => x.id === id);
+      if (!t) return;
+      const chIconsMap = {
+        'WhatsApp': `<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-100 text-green-700 text-xs font-semibold"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>WhatsApp</span>`,
+        'SMS': `<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>SMS</span>`,
+        'Email': `<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-violet-50 border border-violet-100 text-violet-700 text-xs font-semibold"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Email</span>`
+      };
+      document.getElementById('previewTmplName').textContent = t.name;
+      document.getElementById('previewTmplCatLabel').textContent = t.categoryLabel;
+      document.getElementById('previewTmplMsg').textContent = t.msg;
+      document.getElementById('previewChannels').innerHTML = t.channels.map(c => chIconsMap[c] || '').join('');
+      document.getElementById('previewToneWrap').innerHTML = `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${t.toneColor}">Tone: ${t.tone}</span>`;
+      const editArea = document.getElementById('previewTmplEdit');
+      editArea.value = t.msg;
+      document.getElementById('previewCharCount').textContent = t.msg.length;
+      document.getElementById('templatePreviewModal').dataset.currentId = id;
+      document.getElementById('templatePreviewModal').classList.remove('hidden');
+    }
+
+    function closeTmplPreview() {
+      document.getElementById('templatePreviewModal').classList.add('hidden');
+    }
+
+    function applyTemplateAndCreate() {
+      const msg = document.getElementById('previewTmplEdit').value;
+      closeTmplPreview();
+      document.getElementById('promoDesc').value = msg;
+      document.getElementById('descCount').textContent = msg.length;
+      openCreateLinkModal();
+    }
+
+    function useTemplate(id) {
+      const t = promoTemplates.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('promoDesc').value = t.msg;
+      document.getElementById('descCount').textContent = t.msg.length;
+      openCreateLinkModal();
+    }
+
+
+    // =============================================================================
+    // MOBILE NAV
+    // =============================================================================
+
+    function openMobileNav() {
+      document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)';
+      document.getElementById('mobileNavBg').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+      document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)';
+      document.getElementById('mobileNavBg').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+
+    // =============================================================================
+    // INITIALISATION
+    // =============================================================================
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadCatalog();
+      loadPromotions();
+      loadGroups();
+      loadCustomers();
+      renderCards();
+    });
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+
+
 </body>
 
 </html>

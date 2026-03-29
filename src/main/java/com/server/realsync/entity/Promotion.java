@@ -28,7 +28,7 @@ public class Promotion {
     @Column(name = "account_id", nullable = false)
     private Integer accountId;
 
-    @Column(name = "customer_group_id", nullable = false)
+    @Column(name = "customer_group_id", nullable = true)
     private Integer customerGroupId;
 
     @Column(name = "image_url", nullable = false)
@@ -70,42 +70,104 @@ public class Promotion {
         updatedAt = LocalDateTime.now();
     }
 
-    public Promotion() {}
+    public Promotion() {
+    }
 
     // Getters & Setters
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getAccountId() { return accountId; }
-    public void setAccountId(Integer accountId) { this.accountId = accountId; }
+    public Integer getAccountId() {
+        return accountId;
+    }
 
-    public Integer getCustomerGroupId() { return customerGroupId; }
-    public void setCustomerGroupId(Integer customerGroupId) { this.customerGroupId = customerGroupId; }
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public Integer getCustomerGroupId() {
+        return customerGroupId;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setCustomerGroupId(Integer customerGroupId) {
+        this.customerGroupId = customerGroupId;
+    }
 
-    public String getAiGeneratedTitle() { return aiGeneratedTitle; }
-    public void setAiGeneratedTitle(String aiGeneratedTitle) { this.aiGeneratedTitle = aiGeneratedTitle; }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public String getAiWhatsappContent() { return aiWhatsappContent; }
-    public void setAiWhatsappContent(String aiWhatsappContent) { this.aiWhatsappContent = aiWhatsappContent; }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-    public String getAiBlogContent() { return aiBlogContent; }
-    public void setAiBlogContent(String aiBlogContent) { this.aiBlogContent = aiBlogContent; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getAiGeneratedTitle() {
+        return aiGeneratedTitle;
+    }
 
-    public LocalDateTime getScheduledAt() { return scheduledAt; }
-    public void setScheduledAt(LocalDateTime scheduledAt) { this.scheduledAt = scheduledAt; }
+    public void setAiGeneratedTitle(String aiGeneratedTitle) {
+        this.aiGeneratedTitle = aiGeneratedTitle;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public String getAiWhatsappContent() {
+        return aiWhatsappContent;
+    }
+
+    public void setAiWhatsappContent(String aiWhatsappContent) {
+        this.aiWhatsappContent = aiWhatsappContent;
+    }
+
+    public String getAiBlogContent() {
+        return aiBlogContent;
+    }
+
+    public void setAiBlogContent(String aiBlogContent) {
+        this.aiBlogContent = aiBlogContent;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getScheduledAt() {
+        return scheduledAt;
+    }
+
+    public void setScheduledAt(LocalDateTime scheduledAt) {
+        this.scheduledAt = scheduledAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

@@ -1,5 +1,6 @@
 package com.server.realsync.mvc.controllers;
 
+import com.server.realsync.dto.CustomerGroupDTO;
 import com.server.realsync.entity.Account;
 import com.server.realsync.entity.CustomerGroup;
 import com.server.realsync.services.CustomerGroupService;
@@ -30,13 +31,17 @@ public class CustomerGroupController {
      * GET all groups for the currently logged-in account.
      */
     @GetMapping("/my-groups")
-    public ResponseEntity<List<CustomerGroup>> getMyGroups() {
-        Account account = SecurityUtil.getCurrentAccountId();
-        if (account == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok(groupService.getByAccountId(account.getId()));
+public ResponseEntity<List<CustomerGroupDTO>> getMyGroups() {
+    Account account = SecurityUtil.getCurrentAccountId(); 
+
+    if (account == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    List<CustomerGroupDTO> groups = groupService.getGroupsWithCounts(account.getId());
+    
+    return ResponseEntity.ok(groups);
+}
 
     /**
      * POST to save a group.

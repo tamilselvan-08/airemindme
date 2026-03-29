@@ -35,6 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Controller
 @RequestMapping("/")
 @Tag(name = "Home API", description = "HomeController APIs")
+
 public class HomeController {
 
 	@Autowired
@@ -80,7 +81,11 @@ public class HomeController {
 
 	@GetMapping("/home.html")
 	public String getAdminDashboard(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/home";
 	}
 
@@ -91,14 +96,17 @@ public class HomeController {
 			@RequestParam(required = false) String search,
 			Model model) {
 
-		Account account = SecurityUtil.getCurrentAccountId();
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
 
 		model.addAttribute("activePage", "customers");
 
 		List<CustomerGroup> accountGroups = customerGroupService.getByAccountId(account.getId());
 		model.addAttribute("customerGroups", accountGroups);
 
-		Pageable pageable = PageRequest.of(page, 6, Sort.unsorted());;
+		Pageable pageable = PageRequest.of(page, 6, Sort.unsorted());
+		;
 		long totalCustomers = customerService.getTotalCustomers(account.getId());
 		Page<Customer> customers;
 
@@ -134,7 +142,7 @@ public class HomeController {
 						account.getId(), pageable);
 			}
 		}
-
+		model.addAttribute("account", account);
 		model.addAttribute("customers", customers.getContent());
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", customers.getTotalPages());
@@ -147,7 +155,11 @@ public class HomeController {
 
 	@GetMapping("/customer-detail.html")
 	public String getCustomerDetail(@RequestParam Integer id, Model model) {
-		Account account = SecurityUtil.getCurrentAccountId();
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		Optional<Customer> customer = customerService.getById(account.getId(), id);
 		if (customer.isEmpty()) {
 			return "redirect:/customers.html";
@@ -158,32 +170,52 @@ public class HomeController {
 
 	@GetMapping("/promotions.html")
 	public String getPromotions(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/promotions";
 	}
 
 	@GetMapping("/reminder-detail.html")
 	public String getReminderDetail(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/reminder-detail";
 	}
 
 	@GetMapping("/greeting-detail.html")
 	public String getGreetingDetail(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/greeting-detail";
 	}
 
 	@GetMapping("/promo-landing.html")
 	public String getPromoLanding(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/promo-landing";
 	}
 
 	@GetMapping("/catalog.html")
 	public String getCatalog(Model model) {
 
-		Account account = SecurityUtil.getCurrentAccountId();
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 
 		List<CatalogPlan> plans = settingsPlanService.getByAccountId(account.getId());
 
@@ -196,24 +228,42 @@ public class HomeController {
 
 	@GetMapping("/engagement.html")
 	public String engagement(Model model) {
+Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindmeui/engagement";
 	}
 
 	@GetMapping("/user-management.html")
 	public String users(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		model.addAttribute("activePage", "users");
 		return "remindmeui/user-management";
 	}
 
 	@GetMapping("/reports.html")
 	public String getAdminReport(Model model) {
+Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		return "remindme/reports";
 	}
 
 	@GetMapping("/report-history")
 	public String reportHistory(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
+
+		model.addAttribute("account", account);
 		model.addAttribute("activePage", "reports");
 		return "report-history";
 	}
