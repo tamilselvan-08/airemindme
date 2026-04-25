@@ -179,4 +179,22 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    @GetMapping("/api/customers/{id}")
+    public ResponseEntity<?> getCustomerById(@PathVariable Integer id) {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        Optional<Customer> customer = customerService.getById(id);
+
+        if (customer.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // SECURITY CHECK (IMPORTANT)
+        if (!customer.get().getAccountId().equals(account.getId())) {
+            return ResponseEntity.status(403).body("Unauthorized");
+        }
+
+        return ResponseEntity.ok(customer.get());
+    }
 }

@@ -56,44 +56,6 @@
 
   <!-- Mobile nav -->
   <div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='catalog')}"></div>
-  <div id="mobileNavBg" class="md:hidden hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm"
-    onclick="closeMobileNav()"></div>
-  <div id="mobileNavDrawer"
-    class="md:hidden fixed top-0 left-0 h-screen w-72 bg-white z-[46] shadow-2xl flex flex-col transition-transform duration-300"
-    style="transform:translateX(-100%)">
-    <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
-      <span class="text-sm font-bold text-gray-900">Reminder Me</span>
-      <button onclick="closeMobileNav()"
-        class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><svg class="w-4 h-4"
-          fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-    </div>
-    <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-0.5">
-      <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg><span class="text-sm font-semibold">Home</span></a>
-      <a href="customers.html"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg class="w-5 h-5"
-          fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg><span class="text-sm font-semibold">Customers</span></a>
-      <a href="catalog.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600 text-white"><svg
-          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg><span class="text-sm font-semibold">Catalog</span></a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50"><svg
-          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg><span class="text-sm font-semibold">Settings</span></a>
-    </nav>
-  </div>
 
   <!-- ═══ MAIN ═══ -->
   <div class="md:ml-56 min-h-screen pb-24 md:pb-0 pt-14 md:pt-0">
@@ -307,44 +269,65 @@
       <!-- REPORT TEMPLATES PANEL -->
       <div id="cp-rtemplates" class="hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
-          <p class="text-sm text-gray-500">Define structured report templates with custom columns. Filled dynamically
-            when generating a report.</p>
-          <button onclick="openRTModal(null)"
+          <p class="text-sm text-gray-500">
+            Define structured report templates with custom columns. Filled dynamically when generating a report.
+          </p>
+
+          <!-- ✅ FIXED BUTTON -->
+          <button onclick="openRTWithPreset('blank')"
             class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg> Create Template
+            </svg>
+            Create Template
           </button>
         </div>
+
         <div class="flex flex-wrap gap-2 mb-5">
           <p class="text-xs text-gray-400 self-center mr-1">Quick start:</p>
+
           <button onclick="openRTWithPreset('lab')"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition">🔬
-            Lab / Blood Test</button>
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition">
+            🔬 Lab / Blood Test
+          </button>
+
           <button onclick="openRTWithPreset('radiology')"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 border border-violet-100 text-violet-700 text-xs font-semibold hover:bg-violet-100 transition">🩻
-            Radiology</button>
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 border border-violet-100 text-violet-700 text-xs font-semibold hover:bg-violet-100 transition">
+            🩻 Radiology
+          </button>
+
           <button onclick="openRTWithPreset('prescription')"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition">💊
-            Prescription</button>
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition">
+            💊 Prescription
+          </button>
+
           <button onclick="openRTWithPreset('blank')"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-200 transition">+
-            Blank</button>
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-200 transition">
+            + Blank
+          </button>
         </div>
+
         <div id="rtGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
         <div id="rtEmpty" class="hidden text-center py-16">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4"><svg
-              class="w-7 h-7 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg></div>
+            </svg>
+          </div>
+
           <p class="text-gray-500 font-medium">No report templates yet</p>
           <p class="text-gray-400 text-sm mt-1 mb-4">Create a template to start generating structured reports</p>
-          <button onclick="openRTModal(null)"
-            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700"><svg
-              class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+          <!-- ✅ FIXED BUTTON -->
+          <button onclick="openRTWithPreset('blank')"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>Create First Template</button>
+            </svg>
+            Create First Template
+          </button>
         </div>
       </div>
 
@@ -684,15 +667,38 @@
             </svg></div>
         </div>
         <div>
-          <div class="flex items-center justify-between mb-2">
-            <label class="text-sm font-medium text-gray-700">Report Columns <span class="text-red-400">*</span></label>
-            <button type="button" onclick="addRTColumn()"
-              class="flex items-center gap-1 text-xs text-indigo-600 font-semibold hover:text-indigo-800"><svg
-                class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-              </svg>Add Column</button>
+          <div>
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-medium text-gray-700">Report Columns <span
+                    class="text-red-400">*</span></label>
+                <button type="button" onclick="addRow()"
+                  class="flex items-center gap-1 text-xs text-indigo-600 font-semibold hover:text-indigo-800">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>Add Test Field
+                </button>
+              </div>
+
+              <div class="border border-gray-100 rounded-2xl overflow-hidden">
+                <table class="w-full text-sm text-left">
+                  <thead>
+                    <tr class="bg-gray-50 border-b border-gray-100">
+                      <th class="px-4 py-3 font-semibold text-gray-600 w-1/2">Test / Field Name</th>
+                      <th class="px-4 py-3 font-semibold text-gray-600 w-1/3">Ref. Range</th>
+                      <th class="px-4 py-3 font-semibold text-gray-600 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportRows" class="divide-y divide-gray-50 bg-white">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="rtColumnsContainer" class="space-y-3">
+
+            </div>
           </div>
-          <div id="rtColumnsContainer" class="space-y-2"></div>
+
           <div class="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-start gap-2">
             <svg class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
@@ -764,6 +770,8 @@
   </div>
 
   <script src="/js/catlog/catlog.js"></script>
+
+
 </body>
 
 </html>

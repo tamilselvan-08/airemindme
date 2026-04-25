@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Create Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+
+    <div class="max-w-4xl mx-auto p-6">
+
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Create Report</h1>
+            <p class="text-sm text-gray-500">Enter values for selected report template</p>
+        </div>
+
+        <div id="reportHeader" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-1">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Patient Information</p>
+                    <h2 id="dispPatientName" class="text-lg font-bold text-indigo-900">Loading...</h2>
+                    <p id="dispPatientMeta" class="text-sm text-gray-600">—</p>
+                </div>
+                <div class="space-y-1 md:text-right">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Report Details</p>
+                    <h2 id="dispTemplateTitle" class="text-lg font-bold text-gray-800">Loading...</h2>
+                    <div>
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                            Status: Draft
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+
+            <div class="overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100 text-gray-600 text-xs uppercase">
+                            <th class="px-5 py-3 text-left">Test / Field</th>
+                            <th class="px-5 py-3 text-left">Value</th>
+                            <th class="px-5 py-3 text-left">Reference Range</th>
+                            <th class="px-5 py-3 text-left">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reportTableBody" class="divide-y divide-gray-100 bg-white">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-5 flex gap-3">
+                <button onclick="saveReport('Draft')"
+                    class="flex-1 py-3 rounded-xl border border-indigo-200 text-indigo-600 font-semibold hover:bg-indigo-50">
+                    Save Draft
+                </button>
+
+                <button onclick="saveReport('Completed')"
+                    class="flex-1 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700">
+                    Save & Complete
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+<script>
+
+    // GLOBAL STATE
+    let reportFields = [];
+    let templateId = null;
+    let patientId = null;
+
+    // Extracted Data
+    let patientData = null;
+    let templateTitle = "New Report";
+
+
+    // GET URL PARAMS
+    function getParams() {
+        const url = new URL(window.location.href);
+
+        templateId = url.searchParams.get('templateId');
+        patientId = url.searchParams.get('patientId');
+    }
+
+
+    // LOAD TEMPLATE
+    async function loadTemplate() {
+
+        const template = await api(`/api/catalog/rtemplates/${templateId}`);
+
+        // Store template title for header
+        templateTitle = template.title || 'Untitled Report';
+
+        reportFields = (template.columns || []).map(c => ({
+            name: c.name || c.test,
+            value: '',
+            range: c.range || '-',
+            status: 'Normal'
+        }));
+
+        renderHeader(); // Update Header UI
+        renderTable();
+    }
+
+    // NEW: LOAD PATIENT DATA
+    async function loadPatient() {
+        try {
+            patientData = await api(`/api/customers/${patientId}`);
+            renderHeader(); // Update Header UI
+        } catch (err) {
+            console.error("Failed to load patient", err);
+            document.getElementById('dispPatientName').innerText = "Error loading patient";
+        }
+    }
+
+    // NEW: RENDER HEADER
+    function renderHeader() {
+        // Update Patient Details
+        if (patientData) {
+            document.getElementById('dispPatientName').innerText = patientData.name || 'Unknown Patient';
+
+            let meta = `Phone: ${patientData.mobile || 'N/A'}`;
+            if (patientData.age) meta += ` • Age: ${patientData.age}`;
+            if (patientData.gender) meta += ` • ${patientData.gender}`;
+
+            document.getElementById('dispPatientMeta').innerText = meta;
+        }
+
+        // Update Template Title
+        document.getElementById('dispTemplateTitle').innerText = templateTitle;
+    }
+
+
+    // RENDER TABLE
+    function renderTable() {
+        const tbody = document.getElementById('reportTableBody');
+        tbody.innerHTML = '';
+
+        reportFields.forEach((f, i) => {
+            tbody.innerHTML += `
+        <tr>
+
+            <td class="px-5 py-3 font-medium text-gray-700">
+                ${f.name}
+            </td>
+
+            <td class="px-5 py-3">
+                <input 
+                    type="text"
+                    oninput="updateValue(${i}, this.value)"
+                    placeholder="Enter value"
+                    class="w-full px-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500">
+            </td>
+
+            <td class="px-5 py-3 text-gray-400">
+                ${f.range}
+            </td>
+
+            <td class="px-5 py-3">
+                <select onchange="updateStatus(${i}, this.value)"
+                    class="px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>Low</option>
+                </select>
+            </td>
+
+        </tr>
+        `;
+        });
+    }
+
+
+    // UPDATE VALUE
+    function updateValue(index, val) {
+        reportFields[index].value = val;
+    }
+
+
+    // UPDATE STATUS
+    function updateStatus(index, val) {
+        reportFields[index].status = val;
+    }
+
+
+    // SAVE REPORT
+    async function saveReport(status) {
+
+        const payload = {
+            patientId: patientId,
+            templateId: templateId,
+            status: status,
+            fields: JSON.stringify(reportFields)
+        };
+
+        await api('/api/reports', 'POST', payload);
+
+        alert('Report saved successfully');
+
+        window.location.href = '/reports.html';
+    }
+
+
+    // SIMPLE API HELPER
+    async function api(url, method = 'GET', data = null) {
+
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        if (data) options.body = JSON.stringify(data);
+
+        const res = await fetch(url, options);
+
+        if (!res.ok) throw new Error('API Error');
+
+        return res.json();
+    }
+
+
+    // INIT
+    getParams();
+    loadTemplate();
+    loadPatient(); // Call new patient loader
+
+</script>
+
+</html>

@@ -25,6 +25,11 @@ public class CatalogRTemplateService {
         return repo.findByIdAndAccountId(id, accountId);
     }
 
+    public CatalogRTemplate getByIdOrThrow(Integer id, Integer accountId) {
+        return repo.findByIdAndAccountId(id, accountId)
+                .orElseThrow(() -> new RuntimeException("Template not found"));
+    }
+
     /** Create or update */
     public CatalogRTemplate save(CatalogRTemplate template) {
         return repo.save(template);

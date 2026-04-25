@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @Entity
 @Table(name = "catalog_rtemplate")
@@ -58,27 +61,6 @@ public class CatalogRTemplate {
         if (showTotal == null)
             showTotal = true;
     }
-
-    // ── Helpers for columns list ──────────────────────────────────────
-
-    @Transient
-    public List<String> getColumnList() {
-        if (columns == null || columns.isBlank())
-            return List.of();
-        return Arrays.stream(columns.split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-    }
-
-    @Transient
-    public void setColumnList(List<String> list) {
-        this.columns = (list == null || list.isEmpty())
-                ? ""
-                : String.join(",", list);
-    }
-
-    // ── Getters & Setters ─────────────────────────────────────────────
 
     public Integer getId() {
         return id;
@@ -158,5 +140,17 @@ public class CatalogRTemplate {
 
     public void setCreatedAt(LocalDate d) {
         this.createdAt = d;
+    }
+
+    
+
+    public List<Map<String, String>> getParsedColumns() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(this.columns, new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 }

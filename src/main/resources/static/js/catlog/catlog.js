@@ -675,9 +675,156 @@ function deleteTemplate(id) {
 // ║                  REPORT TEMPLATES                       ║
 // ╚══════════════════════════════════════════════════════════╝
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Data state - This is now your source of truth
+let reportRowsData = [{ test: "", range: "" }];
+
+// ── Modified Preset Function ──────────────────────────────────────────────
+
+function openRTWithPreset(type) {
+    if (type === 'lab') {
+        document.getElementById('rt_title').value = "Complete Blood Count";
+        document.getElementById('rt_category').value = "Blood Test";
+        reportRowsData = [
+            { test: "Haemoglobin", range: "12-17 g/dL" },
+            { test: "WBC Count", range: "4000-11000 /µL" },
+            { test: "Platelet Count", range: "150000-400000 /µL" }
+        ];
+    } else {
+        reportRowsData = [{ test: "", range: "" }];
+    }
+    renderRows();
+    document.getElementById('rtModal').classList.remove('hidden');
+}
+
+// ── Modified Save Function ────────────────────────────────────────────────
+function saveRTTemplate() {
+    const title = document.getElementById('rt_title').value.trim();
+    if (!title) { showToast('Title required', 'error'); return; }
+
+    // Filter out empty rows and convert to JSON string
+    const filteredRows = reportRowsData.filter(r => r.test.trim() !== '');
+    const columnsJson = JSON.stringify(filteredRows);
+
+    const payload = {
+        title: title,
+        accountId: 1, // Change this to your dynamic account ID logic
+        category: document.getElementById('rt_category').value,
+        description: document.getElementById('rt_desc').value.trim(),
+        columns: columnsJson, // Storing structured JSON in the TEXT field
+        price: parseFloat(document.getElementById('rt_price').value) || 0,
+        showTotal: document.getElementById('rt_total').checked,
+        status: 'active'
+    };
+
+    const isEdit = editRTId !== null;
+    api(isEdit ? `${API.rtemplates}/${editRTId}` : API.rtemplates, isEdit ? 'PUT' : 'POST', payload)
+        .then(() => {
+            showToast('Template Saved!', 'success');
+            closeRTModal();
+            loadRTemplates();
+        })
+        .catch(err => showToast(err.message, 'error'));
+}
+
+// ── Updated Modal Opener (for Editing) ────────────────────────────────────
+// Use this logic inside your existing edit function to convert string back to rows
+function openRTModal(id = null) {
+    editRTId = id;
+    if (!id) {
+        reportRowsData = [{ test: "", range: "" }];
+        // clear other fields...
+    } else {
+        const t = rtemplates.find(x => x.id === id);
+        if (t) {
+            // ... fill other fields ...
+            try {
+                // Parse the JSON string from the database
+                reportRowsData = JSON.parse(t.columns || "[]");
+                if (reportRowsData.length === 0) reportRowsData = [{ test: "", range: "" }];
+            } catch (e) {
+                // Fallback for old comma-separated data
+                reportRowsData = (t.columns || "").split(',').map(c => ({ test: c, range: '' }));
+            }
+        }
+    }
+    renderRows();
+    document.getElementById('rtModal').classList.remove('hidden');
+}
+
+function closeRTModal() {
+    // 1. Hide the modal
+    const modal = document.getElementById('rtModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    editRTId = null;
+    reportRowsData = [{ test: "" }];
+
+    // 4. Clear any specific validation styles or inputs if necessary
+    document.getElementById('rt_title').value = '';
+    document.getElementById('rt_price').value = '';
+}
+// ── Row Management Logic (Keep exactly as is) ─────────────────────────────
+
+function renderRows() {
+    const container = document.getElementById('reportRows');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (reportRowsData.length === 0) {
+        container.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-gray-400 italic">No fields added.</td></tr>`;
+        return;
+    }
+
+    reportRowsData.forEach((row, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "fade-in hover:bg-gray-50/50 transition-colors";
+        tr.innerHTML = `
+      <td class="px-4 py-3">
+        <input type="text" value="${row.test}" 
+               oninput="updateRow(${index}, 'test', this.value)"
+               placeholder="e.g. Haemoglobin"
+               class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 bg-transparent">
+      </td>
+      <td class="px-4 py-3">
+        <input type="text" value="${row.range}" 
+               oninput="updateRow(${index}, 'range', this.value)"
+               placeholder="e.g. 12-17 g/dL"
+               class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 bg-transparent">
+      </td>
+      <td class="px-4 py-3 text-right">
+        <button onclick="deleteRow(${index})" class="p-2 text-gray-400 hover:text-red-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </td>
+    `;
+        container.appendChild(tr);
+    });
+}
+
+function updateRow(index, field, value) {
+    reportRowsData[index][field] = value;
+}
+
+function addRow() {
+    reportRowsData.push({ test: "", range: "" });
+    renderRows();
+}
+
+function deleteRow(index) {
+    reportRowsData.splice(index, 1);
+    renderRows();
+}
+
 function loadRTemplates() {
     api(API.rtemplates)
-        .then(data => { rtemplates = data; renderRTemplates(); })
+        .then(data => {
+            rtemplates = data;
+            renderRTemplates();
+        })
         .catch(err => showToast('Failed to load report templates: ' + err.message, 'error'));
 }
 
@@ -685,6 +832,7 @@ function renderRTemplates() {
     const grid = document.getElementById('rtGrid');
     const empty = document.getElementById('rtEmpty');
     const badge = document.getElementById('rtBadge');
+
     if (badge) badge.textContent = rtemplates.length;
 
     if (!rtemplates.length) {
@@ -698,16 +846,23 @@ function renderRTemplates() {
         'Blood Test': 'bg-red-50 text-red-700',
         'Radiology': 'bg-violet-50 text-violet-700',
         'Cardiology': 'bg-pink-50 text-pink-700',
-        'Pathology': 'bg-amber-50 text-amber-700',
-        'Urology': 'bg-cyan-50 text-cyan-700',
         'Prescription': 'bg-emerald-50 text-emerald-700',
-        'General Checkup': 'bg-blue-50 text-blue-700',
-        'Custom': 'bg-gray-100 text-gray-600'
+        'General Checkup': 'bg-blue-50 text-blue-700'
     };
 
     grid.innerHTML = rtemplates.map(t => {
-        // columns stored as comma-delimited string in the DB
-        const cols = ((t.columns || '') + '').split(',').map(c => c.trim()).filter(Boolean);
+        let cols = [];
+        try {
+            // Detect if it's our new JSON format or the old comma-style
+            if (t.columns && t.columns.startsWith('[')) {
+                cols = JSON.parse(t.columns);
+            } else {
+                cols = (t.columns || "").split(',').map(c => ({ test: c.trim(), range: '' }));
+            }
+        } catch (e) {
+            cols = (t.columns || "").split(',').map(c => ({ test: c.trim(), range: '' }));
+        }
+
         const catCls = catColors[t.category] || 'bg-gray-100 text-gray-600';
         const isActive = t.status === 'active';
 
@@ -721,14 +876,11 @@ function renderRTemplates() {
             <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${catCls}">${t.category || 'Custom'}</span>
           </div>
         </div>
+        
         <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
           <button onclick="openRTModal(${t.id})" title="Edit"
             class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center text-gray-500 transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-          </button>
-          <button onclick="toggleRTStatus(${t.id})" title="${isActive ? 'Set Inactive' : 'Set Active'}"
-            class="w-7 h-7 rounded-lg flex items-center justify-center transition ${isActive ? 'bg-emerald-50 text-emerald-500 hover:bg-orange-50 hover:text-orange-500' : 'bg-gray-100 text-gray-400 hover:bg-emerald-50 hover:text-emerald-500'}">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${isActive ? 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636' : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'}"/></svg>
           </button>
           <button onclick="deleteRT(${t.id})" title="Delete"
             class="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-400 transition">
@@ -736,143 +888,61 @@ function renderRTemplates() {
           </button>
         </div>
       </div>
-      ${t.description ? `<p class="text-xs text-gray-500 mb-3 leading-relaxed line-clamp-2">${t.description}</p>` : ''}
+
       <div class="flex flex-wrap gap-1.5 mb-3">
-        ${cols.map(c => `<span class="text-[10px] px-2 py-1 rounded-lg bg-gray-100 text-gray-600 font-medium">${c}</span>`).join('')}
-        ${t.showTotal ? `<span class="text-[10px] px-2 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-semibold">∑ Grand Total</span>` : ''}
+        ${cols.map(c => `
+          <span class="text-[10px] px-2 py-1 rounded-lg bg-gray-100 text-gray-600 font-medium border border-gray-200/50">
+            ${c.test} ${c.range ? `<span class="text-indigo-500 ml-1 opacity-70">[${c.range}]</span>` : ''}
+          </span>
+        `).join('')}
       </div>
+
       <div class="flex items-center justify-between pt-3 border-t border-gray-50">
         <div class="flex items-center gap-2">
-          <span class="text-[10px] text-gray-400">${cols.length} columns</span>
+          <span class="text-[10px] text-gray-400">${cols.length} fields</span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}">${isActive ? 'Active' : 'Inactive'}</span>
         </div>
-        ${t.price ? `<p class="text-sm font-bold text-emerald-600">₹${Number(t.price).toLocaleString('en-IN')}</p>` : ''}
+        <p class="text-sm font-bold text-emerald-600">
+          ${t.price > 0 ? '₹' + Number(t.price).toLocaleString('en-IN') : 'Free'}
+        </p>
       </div>
     </div>`;
     }).join('');
 }
 
-// ── RT Modal ──────────────────────────────────────────────────────────────────
-function openRTModal(id) {
-    editRTId = id || null;
-    rtCols = [];
-
-    if (editRTId) {
-        const t = rtemplates.find(x => x.id === editRTId);
-        if (!t) return;
-        document.getElementById('rt_title').value = t.title || '';
-        document.getElementById('rt_desc').value = t.description || '';
-        document.getElementById('rt_price').value = t.price || '';
-        document.getElementById('rt_category').value = t.category || 'Blood Test';
-        document.getElementById('rt_total').checked = t.showTotal !== false;
-        document.getElementById('rtModalTitle').textContent = 'Edit Report Template';
-        document.getElementById('rtSaveLabel').textContent = 'Save Changes';
-        const cols = ((t.columns || '') + '').split(',').map(c => c.trim()).filter(Boolean);
-        rtCols = cols.map((v, i) => ({ uid: Date.now() + i, value: v }));
-    } else {
-        document.getElementById('rt_title').value = '';
-        document.getElementById('rt_desc').value = '';
-        document.getElementById('rt_price').value = '';
-        document.getElementById('rt_category').value = 'Blood Test';
-        document.getElementById('rt_total').checked = true;
-        document.getElementById('rtModalTitle').textContent = 'Create Report Template';
-        document.getElementById('rtSaveLabel').textContent = 'Save Template';
-    }
-    renderRTCols();
-    document.getElementById('rtModal').classList.remove('hidden');
-}
-
-function openRTWithPreset(type) {
-    openRTModal(null);
-    const presets = {
-        lab: { category: 'Blood Test', cols: ['Test Name', 'Value', 'Reference Range', 'Unit', 'Status/Flag'] },
-        radiology: { category: 'Radiology', cols: ['Region', 'Findings', 'Impression', 'Radiologist'] },
-        prescription: { category: 'Prescription', cols: ['Medicine Name', 'Dosage', 'Frequency', 'Duration', 'Instructions'] },
-        blank: { category: 'Custom', cols: ['Column 1', 'Column 2'] }
-    };
-    const p = presets[type] || presets.blank;
-    document.getElementById('rt_category').value = p.category;
-    rtCols = p.cols.map((v, i) => ({ uid: Date.now() + i, value: v }));
-    renderRTCols();
-}
-
-function closeRTModal() { document.getElementById('rtModal').classList.add('hidden'); }
-
-// ── Column editor ─────────────────────────────────────────────────────────────
-function addRTColumn() {
-    rtCols.push({ uid: Date.now() + Math.random(), value: '' });
-    renderRTCols();
-    // focus the new input
-    const inputs = document.querySelectorAll('.rt-col-input');
-    if (inputs.length) inputs[inputs.length - 1].focus();
-}
-function removeRTCol(uid) {
-    rtCols = rtCols.filter(c => c.uid !== uid);
-    renderRTCols();
-}
-function updateRTCol(uid, val) {
-    const c = rtCols.find(x => x.uid === uid);
-    if (c) c.value = val;
-}
-function renderRTCols() {
-    const cont = document.getElementById('rtColumnsContainer');
-    if (!rtCols.length) {
-        cont.innerHTML = `
-      <div class="text-center py-6 border-2 border-dashed border-gray-200 rounded-2xl">
-        <p class="text-xs text-gray-400 mb-2">No columns yet</p>
-        <button type="button" onclick="addRTColumn()" class="text-xs text-indigo-600 font-semibold hover:underline">+ Add your first column</button>
-      </div>`;
+function deleteRT(id) {
+    // 1. Ask for confirmation to prevent accidental clicks
+    if (!confirm('Are you sure you want to delete this report template? This action cannot be undone.')) {
         return;
     }
-    cont.innerHTML = rtCols.map((c, i) => `
-    <div class="flex items-center gap-2">
-      <div class="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center text-xs text-indigo-600 font-bold flex-shrink-0">${i + 1}</div>
-      <input type="text" value="${c.value.replace(/"/g, '&quot;')}"
-        placeholder="Column name (e.g. Test Name, Value, Reference Range)"
-        oninput="updateRTCol(${c.uid}, this.value)"
-        class="rt-col-input flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50">
-      <button onclick="removeRTCol(${c.uid})"
-        class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-100 flex-shrink-0">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>`).join('');
-}
 
-// ── Save RT ───────────────────────────────────────────────────────────────────
-function saveRTTemplate() {
-    const title = document.getElementById('rt_title').value.trim();
-    if (!title) { showToast('Please enter a template title', 'error'); return; }
-
-    const cols = rtCols.map(c => c.value.trim()).filter(Boolean);
-    if (!cols.length) { showToast('Please add at least one column', 'error'); return; }
-
-    const payload = {
-        title,
-        category: document.getElementById('rt_category').value,
-        description: document.getElementById('rt_desc').value.trim(),
-        columns: cols.join(','),          // stored as comma-delimited string
-        price: parseFloat(document.getElementById('rt_price').value) || 0,
-        showTotal: document.getElementById('rt_total').checked,
-        status: 'active'
-    };
-
-    const isEdit = editRTId !== null;
-    api(isEdit ? `${API.rtemplates}/${editRTId}` : API.rtemplates, isEdit ? 'PUT' : 'POST', payload)
-        .then(() => { showToast(isEdit ? 'Template updated!' : 'Report template created!', 'success'); closeRTModal(); loadRTemplates(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-
-function toggleRTStatus(id) {
-    api(`${API.rtemplates}/${id}/toggle-status`, 'PATCH')
-        .then(() => { showToast('Status updated', 'success'); loadRTemplates(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
-}
-function deleteRT(id) {
-    if (!confirm('Delete this report template?')) return;
+    // 2. Call the backend API
+    // Assumes API.rtemplates is your endpoint (e.g., '/api/catalog/report-templates')
     api(`${API.rtemplates}/${id}`, 'DELETE')
-        .then(() => { showToast('Template deleted', 'success'); loadRTemplates(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
+        .then(() => {
+            // 3. Show success notification
+            showToast('Template deleted successfully', 'success');
+
+            // 4. Refresh the local list and UI
+            loadRTemplates();
+        })
+        .catch(err => {
+            // 5. Handle errors (e.g., template in use, network issues)
+            console.error('Delete error:', err);
+            showToast('Failed to delete template: ' + err.message, 'error');
+        });
 }
+
+
+
+
+
+
+
+
+
+
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SUMMARY (header badges from server)

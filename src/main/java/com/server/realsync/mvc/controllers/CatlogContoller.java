@@ -18,6 +18,9 @@ import com.server.realsync.services.CatalogTemplateService;
 import com.server.realsync.services.SettingsPlanService;
 import com.server.realsync.util.SecurityUtil;
 
+//used for report templates
+
+
 @RestController
 @RequestMapping("/api/catalog")
 public class CatlogContoller {
@@ -33,6 +36,8 @@ public class CatlogContoller {
 
     @Autowired
     private CatalogRTemplateService rTemplateService;
+
+    
 
     // GET /api/catalog/plans
     @GetMapping("/plans")
@@ -220,6 +225,24 @@ public class CatlogContoller {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/rtemplates/{id}")
+    public ResponseEntity<?> getRTemplateById(@PathVariable Integer id) {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return rTemplateService.getById(id, account.getId())
+                .map(template -> {
+
+                    Map<String, Object> response = Map.of(
+                            "id", template.getId(),
+                            "title", template.getTitle(),
+                            "columns", template.getParsedColumns());
+
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // DELETE
     @DeleteMapping("/rtemplates/{id}")
     public ResponseEntity<Void> deleteRTemplate(@PathVariable Integer id) {
@@ -256,4 +279,6 @@ public class CatlogContoller {
                 "activeProducts", productService.countActiveByAccountId(accId),
                 "activeTemplates", templateService.countActiveByAccountId(accId)));
     }
+
+
 }

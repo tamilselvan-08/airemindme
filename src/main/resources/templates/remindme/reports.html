@@ -306,7 +306,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <select id="custFilter" onchange="onFilter()"
+            <select id="custFilter" onchange="applyFilters()"
               class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
               <option value="">All Patients</option>
             </select>
@@ -475,60 +475,56 @@
           </svg></button>
       </div>
       <div class="px-5 pb-6 space-y-4">
-        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Patient <span
-              class="text-red-400">*</span></label>
-          <div class="relative"><select id="rCustomer"
-              class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+
+        <!-- Patient -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-1.5 block">
+            Patient <span class="text-red-400">*</span>
+          </label>
+
+          <div class="relative">
+            <select id="rCustomer"
+              class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500">
               <option value="">Select patient...</option>
-              <option>Rajesh Kumar</option>
-              <option>Anjali Singh</option>
-              <option>Mohammed Ibrahim</option>
-              <option>Sunita Patel</option>
-              <option>Vikram Nair</option>
-              <option>Priya Mehta</option>
-              <option>Amit Gupta</option>
-              <option>Kiran Bose</option>
-              <option>Deepa Krishnan</option>
-              <option>Suresh Reddy</option>
-            </select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-              fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg></div>
-        </div>
-        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Test Type <span
-              class="text-red-400">*</span></label>
-          <div class="relative"><input type="text" id="mTestInput" placeholder="Search 265+ tests..."
-              oninput="filterModalTests()" onfocus="showModalDrop()" onblur="setTimeout(hideModalDrop,200)"
-              class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <div id="mTestDrop"
-              class="hidden absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-2xl shadow-xl mt-1 max-h-52 overflow-y-auto">
-              <div id="mTestDropInner"></div>
-            </div>
-          </div><input type="hidden" id="mTestId">
-          <div id="mTestInfo"
-            class="hidden mt-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between gap-2">
-            <div>
-              <p id="mTestName" class="text-xs font-bold text-gray-800"></p>
-              <p id="mTestSpec" class="text-[10px] text-gray-500 mt-0.5"></p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p id="mTestMrp" class="text-sm font-bold text-emerald-700"></p>
-              <p id="mTestTat" class="text-[10px] text-gray-400"></p>
-            </div>
+            </select>
           </div>
         </div>
-        <div><label class="text-sm font-medium text-gray-700 mb-1.5 block">Result / Findings</label><textarea
-            id="rResult" rows="2" placeholder="Enter test results..."
-            class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+
+        <!-- Template -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-1.5 block">
+            Report Template <span class="text-red-400">*</span>
+          </label>
+
+          <div class="relative">
+            <select id="rTemplate"
+              class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500">
+              <option value="">Select report...</option>
+            </select>
+          </div>
         </div>
-        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl"><input type="checkbox" id="rPaid"
-            class="rounded w-4 h-4"><label for="rPaid" class="text-sm font-medium text-gray-700 cursor-pointer">Invoice
-            Paid</label></div>
-        <div class="flex gap-3"><button onclick="saveReport('Draft')"
-            class="flex-1 py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-semibold text-sm hover:bg-indigo-50">Save
-            Draft</button><button onclick="saveReport('Completed')"
-            class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700">Mark
-            Complete</button></div>
+
+        <!-- Paid -->
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl">
+          <input type="checkbox" id="rPaid" class="rounded w-4 h-4">
+          <label for="rPaid" class="text-sm font-medium text-gray-700 cursor-pointer">
+            Invoice Paid
+          </label>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+          <button onclick="goToReportPage('Draft')"
+            class="flex-1 py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-semibold text-sm hover:bg-indigo-50">
+            Save Draft
+          </button>
+
+          <button onclick="goToReportPage('Completed')"
+            class="flex-1 py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700">
+            Continue
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -634,349 +630,535 @@
     </svg>
     <p id="toastMsg" class="text-sm font-medium">Done!</p>
   </div>
-
   <script>
-    // ══════════ LAB TESTS (265 tests compact) ══════════
-    const LAB_TESTS = [
-      [1, "17 OH Progesterone", 1200, 550, "Serum", "1 Day"], [2, "24 Hrs Urine Chloride", 120, 110, "24Hr Urine", "2 Hrs"], [3, "24 Hrs Urine Creatinine", 200, 150, "24Hr Urine", "2 Hrs"], [4, "24 Hrs Urine Protein", 175, 175, "24Hr Urine", "2 Hrs"], [5, "24 Hrs Urine Uric Acid", 150, 125, "24Hr Urine", "2 Hrs"], [6, "Absolute Eosinophil Count", 180, 100, "EDTA Blood", "2 Hrs"], [7, "Acid Phosphatase (Total)", 480, 150, "Serum", "2 Hrs"], [8, "Activated Partial Thromboplastin Time (APTT)", 300, 150, "Citrate Plasma", "2 Hrs"], [9, "Adenosine Deaminase (ADA)", 780, 500, "Serum/Fluid", "4 Hrs"], [10, "AFB Culture", 600, 350, "Specimen", "42 Days"], [11, "AFB Smear Study", 150, 100, "Specimen", "4 Hrs"], [12, "Albumin", 80, 60, "Serum", "1 Day"], [13, "Alkaline Phosphatase (ALP)", 120, 90, "Serum", "2 Hrs"], [14, "Alpha Feto Protein (AFP)", 600, 250, "Serum", "6 Hrs"], [15, "ALT / SGPT", 120, 50, "Serum", "4 Hrs"], [16, "Ammonia", 550, 400, "EDTA Plasma", "4 Hrs"], [17, "Amylase", 400, 150, "Serum", "2 Hrs"], [18, "Anti Cardiolipin IgG Ab", 800, 500, "Serum", "2 Days"], [19, "Anti CMV IgG Ab", 600, 300, "Serum", "1 Day"], [20, "Anti CMV IgM Ab", 600, 300, "Serum", "1 Day"], [21, "Anti Cyclic Citrullinated Peptides (ACCP)", 1200, 600, "Serum", "4 Hrs"], [22, "Anti Dengue IgM Ab", 900, 500, "Serum", "1 Day"], [23, "Anti ds DNA Ab", 650, 400, "Serum", "2 Days"], [24, "Anti HAV Ab Total", 750, 400, "Serum", "1 Day"], [25, "Anti HAV IgM Ab", 720, 400, "Serum", "6 Hrs"], [26, "Anti HBc Ab Total", 720, 450, "Serum", "1 Day"], [27, "Anti HBe", 720, 450, "Serum", "1 Day"], [28, "Anti HBs", 720, 450, "Serum", "1 Day"], [29, "Anti HCV Ab - CLIA", 720, 450, "Serum", "6 Hrs"], [30, "Anti Herpes Simplex Virus IgG Ab", 750, 450, "Serum", "1 Day"], [31, "Anti Herpes Simplex Virus IgM Ab", 750, 450, "Serum", "1 Day"], [32, "Anti HEV IgM Ab", 600, 500, "Serum", "1 Day"], [33, "Anti Mitochondrial (AMA) Ab", 1200, 900, "Serum", "3 Days"], [34, "Anti Mullerian Hormone (AMH)", 1800, 900, "Serum", "6 Hrs"], [35, "Anti Nuclear Abs Profile", 3000, 2200, "Serum", "1 Day"], [36, "Anti Nuclear Antibody (ANA)", 700, 450, "Serum", "1 Day"], [37, "Anti TPO Ab", 800, 500, "Serum", "6 Hrs"], [38, "Anti Toxoplasma IgG Ab", 700, 500, "Serum", "1 Day"], [39, "Anti TTG IgA Ab", 1600, 1200, "Serum", "3 Days"], [40, "Anti Varicella Zoster IgG Ab", 1500, 1100, "Serum", "2 Days"], [41, "AST / SGOT", 120, 50, "Serum", "2 Hrs"], [42, "Bacterial Culture & Sensitivity", 450, 180, "Specimen", "2 Days"], [43, "Beta 2 Microglobulin", 1650, 1400, "Serum", "1 Day"], [44, "Bilirubin", 180, 50, "Serum", "2 Hrs"], [45, "Biopsy - Large Specimen", 1020, 800, "Formalin", "4 Days"], [46, "Biopsy - Small Specimen", 480, 300, "Formalin", "4 Days"], [47, "Blood C/S RAPID Aerobic", 1100, 750, "Bactalert", "5 Days"], [48, "Blood Urea Nitrogen (BUN)", 110, 50, "Serum", "2 Hrs"], [49, "Body Fluid Analysis", 600, 180, "Body Fluid", "4 Hrs"], [50, "C Peptide (F)", 1000, 500, "Serum", "1 Day"], [51, "CA 125", 900, 400, "Serum", "4 Hrs"], [52, "CA 15-3", 900, 550, "Serum", "1 Day"], [53, "CA 19.9", 900, 400, "Serum", "4 Hrs"], [54, "Calcium", 180, 50, "Serum", "2 Hrs"], [55, "Carcino Embryonic Antigen (CEA)", 600, 300, "Serum", "4 Hrs"], [56, "CD 4", 1400, 1000, "EDTA Blood", "4 Days"], [57, "CD 4 & CD 8 Count", 2500, 2000, "EDTA Blood", "1 Day"], [58, "Ceruloplasmin", 900, 550, "Serum", "1 Day"], [59, "Chloride (Cl)", 120, 100, "Serum", "1 Hrs"], [60, "Cholesterol", 110, 55, "Serum", "2 Hrs"], [61, "Coagulation Profile", 1600, 1000, "Citrate Plasma", "1 Day"], [62, "Complement 3 (C3)", 600, 350, "Serum", "1 Day"], [63, "Complement 4 (C4)", 600, 350, "Serum", "1 Day"], [64, "Complete Blood Count (CBC)", 250, 100, "EDTA Blood", "30 mins"], [65, "Copper", 720, 500, "Serum", "1 Day"], [66, "Cortisol", 500, 350, "Serum", "4 Hrs"], [67, "CPK - MB", 480, 250, "Serum", "1 Day"], [68, "CPK / CK", 480, 200, "Serum", "4 Hrs"], [69, "C-Reactive Protein (CRP) Quantitative", 450, 150, "Serum", "2 Hrs"], [70, "HSCRP", 600, 450, "Serum", "6 Hrs"], [71, "Creatinine", 120, 50, "Serum", "2 Hrs"], [72, "CSF Analysis", 600, 225, "CSF", "2 Hrs"], [73, "D-Dimer (Quantitative)", 750, 600, "Citrate Plasma", "4 Hrs"], [74, "Direct Coombs Test (DCT)", 500, 350, "EDTA Blood", "1 Day"], [75, "Electrolytes (K, Cl, Na, HC03)", 450, 150, "Serum", "2 Hrs"], [76, "Erythrocyte Sedimentation Rate (ESR)", 100, 30, "EDTA Blood", "2 Hrs"], [77, "Estradiol", 480, 250, "Serum", "4 Hrs"], [78, "Factor IX Assay", 1920, 1500, "Citrate Plasma", "1 Day"], [79, "Factor VIII Assay", 2500, 1450, "Citrate Plasma", "2 Days"], [80, "Ferritin", 600, 300, "Serum", "4 Hrs"], [81, "Fibrinogen", 900, 720, "Citrate Plasma", "4 Hrs"], [82, "Folate (Folic Acid)", 780, 300, "Serum", "4 Hrs"], [83, "Free T3 (FT3)", 180, 70, "Serum", "4 Hrs"], [84, "Free T3, Free T4, TSH", 500, 140, "Serum", "4 Hrs"], [85, "Free T4 (FT4)", 180, 70, "Serum", "4 Hrs"], [86, "FSH", 300, 100, "Serum", "4 Hrs"], [87, "G6PD Activity", 800, 600, "Hep. Blood", "1 Day"], [88, "Gamma GT (GGT)", 120, 60, "Serum", "4 Hrs"], [89, "eGFR", 120, 100, "Serum", "2 Hrs"], [90, "Glucose (F)", 60, 30, "Fl.Plasma", "1 Hrs"], [91, "Glucose (PP)", 60, 30, "Fl.Plasma", "1 Hrs"], [92, "Glucose (R)", 60, 30, "Fl.Plasma", "1 Hrs"], [93, "Glucose Tolerance Test GTT", 480, 250, "Fl.Plasma", "3 Hrs"], [94, "Grouping & Rh Typing", 100, 50, "EDTA Blood", "1 Hrs"], [95, "Growth Hormone", 900, 450, "Serum", "1 Day"], [96, "Haptoglobin", 1500, 1300, "Serum", "1 Day"], [97, "HBA1c", 500, 175, "EDTA Blood", "2 Hrs"], [98, "HBsAg - CLIA", 350, 200, "Serum", "4 Hrs"], [99, "HBV PCR (Qualitative)", 2500, 2300, "EDTA Blood", "2 Days"], [100, "HBV PCR (Quantitative)", 5200, 3800, "EDTA Blood", "2 Days"], [101, "HCV (Elisa)", 1000, 550, "Serum", "1 Day"], [102, "HCV PCR (Quantitative)", 5200, 3800, "EDTA Blood", "3 Days"], [103, "HDL Cholesterol", 150, 90, "Serum", "2 Hrs"], [104, "Heavy Metal Poisoning", 6500, 6000, "EDTA Blood", "3 Days"], [105, "Hematocrit (PCV)", 60, 50, "EDTA Blood", "1 Hrs"], [106, "Hemoglobin (HB)", 100, 50, "EDTA Blood", "1 Hrs"], [107, "Hemoglobin Electrophoresis", 1500, 1000, "EDTA Blood", "3 Days"], [108, "HIV - CLIA", 500, 300, "Serum", "4 Hrs"], [109, "HIV - ELISA", 900, 500, "Serum", "1 Day"], [110, "HIV:1 PCR (Quantitative)", 4800, 3500, "EDTA Blood", "2 Days"], [111, "HLA B 27", 2400, 1900, "EDTA Blood", "3 Days"], [112, "Homocysteine", 1200, 720, "Serum", "12 Hrs"], [113, "HPV DNA PCR (Qualitative)", 4800, 3500, "Cervical Swab", "2 Days"], [114, "Immunoglobulin A (IGA)", 450, 350, "Serum", "1 Day"], [115, "Immunoglobulin E (IgE)", 550, 250, "Serum", "4 Hrs"], [116, "Immunoglobulin G (IGG)", 550, 350, "Serum", "1 Day"], [117, "Insulin (F)", 700, 300, "Serum", "4 Hrs"], [118, "Interleukin-6", 3000, 2700, "Serum", "3 Days"], [119, "Iron", 300, 100, "Serum", "2 Hrs"], [120, "Iron Profile", 2000, 900, "Serum", "1 Day"], [121, "Lactate", 1000, 650, "Fl.Plasma", "1 Day"], [122, "LDH", 300, 130, "Serum", "2 Hrs"], [123, "LDL Cholesterol", 180, 120, "Serum", "2 Hrs"], [124, "Leptospirosis IgG/IgM Ab", 600, 400, "Serum", "4 Hrs"], [125, "LH", 240, 110, "Serum", "4 Hrs"], [126, "Lipase", 360, 200, "Serum", "4 Hrs"], [127, "Lipid Profile", 550, 200, "Serum", "4 Hrs"], [128, "Lithium", 800, 550, "Serum", "1 Day"], [129, "Liver Function Test", 600, 200, "Serum", "4 Hrs"], [130, "Lupus Anticoagulant", 550, 500, "Citrate Plasma", "6 Hrs"], [131, "Magnesium", 300, 150, "Serum", "2 Hrs"], [132, "Malarial Parasite (MP) Smear Study", 150, 90, "EDTA Blood", "4 Hrs"], [133, "Motion Routine", 120, 50, "Stool Sample", "2 Hrs"], [134, "MTB-CBNAAT", 3000, 2500, "Sputum", "2 Days"], [135, "NT_proBNP", 2400, 1300, "Serum", "6 Hrs"], [136, "Osmolality", 420, 230, "Serum", "4 Hrs"], [137, "PAP SMEAR", 350, 150, "Fluid", "1 Day"], [138, "PAP SMEAR (LBC)", 600, 450, "LBC", "2 Days"], [139, "Parathyroid Hormone (PTH)", 900, 450, "EDTA Plasma", "6 Hrs"], [140, "Peripheral Smear", 250, 100, "EDTA Blood", "1 Day"], [141, "Phosphorous", 120, 45, "Serum", "4 Hrs"], [142, "Platelet Count", 120, 100, "EDTA Blood", "2 Hrs"], [143, "Potassium (K)", 150, 100, "Serum", "2 Hrs"], [144, "Prenatal Screening First Trimester", 1650, 900, "Serum", "2 Days"], [145, "Procalcitonin (PcT)", 1500, 1000, "Serum", "4 Hrs"], [146, "Progesterone", 500, 250, "Serum", "4 Hrs"], [147, "Prolactin", 240, 130, "Serum", "4 Hrs"], [148, "Total PSA", 500, 250, "Serum", "4 Hrs"], [149, "Free PSA", 600, 450, "Serum", "6 Hrs"], [150, "Protein C", 1400, 1000, "Citrate Plasma", "2 Days"], [151, "Protein Electrophoresis", 780, 450, "Serum", "2 Days"], [152, "Protein S", 1400, 1000, "Citrate Plasma", "2 Days"], [153, "Prothrombin Time", 200, 100, "Citrate Plasma", "2 Hrs"], [154, "Pus for Culture & Sensitivity", 450, 180, "Sterile Container", "3 Days"], [155, "RA Factor (Quantitative)", 450, 150, "Serum", "4 Hrs"], [156, "Random Urine Albumin Creatinine Ratio (ACR)", 450, 300, "Urine", "1 Day"], [157, "RBC Folate", 1500, 1350, "EDTA Blood", "4 Hrs"], [158, "Renal Stone Analysis", 360, 200, "Stone", "1 Day"], [159, "Renin Activity (PRA)", 3450, 3050, "EDTA Blood", "3 Days"], [160, "Reticulocyte Count", 150, 70, "EDTA Blood", "1 Day"], [161, "RFT (Urea, Creatinine, Uric Acid)", 380, 150, "Serum", "2 Hrs"], [162, "Scrub Typhus IgG & IgM Ab", 600, 350, "Serum", "4 Hrs"], [163, "Semen Analysis", 500, 250, "Semen", "6 Hrs"], [164, "Sodium (NA)", 150, 100, "Serum", "2 Hrs"], [165, "Sputum Culture & Sensitivity", 600, 250, "Sterile Container", "3 Days"], [166, "Stool Occult Blood", 120, 50, "Stool", "2 Hrs"], [167, "TB (PCR)", 2400, 2000, "Clinical Fluid", "2 Days"], [168, "TB QUANTIFERON", 3000, 2500, "Hep. Blood", "3 Days"], [169, "Testosterone (Total)", 600, 275, "Serum", "4 Hrs"], [170, "Thyroid Function Test (TFT)", 400, 90, "Serum", "4 Hrs"], [171, "Thyroglobulin (TG)", 1200, 720, "Serum", "1 Day"], [172, "ToRCH IgG", 1500, 900, "Serum", "1 Day"], [173, "ToRCH IgM", 1500, 900, "Serum", "1 Day"], [174, "Total Iron Binding Capacity (TIBC)", 420, 250, "Serum", "6 Hrs"], [175, "Total Protein & Albumin", 180, 50, "Serum", "2 Hrs"], [176, "Total T3", 120, 50, "Serum", "4 Hrs"], [177, "Total T3, T4, TSH, Free T3, FT4", 900, 250, "Serum", "4 Hrs"], [178, "Total T4", 120, 50, "Serum", "4 Hrs"], [179, "Total β-hCG (BHCG)", 500, 250, "Serum", "4 Hrs"], [180, "Transferrin", 900, 750, "Serum", "1 Day"], [181, "Triglycerides", 110, 55, "Serum", "2 Hrs"], [182, "Trop I (Quantitative)", 900, 400, "Serum", "4 Hrs"], [183, "Trop T (Qualitative)", 900, 550, "EDTA Blood", "4 Hrs"], [184, "TSH", 120, 50, "Serum", "4 Hrs"], [185, "Urea", 120, 50, "Serum", "2 Hrs"], [186, "Uric Acid", 140, 55, "Serum", "2 Hrs"], [187, "Urine Complete Analysis", 120, 50, "Urine", "2 Hrs"], [188, "Urine Culture & Sensitivity", 450, 150, "Sterile Container", "3 Days"], [189, "Urine Pregnancy Test (BHCG)", 125, 80, "Urine", "1 Hrs"], [190, "Urine Routine Examination", 120, 35, "Urine", "2 Hrs"], [191, "Urine Sugar (F)", 50, 30, "Urine", "30 mins"], [192, "VDRL (Qualitative)", 180, 90, "Serum", "4 Hrs"], [193, "VDRL (Quantitative)", 480, 300, "Serum", "4 Hrs"], [194, "Vitamin B12", 720, 350, "Serum", "4 Hrs"], [195, "Vitamin D Total (25 OH)", 900, 450, "Serum", "4 Hrs"], [196, "Vitamin D3", 2500, 2000, "Serum", "4 Days"], [197, "Widal Test", 200, 90, "Serum", "1 Day"], [198, "Zinc", 600, 300, "Serum", "1 Day"], [199, "Dengue NS1 Antigen", 900, 500, "Serum", "1 Day"], [200, "Grams Stain", 120, 75, "Specimen", "4 Hrs"], [201, "Glucose Challenge Test (GCT)", 100, 70, "Fl.Plasma", "1 Hrs"], [202, "FNAC (Done in Lab)", 600, 250, "NA", "2 Days"], [203, "Semen Fructose Test", 360, 200, "Semen", "2 Hrs"], [204, "Anti Streptolysin O (ASO) - Quantitative", 600, 200, "Serum", "4 Hrs"], [205, "HIV Westernblot", 2800, 2500, "Serum", "3 Days"], [206, "Testosterone (Free)", 720, 400, "Serum", "2 Days"], [207, "Cortisol (8 am)", 500, 350, "Serum", "4 Hrs"], [208, "Cortisol (4 pm)", 500, 350, "Serum", "4 Hrs"], [209, "Insulin (PP)", 700, 300, "Serum", "4 Hrs"], [210, "CD 8", 1400, 1000, "EDTA Blood", "4 Days"], [211, "Immunoglobulin M (IGM)", 450, 350, "Serum", "1 Day"], [212, "Indirect Coombs Test (ICT)", 500, 300, "Serum", "1 Day"], [213, "LE Cells", 300, 150, "Serum", "1 Day"], [214, "Lipase", 360, 200, "Serum", "4 Hrs"], [215, "Lipoprotein (a)", 1000, 650, "Serum", "1 Day"], [216, "Anti Sm (Smith) Ab", 2000, 1800, "Serum", "2 Days"], [217, "Anti Smooth Muscle (ASMA) Ab", 2200, 2000, "Serum", "2 Days"], [218, "Stool Hanging Drop", 150, 100, "Stool", "4 Hrs"], [219, "Sickling Test", 360, 200, "EDTA Blood", "2 Days"], [220, "Fungal Culture & Sensitivity", 450, 300, "Sterile Container", "21 Days"], [221, "Bleeding Time (BT)", 100, 30, "Support", "1 Hrs"], [222, "Clotting Time (CT)", 100, 50, "Support", "1 Hrs"], [223, "Bone Marrow Study", 2000, 1500, "Bone Marrow", "2 Days"], [224, "Cryptococcus Stain (India ink CSF)", 200, 150, "Fluid", "1 Day"], [225, "Osmotic Fragility", 900, 600, "Hep. Blood", "1 Day"], [226, "Paul Bunnel Test", 700, 500, "Serum", "1 Day"], [227, "Filariasis IgG & IgM Ab", 700, 600, "Serum", "4 Hrs"], [228, "Anti GAD Ab", 3500, 2500, "Serum", "2 Days"], [229, "Anti GBM Ab", 1900, 1500, "Serum", "3 Days"], [230, "HCV PCR (Qualitative)", 2500, 2300, "EDTA Blood", "3 Days"], [231, "HIV:1 PCR (Qualitative)", 3000, 2200, "EDTA Blood", "2 Days"], [232, "Cholinesterase", 720, 450, "Serum", "2 Hrs"], [233, "C Peptide (PP)", 1000, 500, "Serum", "1 Day"], [234, "Prenatal Screening Second Trimester", 2700, 1300, "Serum", "2 Days"], [235, "Protein Electrophoresis", 780, 450, "Serum", "2 Days"], [236, "Anti Thrombin III", 1500, 1300, "Citrate Plasma", "1 Day"], [237, "Anti HBc IgM Ab", 720, 450, "Serum", "1 Day"], [238, "Beta 2 Glycoprotein IgG Ab", 720, 450, "Serum", "2 Days"], [239, "Ionised Calcium (ISE)", 650, 450, "Serum", "4 Hrs"], [240, "Body Fluid Cytology", 500, 400, "Body Fluid", "4 Hrs"], [241, "Coagulation Profile", 1600, 1000, "Citrate Plasma", "1 Day"], [242, "Factor XIII Activity", 600, 400, "Citrate Plasma", "2 Days"], [243, "Microfilaria (MF) Smear", 120, 120, "EDTA Blood", "2 Hrs"], [244, "Nasal Swab", 400, 200, "Swab", "2 Days"], [245, "Ear Swab", 400, 200, "Swab", "1 Day"], [246, "Conjunctival Swab C/S", 500, 250, "Swab", "2 Days"], [247, "PAP SMEAR (LBC)", 600, 450, "LBC", "2 Days"], [248, "Gall Stone Analysis", 300, 250, "Stone", "1 Day"], [249, "Skin Scrapping", 200, 100, "Sterile Container", "4 Hrs"], [250, "Water Culture", 300, 180, "Sterile Container", "3 Days"], [251, "Weil Felix Test", 480, 90, "Serum", "1 Day"], [252, "Stool Culture", 400, 200, "Sterile Container", "2 Days"], [253, "Stool for Clostridium Difficile", 2500, 2000, "Stool", "1 Day"], [254, "Throat Swab", 400, 250, "Swab", "2 Days"], [255, "Urethral Swab C/S", 400, 200, "Swab", "2 Days"], [256, "Open Plate Culture", 1500, 700, "Blood agar", "78 Hrs"], [257, "AFB Sputum 1&2", 500, 300, "Specimen", "4 Hrs"], [258, "Urine Bence Jones Protein (BJP)", 180, 150, "Urine", "4 Hrs"], [259, "Urine Osmolality", 420, 250, "Urine", "4 Hrs"], [260, "Random Urine Microalbumin", 360, 250, "Urine", "6 Hrs"], [261, "Urine Chyluria", 300, 225, "Urine", "4 Hrs"], [262, "Urine THC", 600, 450, "Urine", "1 Day"], [263, "Urine Cocaine", 600, 450, "Urine", "1 Day"], [264, "Urine Benzodiazepine", 600, 400, "Urine", "4 Hrs"], [265, "Angiotensin Converting Enzyme (ACE)", 900, 650, "Serum", "4 Hrs"]
-    ];
+    /* =============================================================
+     LAB REPORT ENGINE
+     ============================================================= */
 
-    // ══════════ REPORT DATA ══════════
-    const todayStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-    let reports = [
-      { id: 1, customer: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh.kumar@gmail.com', testId: 64, testName: 'Complete Blood Count (CBC)', mrp: 250, paid: true, specimen: 'EDTA Blood', tat: '30 mins', date: '15 Mar 2026', status: 'Shared', result: 'Hb: 14.2 g/dL, WBC: 7500/µL' },
-      { id: 2, customer: 'Anjali Singh', phone: '9123456789', email: 'anjali.singh@gmail.com', testId: 190, testName: 'Urine Routine Examination', mrp: 120, paid: true, specimen: 'Urine', tat: '2 Hrs', date: '14 Mar 2026', status: 'Completed', result: 'Clear, pH 6.5, Protein: Negative' },
-      { id: 3, customer: 'Mohammed Ibrahim', phone: '9988776655', email: 'ibrahim@gmail.com', testId: 170, testName: 'Thyroid Function Test (TFT)', mrp: 400, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '13 Mar 2026', status: 'Shared', result: 'TSH: 2.4 µIU/mL — Normal' },
-      { id: 4, customer: 'Sunita Patel', phone: '9871234560', email: 'sunita.patel@gmail.com', testId: 127, testName: 'Lipid Profile', mrp: 550, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '12 Mar 2026', status: 'Draft', result: '' },
-      { id: 5, customer: 'Vikram Nair', phone: '9765432100', email: 'vikram.nair@gmail.com', testId: 129, testName: 'Liver Function Test', mrp: 600, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '11 Mar 2026', status: 'Completed', result: 'Total Bilirubin: 0.8, AST: 32 U/L' },
-      { id: 6, customer: 'Priya Mehta', phone: '9654321098', email: 'priya.mehta@gmail.com', testId: 184, testName: 'TSH', mrp: 120, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '10 Mar 2026', status: 'Shared', result: 'TSH: 4.8 µIU/mL — Borderline High' },
-      { id: 7, customer: 'Amit Gupta', phone: '9543210987', email: 'amit.gupta@gmail.com', testId: 97, testName: 'HBA1c', mrp: 500, paid: true, specimen: 'EDTA Blood', tat: '2 Hrs', date: '09 Mar 2026', status: 'Completed', result: 'HbA1c: 7.2%' },
-      { id: 8, customer: 'Kiran Bose', phone: '9432109876', email: 'kiran.bose@gmail.com', testId: 80, testName: 'Ferritin', mrp: 600, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '08 Mar 2026', status: 'Draft', result: '' },
-      { id: 9, customer: 'Deepa Krishnan', phone: '9321098765', email: 'deepa.k@gmail.com', testId: 194, testName: 'Vitamin B12', mrp: 720, paid: true, specimen: 'Serum', tat: '4 Hrs', date: '07 Mar 2026', status: 'Completed', result: 'B12: 312 pg/mL' },
-      { id: 10, customer: 'Suresh Reddy', phone: '9210987654', email: 'suresh.r@gmail.com', testId: 73, testName: 'D-Dimer (Quantitative)', mrp: 750, paid: true, specimen: 'Citrate Plasma', tat: '4 Hrs', date: '06 Mar 2026', status: 'Completed', result: 'D-Dimer: 0.42 µg/mL FEU' },
-      { id: 11, customer: 'Rajesh Kumar', phone: '9876543210', email: 'rajesh.kumar@gmail.com', testId: 127, testName: 'Lipid Profile', mrp: 550, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '05 Mar 2026', status: 'Draft', result: '' },
-      { id: 12, customer: 'Anjali Singh', phone: '9123456789', email: 'anjali.singh@gmail.com', testId: 184, testName: 'TSH', mrp: 120, paid: false, specimen: 'Serum', tat: '4 Hrs', date: '04 Mar 2026', status: 'Completed', result: 'TSH: 1.8 µIU/mL — Normal' }
-    ];
+    /* ─────────────────────────────────────────────
+       STATE
+    ───────────────────────────────────────────── */
+    let reports = [];
+    let selectedIds = new Set();
+    let activeTab = 'dashboard';
+    let statusFilter = 'all';
+    let searchFilter = '';
+    let phoneFilter = '';
+    let currentPage = 1;
 
-    // ══════════ STATE ══════════
-    let activeTab = 'dashboard', statusFilter = 'all', custFilter = '', phoneFilter = '', searchFilter = '';
-    let selectedIds = new Set(), page = 1, viewMode = 'list', sendChannel = 'wa';
-    const PER_PAGE = 8;
-    const statusColors = { Draft: 'bg-orange-100 text-orange-700', Completed: 'bg-emerald-100 text-emerald-700', Shared: 'bg-blue-100 text-blue-700' };
+    const PER_PAGE = 5;
 
-    // ══════════ SIDEBAR TOGGLE ══════════
-    function toggleSub(id) {
-      const sub = document.getElementById('sub-' + id);
-      const ch = document.getElementById('ch-' + id);
-      if (!sub) return;
-      const hidden = sub.classList.contains('hidden');
-      sub.classList.toggle('hidden', !hidden);
-      if (ch) ch.style.transform = hidden ? 'rotate(180deg)' : '';
+
+    /* =============================================================
+       API HELPER
+       ============================================================= */
+    async function api(url, method = 'GET', data = null) {
+      const options = {
+        method,
+        headers: { 'Content-Type': 'application/json' }
+      };
+
+      if (data) options.body = JSON.stringify(data);
+
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error(`API Error: ${res.status} ${res.statusText}`);
+
+      return res.json();
     }
 
-    // ══════════ HASH ROUTING ══════════
-    function initFromHash() {
-      const hash = window.location.hash;
-      if (hash === '#generated') switchTab('generated');
-      else switchTab('dashboard');
-      // sidebar sub-menu: force open
-      const ch = document.getElementById('ch-reports');
-      if (ch) ch.style.transform = 'rotate(180deg)';
-      const chM = document.getElementById('ch-mob-reports');
-      if (chM) chM.style.transform = 'rotate(180deg)';
-      // set active subnav
-      const snd = document.getElementById('subnav-dashboard');
-      const sng = document.getElementById('subnav-generated');
-      if (hash === '#generated') {
-        if (snd) snd.classList.remove('active');
-        if (sng) sng.classList.add('active');
-      } else {
-        if (sng) sng.classList.remove('active');
-        if (snd) snd.classList.add('active');
+
+    /* =============================================================
+       INIT — Load all data on page ready
+       ============================================================= */
+    async function init() {
+      try {
+        await loadReports();
+        await loadCustomers();
+        await loadTemplates();
+      } catch (e) {
+        console.error('Init failed:', e);
       }
     }
 
-    // ══════════ TAB SWITCH ══════════
-    function switchTab(t) {
-      activeTab = t;
-      ['dashboard', 'generated'].forEach(x => {
-        const p = document.getElementById('tab-' + x);
-        const b = document.getElementById('mt-' + x);
-        if (!p || !b) return;
-        if (x === t) { p.classList.remove('hidden'); b.classList.add('border-indigo-600', 'text-indigo-600'); b.classList.remove('border-transparent', 'text-gray-500'); }
-        else { p.classList.add('hidden'); b.classList.remove('border-indigo-600', 'text-indigo-600'); b.classList.add('border-transparent', 'text-gray-500'); }
+    document.addEventListener('DOMContentLoaded', init);
+
+
+    /* =============================================================
+       DATA LOADERS
+       ============================================================= */
+
+    /* ── Reports ── */
+    async function loadReports() {
+      try {
+        const [reportsRes, customersRes, templatesRes] = await Promise.all([
+          api('/api/reports'),
+          api('/api/customers/my-customers'),
+          api('/api/catalog/rtemplates')
+        ]);
+
+        console.log('RAW REPORTS:', reportsRes);
+
+        /* ── Transform ── */
+        reports = reportsRes.map(r => {
+          const customer = customersRes.find(c => c.id === r.patientId);
+          const template = templatesRes.find(t => t.id === r.templateId);
+
+          let parsedFields = [];
+          try {
+            parsedFields = JSON.parse(r.fields || '[]');
+          } catch (e) { /* leave empty */ }
+
+          return {
+            id: r.id,
+
+            // Customer
+            customer: customer ? customer.name : `Patient #${r.patientId}`,
+            phone: customer?.mobile || '',
+
+            // Test
+            testName: template
+              ? template.title
+              : (parsedFields[0]?.name || 'Test'),
+
+            // Price
+            mrp: template ? template.price : 0,
+
+            // Status
+            status: r.status,
+            paid: r.status === 'Completed',
+
+            // Date
+            date: new Date(r.createdAt).toLocaleDateString('en-IN')
+          };
+        });
+
+        console.log('MAPPED REPORTS:', reports);
+
+        renderReports();
+        renderDashboard();
+
+      } catch (err) {
+        console.error('loadReports error:', err);
+      }
+    }
+
+    /* ── Customers dropdown ── */
+    async function loadCustomers() {
+      const customers = await api('/api/customers/my-customers');
+      const select = document.getElementById('rCustomer');
+      if (!select) return;
+
+      select.innerHTML = '<option value="">Select patient...</option>';
+      customers.forEach(c => {
+        select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
       });
-      document.getElementById('breadcrumbTab').textContent = t === 'dashboard' ? 'Dashboard' : 'Reports Generated';
-      if (t === 'dashboard') renderDashboard();
-      if (t === 'generated') { buildCustFilter(); renderReports(); }
-      if (t === 'generated') window.history.replaceState(null, '', '#generated');
-      else window.history.replaceState(null, '', '#');
     }
 
-    // ══════════ DASHBOARD ══════════
-    function renderDashboard() {
-      const total = reports.length, paid = reports.filter(r => r.paid).length, unpaid = reports.filter(r => !r.paid).length;
-      const sent = reports.filter(r => r.status === 'Shared').length, inprog = reports.filter(r => r.status === 'Completed').length, draft = reports.filter(r => r.status === 'Draft').length;
-      document.getElementById('d-total').textContent = total; document.getElementById('d-paid').textContent = paid; document.getElementById('d-unpaid').textContent = unpaid;
-      document.getElementById('d-sent').textContent = sent; document.getElementById('d-progress').textContent = inprog;
-      document.getElementById('d2-shared').textContent = sent; document.getElementById('d2-completed').textContent = inprog; document.getElementById('d2-draft').textContent = draft;
-      document.getElementById('genBadge').textContent = total;
-      const totalRev = reports.reduce((s, r) => s + r.mrp, 0), coll = reports.filter(r => r.paid).reduce((s, r) => s + r.mrp, 0);
-      document.getElementById('rev-total').textContent = '₹' + totalRev.toLocaleString('en-IN');
-      document.getElementById('rev-collected').textContent = '₹' + coll.toLocaleString('en-IN');
-      document.getElementById('rev-outstanding').textContent = '₹' + (totalRev - coll).toLocaleString('en-IN');
-      const tc = {}; reports.forEach(r => { tc[r.testName] = (tc[r.testName] || 0) + 1; });
-      const top = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 5), mx = top[0]?.[1] || 1;
-      document.getElementById('topTests').innerHTML = top.map(([n, c]) => `<div><div class="flex justify-between mb-1"><span class="text-xs text-gray-700 truncate flex-1 mr-2">${n}</span><span class="text-xs font-bold">${c}</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="bar-fill h-full bg-indigo-500 rounded-full" style="width:${Math.round(c / mx * 100)}%"></div></div></div>`).join('');
-      document.getElementById('recentReports').innerHTML = reports.slice(0, 5).map(r => `<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-sm flex-shrink-0">🧪</div><div class="flex-1 min-w-0"><p class="text-xs font-bold text-gray-800 truncate">${r.testName}</p><p class="text-[10px] text-gray-400">${r.customer} · ${r.date}</p></div><span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColors[r.status]} flex-shrink-0">${r.status}</span></div>`).join('');
+    /* ── Templates dropdown ── */
+    async function loadTemplates() {
+      const templates = await api('/api/catalog/rtemplates');
+      const select = document.getElementById('rTemplate');
+      if (!select) return;
+
+      select.innerHTML = '<option value="">Select report...</option>';
+      templates.forEach(t => {
+        select.innerHTML += `<option value="${t.id}">${t.title}</option>`;
+      });
     }
 
-    // ══════════ REPORTS GENERATED ══════════
-    function buildCustFilter() {
-      const names = [...new Set(reports.map(r => r.customer))].sort();
-      const sel = document.getElementById('custFilter');
-      sel.innerHTML = '<option value="">All Patients</option>' + names.map(n => `<option value="${n}"${n === custFilter ? ' selected' : ''}>${n}</option>`).join('');
+
+    /* =============================================================
+       FILTERS & PAGINATION
+       ============================================================= */
+    function applyFilters() {
+      searchFilter = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      phoneFilter = (document.getElementById('phoneInput')?.value || '').toLowerCase();
+      currentPage = 1;
+      renderReports();
     }
+
+    function setStatusFilter(status) {
+      statusFilter = status;
+      currentPage = 1;
+      renderReports();
+    }
+
     function getFiltered() {
       return reports.filter(r => {
-        const mS = statusFilter === 'all' || r.status === statusFilter;
-        const mC = !custFilter || r.customer === custFilter;
-        const mP = !phoneFilter || r.phone.includes(phoneFilter);
-        const mQ = !searchFilter || r.testName.toLowerCase().includes(searchFilter) || r.customer.toLowerCase().includes(searchFilter);
-        return mS && mC && mP && mQ;
+        const matchStatus = statusFilter === 'all' || r.status === statusFilter;
+
+        const matchSearch =
+          !searchFilter ||
+          r.testName.toLowerCase().includes(searchFilter) ||
+          r.customer.toLowerCase().includes(searchFilter);
+
+        const matchPhone =
+          !phoneFilter ||
+          (r.phone || '').toLowerCase().includes(phoneFilter);
+
+        return matchStatus && matchSearch && matchPhone;
       });
     }
-    function onFilter() {
-      custFilter = document.getElementById('custFilter').value;
-      phoneFilter = (document.getElementById('phoneInput').value || '').trim();
-      searchFilter = (document.getElementById('searchInput').value || '').toLowerCase();
-      page = 1; renderReports();
-    }
-    function setStatusFilter(f) {
-      statusFilter = f; page = 1;
-      ['all', 'Draft', 'Completed', 'Shared'].forEach(x => { const b = document.getElementById('sf-' + x); b.className = x === f ? 'px-3 py-1.5 rounded-full bg-indigo-600 text-white text-xs font-semibold' : 'px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-semibold hover:border-gray-300'; });
-      renderReports();
-    }
-    function setView(v) {
-      viewMode = v;
-      document.getElementById('vw-list').className = v === 'list' ? 'px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800 transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-gray-700 transition';
-      document.getElementById('vw-group').className = v === 'group' ? 'px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-semibold text-gray-800 transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-gray-700 transition';
-      renderReports();
-    }
-    function renderReports() {
-      const filtered = getFiltered();
-      document.getElementById('filterCount').textContent = filtered.length + ' report' + (filtered.length !== 1 ? 's' : '');
-      document.getElementById('genBadge').textContent = reports.length;
-      const list = document.getElementById('reportList');
-      list.innerHTML = '';
-      if (!filtered.length) { list.innerHTML = '<div class="text-center py-16 bg-white rounded-2xl border border-gray-100"><p class="text-sm text-gray-500">No reports found</p></div>'; document.getElementById('pagination').innerHTML = ''; return; }
-      if (viewMode === 'group') { renderGroupView(filtered); return; }
-      const start = (page - 1) * PER_PAGE, slice = filtered.slice(start, start + PER_PAGE);
-      document.getElementById('pageLabel').textContent = `Showing ${start + 1}–${Math.min(start + PER_PAGE, filtered.length)} of ${filtered.length}`;
-      slice.forEach(r => { list.innerHTML += buildReportCard(r); });
-      renderPagination(filtered.length);
-    }
 
-    function renderGroupView(filtered) {
-      const groups = {};
-      filtered.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
-      document.getElementById('pageLabel').textContent = '';
-      document.getElementById('pagination').innerHTML = '';
-      let html = '';
-      Object.entries(groups).forEach(([cust, rs]) => {
-        const subT = rs.reduce((s, r) => s + r.mrp, 0);
-        const allSel = rs.every(r => selectedIds.has(r.id));
-        html += `<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
-      <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border-b border-gray-100">
-        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${cust.charAt(0)}</div>
-        <div class="flex-1 min-w-0"><p class="text-sm font-bold text-gray-900">${cust}</p><p class="text-xs text-gray-400">${rs.length} report${rs.length !== 1 ? 's' : ''} · ₹${subT.toLocaleString('en-IN')}</p></div>
-        <button onclick="selectCustomer('${cust}')" class="text-xs ${allSel ? 'text-red-500' : 'text-indigo-600'} font-semibold hover:underline flex-shrink-0">${allSel ? 'Deselect All' : 'Select All'}</button>
-      </div>
-      <div class="divide-y divide-gray-50">${rs.map(r => buildReportCard(r, 'compact')).join('')}</div>
-    </div>`;
-      });
-      document.getElementById('reportList').innerHTML = html;
-    }
-
-    function buildReportCard(r, compact = '') {
-      const sel = selectedIds.has(r.id);
-      return `<div id="card-${r.id}" class="report-card ${compact ? '' : 'bg-white rounded-2xl border border-gray-100 shadow-sm'} ${sel ? 'selected' : ''} p-3 md:p-4 cursor-pointer hover:border-indigo-200 transition ${compact ? '' : 'border'}" onclick="toggleSelect(${r.id})">
-    <div class="flex items-center gap-3">
-      <div class="report-checkbox">${sel ? '✓' : ''}</div>
-      <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-sm">🧪</div>
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap mb-0.5">
-          <p class="text-sm font-bold text-gray-900">${r.testName}</p>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${statusColors[r.status]}">${r.status}</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${r.paid ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}">${r.paid ? 'Paid' : 'Unpaid'}</span>
-        </div>
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs font-medium text-gray-600">${r.customer}</span>
-          <span class="text-gray-300">·</span><span class="text-xs text-gray-400">${r.date}</span>
-          <span class="text-gray-300">·</span><span class="text-xs font-bold text-emerald-600">₹${r.mrp.toLocaleString('en-IN')}</span>
-          <span class="text-gray-300">·</span><span class="text-xs text-gray-400">📱 ${r.phone}</span>
-        </div>
-        ${r.result ? `<p class="text-[10px] text-gray-500 mt-0.5 italic truncate">${r.result}</p>` : ''}
-      </div>
-      <div class="flex items-center gap-1 flex-shrink-0 ml-1" onclick="event.stopPropagation()">
-        <a href="report-detail.html?id=${r.id}" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-semibold hover:bg-indigo-100">View</a>
-        <button onclick="quickDelete(${r.id})" class="w-7 h-7 rounded-xl bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-100"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-      </div>
-    </div>
-  </div>`;
+    function getPaginated(data) {
+      const start = (currentPage - 1) * PER_PAGE;
+      return data.slice(start, start + PER_PAGE);
     }
 
     function renderPagination(total) {
       const el = document.getElementById('pagination');
-      const tp = Math.ceil(total / PER_PAGE);
-      if (tp <= 1) { el.innerHTML = ''; return; }
-      let s = Math.max(1, page - 2), e = Math.min(tp, s + 4); if (e - s < 4) s = Math.max(1, e - 4);
-      el.innerHTML = `<button onclick="goPage(${page - 1})" ${page === 1 ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 disabled:opacity-40 text-sm">‹</button>` +
-        Array.from({ length: e - s + 1 }, (_, i) => `<button onclick="goPage(${s + i})" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium ${s + i === page ? 'bg-indigo-600 text-white' : 'border border-gray-200 text-gray-600 hover:bg-gray-50'}">${s + i}</button>`).join('') +
-        `<button onclick="goPage(${page + 1})" ${page === tp ? 'disabled' : ''} class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 disabled:opacity-40 text-sm">›</button>`;
-    }
-    function goPage(p) { const t = Math.ceil(getFiltered().length / PER_PAGE); if (p < 1 || p > t) return; page = p; renderReports(); }
+      if (!el) return;
 
-    // ══════════ MULTI-SELECT ══════════
-    function toggleSelect(id) {
-      if (selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
-      renderReports(); updateSelectionBar();
-    }
-    function selectAll() { getFiltered().forEach(r => selectedIds.add(r.id)); renderReports(); updateSelectionBar(); }
-    function clearSelection() { selectedIds.clear(); renderReports(); updateSelectionBar(); }
-    function selectCustomer(name) {
-      const rs = reports.filter(r => r.customer === name);
-      const allSel = rs.every(r => selectedIds.has(r.id));
-      rs.forEach(r => allSel ? selectedIds.delete(r.id) : selectedIds.add(r.id));
-      renderReports(); updateSelectionBar();
-    }
-    function updateSelectionBar() {
-      const bar = document.getElementById('selectionBar');
-      const count = selectedIds.size;
-      if (!count) { bar.classList.add('hidden'); document.getElementById('multiCustWarning').classList.add('hidden'); return; }
-      bar.classList.remove('hidden');
-      const selR = reports.filter(r => selectedIds.has(r.id));
-      const custs = [...new Set(selR.map(r => r.customer))];
-      const total = selR.reduce((s, r) => s + r.mrp, 0);
-      document.getElementById('selCount').textContent = count + ' report' + (count !== 1 ? 's' : '') + ' selected';
-      document.getElementById('selCustomerNames').textContent = custs.length === 1 ? custs[0] : custs.join(', ');
-      document.getElementById('selTotal').textContent = '₹' + total.toLocaleString('en-IN');
-      // Multi-customer warning
-      const warn = document.getElementById('multiCustWarning');
-      if (custs.length > 1) { warn.classList.remove('hidden'); document.getElementById('multiCustMsg').textContent = `Reports from ${custs.length} different patients selected — use "By Patient" view to manage per-patient selections`; }
-      else { warn.classList.add('hidden'); }
+      const totalPages = Math.ceil(total / PER_PAGE);
+      el.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const active = i === currentPage
+          ? 'background:#4f46e5; color:white;'
+          : '';
+        el.innerHTML +=
+          `<button onclick="goPage(${i})"
+        style="margin:2px; padding:5px; ${active}">
+        ${i}
+      </button>`;
+      }
     }
 
-    // ══════════ SEND MODAL ══════════
-    function openSendModal() {
-      if (!selectedIds.size) { showToast('Select at least one report'); return; }
-      const selR = reports.filter(r => selectedIds.has(r.id));
+    function goPage(p) {
+      currentPage = p;
+      renderReports();
+    }
+
+
+    /* =============================================================
+       RENDER — Report list
+       ============================================================= */
+    function renderReports() {
+      const container = document.getElementById('reportList');
+      if (!container) return;
+
+      const filtered = getFiltered();
+      const paginated = getPaginated(filtered);
+
+      renderPagination(filtered.length);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+      <div class="text-center py-10 text-gray-400">
+        No reports found
+      </div>`;
+        return;
+      }
+
+      container.innerHTML = paginated.map(r => {
+        const isSelected = selectedIds.has(r.id);
+
+        return `
+      <div class="
+        flex items-center justify-between
+        bg-white border rounded-2xl p-4 mb-3
+        shadow-sm hover:shadow-md transition
+        ${isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''}
+      ">
+        <!-- LEFT -->
+        <div class="flex items-center gap-4">
+
+          <input type="checkbox"
+            ${isSelected ? 'checked' : ''}
+            onchange="toggleSelect(${r.id})"
+            class="w-4 h-4">
+
+          <div class="w-10 h-10 rounded-full bg-indigo-100
+                      flex items-center justify-center">
+            🧪
+          </div>
+
+          <div>
+            <div class="font-semibold text-gray-800">
+              ${r.testName}
+
+              <span class="ml-2 text-xs px-2 py-1 rounded-full
+                ${r.status === 'Completed'
+            ? 'bg-green-100 text-green-600'
+            : 'bg-yellow-100 text-yellow-600'}">
+                ${r.status}
+              </span>
+
+              ${r.paid ? `
+                <span class="ml-1 text-xs px-2 py-1 rounded-full
+                             bg-green-100 text-green-600">
+                  Paid
+                </span>` : ''}
+            </div>
+
+            <div class="text-sm text-gray-500 mt-1">
+              ${r.customer} · ${r.date}
+            </div>
+
+            <div class="text-xs text-gray-400">
+              📱 ${r.phone || '-'}
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="text-right">
+          <div class="text-green-600 font-semibold text-lg">
+            ₹${r.mrp}
+          </div>
+
+          <div class="flex gap-2 mt-2 justify-end">
+            <button onclick="viewReport(${r.id})"
+              class="px-3 py-1 text-sm bg-indigo-100 text-indigo-600 rounded-lg">
+              View
+            </button>
+            <button onclick="deleteReport(${r.id})"
+              class="px-2 py-1 text-sm bg-red-100 text-red-600 rounded-lg">
+              🗑
+            </button>
+          </div>
+        </div>
+      </div>`;
+      }).join('');
+    }
+
+    /* ── Grouped view ── */
+    function renderGrouped() {
+      const container = document.getElementById('reportList');
+      if (!container) return;
+
       const groups = {};
-      selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = { reports: [], contact: { email: r.email || '', phone: r.phone || '' } }; groups[r.customer].reports.push(r); });
-      const gc = Object.keys(groups).length;
-      document.getElementById('sendModalSubtitle').textContent = `${selR.length} report${selR.length !== 1 ? 's' : ''} · ${gc} patient${gc !== 1 ? 's' : ''}`;
-      const totalMrp = selR.reduce((s, r) => s + r.mrp, 0);
-      document.getElementById('sendModalTotal').textContent = '₹' + totalMrp.toLocaleString('en-IN');
-      // Render groups
-      document.getElementById('sendModalGroups').innerHTML = Object.entries(groups).map(([cust, g]) => `
-    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${cust.charAt(0)}</div>
-        <div class="flex-1"><p class="text-sm font-bold text-gray-900">${cust}</p><p class="text-xs text-gray-400">${g.reports.length} test${g.reports.length !== 1 ? 's' : ''} · ₹${g.reports.reduce((s, r) => s + r.mrp, 0).toLocaleString('en-IN')}</p></div>
-      </div>
-      <!-- Contact fields -->
-      <div class="grid grid-cols-2 gap-2 mb-3">
-        <div><label class="text-[10px] font-semibold text-gray-500 mb-1 block">📱 Phone</label><input type="tel" id="phone-${cust.replace(/ /g, '_')}" value="${g.contact.phone}" placeholder="Enter phone..." class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
-        <div><label class="text-[10px] font-semibold text-gray-500 mb-1 block">📧 Email</label><input type="email" id="email-${cust.replace(/ /g, '_')}" value="${g.contact.email}" placeholder="Enter email..." class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
-      </div>
-      <!-- Reports list -->
-      <div class="space-y-1.5">
-        ${g.reports.map(r => `<div class="flex items-center justify-between bg-white rounded-xl px-3 py-2 border border-gray-100"><div class="min-w-0 flex-1"><p class="text-xs font-semibold text-gray-800 truncate">${r.testName}</p>${r.result ? `<p class="text-[10px] text-gray-500">${r.result}</p>` : ''}</div><span class="text-xs font-bold text-emerald-600 ml-3 flex-shrink-0">₹${r.mrp.toLocaleString('en-IN')}</span></div>`).join('')}
-      </div>
-    </div>`).join('');
-      // PDF list
-      document.getElementById('pdfList').innerHTML = selR.map(r => `
-    <div class="flex items-center justify-between py-1.5">
-      <div class="flex items-center gap-2 min-w-0 flex-1"><div class="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><span class="text-xs text-gray-700 truncate">${r.customer}_${r.testName.replace(/ /g, '_')}.pdf</span></div>
-      <button onclick="downloadSinglePDF(${r.id})" class="text-xs text-indigo-600 font-medium hover:underline flex-shrink-0 ml-2">Open</button>
-    </div>`).join('');
-      setChannel('wa');
+      reports.forEach(r => {
+        if (!groups[r.customer]) groups[r.customer] = [];
+        groups[r.customer].push(r);
+      });
+
+      container.innerHTML = Object.keys(groups).map(name => `
+    <h3>${name}</h3>
+    ${groups[name].map(r => `
+      <div style="margin-left:10px; padding:5px; border-bottom:1px solid #eee">
+        ${r.testName} — ₹${r.mrp}
+      </div>`).join('')}
+  `).join('');
+    }
+
+    function setView(type) {
+      type === 'group' ? renderGrouped() : renderReports();
+    }
+
+
+    /* =============================================================
+       RENDER — Dashboard
+       ============================================================= */
+    function renderDashboard() {
+      const total = reports.length;
+      const paid = reports.filter(r => r.paid).length;
+
+      const totalEl = document.getElementById('d-total');
+      const paidEl = document.getElementById('d-paid');
+
+      if (totalEl) totalEl.textContent = total;
+      if (paidEl) paidEl.textContent = paid;
+    }
+
+
+    /* =============================================================
+       TAB NAVIGATION
+       ============================================================= */
+    function switchTab(tab) {
+      activeTab = tab;
+
+      const dashboardTab = document.getElementById('tab-dashboard');
+      const reportsTab = document.getElementById('tab-generated');
+
+      if (dashboardTab && reportsTab) {
+        if (tab === 'dashboard') {
+          dashboardTab.classList.remove('hidden');
+          reportsTab.classList.add('hidden');
+        } else {
+          dashboardTab.classList.add('hidden');
+          reportsTab.classList.remove('hidden');
+        }
+      }
+
+      const breadcrumb = document.getElementById('breadcrumbTab');
+      if (breadcrumb) {
+        breadcrumb.textContent =
+          tab === 'dashboard' ? 'Dashboard' : 'Reports Generated';
+      }
+
+      window.location.hash = tab === 'generated' ? '#generated' : '';
+
+      if (tab === 'dashboard') renderDashboard();
+      if (tab === 'generated') renderReports();
+    }
+
+
+    /* =============================================================
+       REPORT ACTIONS
+       ============================================================= */
+    function viewReport(id) {
+      window.location.href = `/view-report.html?id=${id}`;
+    }
+
+    function deleteReport(id) {
+      if (!confirm('Delete this report?')) return;
+      console.log('Delete:', id);
+      // TODO: call backend delete API
+    }
+
+    function goToReportPage(status) {
+      const patientId = document.getElementById('rCustomer').value;
+      const templateId = document.getElementById('rTemplate').value;
+      const paid = document.getElementById('rPaid').checked;
+
+      if (!patientId || !templateId) {
+        alert('Select patient & template');
+        return;
+      }
+
+      localStorage.setItem('reportDraft', JSON.stringify({
+        patientId, templateId, status, paid
+      }));
+
+      window.location.href =
+        `/create-report.html?patientId=${patientId}&templateId=${templateId}&status=${status}`;
+    }
+
+
+    /* =============================================================
+       SELECTION
+       ============================================================= */
+    function toggleSelect(id) {
+      selectedIds.has(id) ? selectedIds.delete(id) : selectedIds.add(id);
+      updateSelectionUI();
+      renderReports();
+    }
+
+    function selectAll() {
+      reports.forEach(r => selectedIds.add(r.id));
+      updateSelectionUI();
+      renderReports();
+    }
+
+    function clearSelection() {
+      selectedIds.clear();
+      updateSelectionUI();
+      renderReports();
+    }
+
+    function updateSelectionUI() {
+      const bar = document.getElementById('selectionBar');
+      const countEl = document.getElementById('selCount');
+      const totalEl = document.getElementById('selTotal');
+      const nameEl = document.getElementById('selCustomerNames');
+
+      const selected = reports.filter(r => selectedIds.has(r.id));
+
+      if (selected.length === 0) {
+        bar.classList.add('hidden');
+        return;
+      }
+
+      bar.classList.remove('hidden');
+
+      countEl.textContent = `${selected.length} report selected`;
+      totalEl.textContent = `₹${selected.reduce((sum, r) => sum + (r.mrp || 0), 0)}`;
+      nameEl.textContent = [...new Set(selected.map(r => r.customer))].join(', ');
+
+      checkMultiPatient(selected);
+    }
+
+    function checkMultiPatient(selected) {
+      const warning = document.getElementById('multiCustWarning');
+      const msg = document.getElementById('multiCustMsg');
+      const unique = [...new Set(selected.map(r => r.customer))];
+
+      if (unique.length > 1) {
+        warning.classList.remove('hidden');
+        msg.textContent = `Reports from ${unique.length} different patients selected`;
+      } else {
+        warning.classList.add('hidden');
+      }
+    }
+
+
+    /* =============================================================
+       SEND / WHATSAPP
+       ============================================================= */
+    function openSendModal() {
+      const selected = reports.filter(r => selectedIds.has(r.id));
+
+      if (selected.length === 0) {
+        alert('Select reports first');
+        return;
+      }
+
+      const groups = groupByCustomer(selected);
+      const container = document.getElementById('sendModalGroups');
+
+      container.innerHTML = Object.keys(groups).map(name => {
+        const items = groups[name];
+        const total = items.reduce((s, r) => s + r.mrp, 0);
+
+        return `
+      <div class="p-3 border rounded-xl">
+        <b>${name}</b><br>
+        ${items.map(i => `${i.testName} — ₹${i.mrp}`).join('<br>')}
+        <br><b>Total: ₹${total}</b>
+      </div>`;
+      }).join('');
+
+      document.getElementById('sendModalTotal').textContent =
+        '₹' + selected.reduce((s, r) => s + r.mrp, 0);
+
       openModal('sendModal');
     }
 
-    function setChannel(ch) {
-      sendChannel = ch;
-      const map = { wa: 'bg-green-500 text-white', email: 'bg-violet-500 text-white', sms: 'bg-blue-500 text-white' };
-      const labels = { wa: 'WhatsApp', email: 'Email', sms: 'SMS' };
-      ['wa', 'email', 'sms'].forEach(c => { const el = document.getElementById('ch-' + c); el.className = `py-3 rounded-2xl text-sm font-semibold flex flex-col items-center gap-1 transition ${c === ch ? map[c] : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`; });
-      document.getElementById('sendExecuteBtn').innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>Send via ${labels[ch]}`;
-      // Update preview
-      const selR = reports.filter(r => selectedIds.has(r.id));
-      const groups = {}; selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
-      const firstCust = Object.keys(groups)[0];
-      const fg = groups[firstCust];
-      const total = fg.reduce((s, r) => s + r.mrp, 0);
-      let preview = `Hello ${firstCust},\n\nYour lab reports are ready:\n\n${fg.map((r, i) => `${i + 1}. ${r.testName}: ${r.result || 'Result pending'} — ₹${r.mrp}`).join('\n')}\n\nTotal: ₹${total.toLocaleString('en-IN')}\n\nView / Download PDF: https://reminderme.app/reports/${Date.now()}`;
-      if (Object.keys(groups).length > 1) preview += `\n\n(+ ${Object.keys(groups).length - 1} more patient${Object.keys(groups).length > 2 ? 's' : ''} will receive separate messages)`;
-      document.getElementById('msgPreview').textContent = preview.length > 300 ? preview.slice(0, 297) + '...' : preview;
-    }
-
-    function downloadSinglePDF(reportId) {
-      const r = reports.find(x => x.id === reportId);
-      if (!r) return;
-      const html = `<!DOCTYPE html><html><head><title>${r.testName} - ${r.customer}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#fff;padding:32px;max-width:700px;margin:0 auto;color:#111827}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e5e7eb}.logo{font-size:18px;font-weight:800;color:#4f46e5}.badge{background:#eef2ff;color:#4f46e5;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.field{background:#f9fafb;padding:12px;border-radius:10px}.label{font-size:10px;color:#6b7280;margin-bottom:4px;text-transform:uppercase;font-weight:600}.value{font-size:14px;font-weight:600;color:#111827}.result{background:#ecfdf5;border:1px solid #d1fae5;padding:16px;border-radius:12px;margin:20px 0}.result .label{color:#065f46}.result .value{color:#065f46;font-size:15px}.price-box{background:#eff6ff;border:1px solid #bfdbfe;padding:12px 16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;text-align:center;font-size:11px;color:#9ca3af}</style></head><body><div class="header"><div><div class="logo">🧪 Reminder Me</div><p style="font-size:12px;color:#6b7280;margin-top:4px">Lab Report</p></div><div class="badge">${r.status}</div></div><div class="grid"><div class="field"><div class="label">Patient Name</div><div class="value">${r.customer}</div></div><div class="field"><div class="label">Phone</div><div class="value">${r.phone || '—'}</div></div><div class="field"><div class="label">Test Name</div><div class="value">${r.testName}</div></div><div class="field"><div class="label">Date</div><div class="value">${r.date}</div></div><div class="field"><div class="label">Specimen</div><div class="value">${r.specimen || '—'}</div></div><div class="field"><div class="label">TAT</div><div class="value">${r.tat || '—'}</div></div></div>${r.result ? `<div class="result"><div class="label">Result / Findings</div><div class="value" style="margin-top:6px">${r.result}</div></div>` : ''}<div class="price-box"><span style="font-size:13px;font-weight:600;color:#1e40af">MRP</span><span style="font-size:20px;font-weight:800;color:#1d4ed8">₹${r.mrp.toLocaleString('en-IN')}</span></div><div class="footer">Powered by Reminder Me · reminderme.app · Report ID: RPT-${r.id}</div></body></html>`;
-      const w = window.open('', '_blank');
-      w.document.write(html); w.document.close();
-      setTimeout(() => w.print(), 600);
-    }
-
-    function downloadAllPDFs() {
-      const selR = reports.filter(r => selectedIds.has(r.id));
-      if (!selR.length) { showToast('No reports selected'); return; }
-      selR.forEach((r, i) => setTimeout(() => downloadSinglePDF(r.id), i * 300));
-      showToast(`Opening ${selR.length} PDFs for printing/download`);
-    }
-
     function executeSend() {
-      const selR = reports.filter(r => selectedIds.has(r.id));
-      const groups = {}; selR.forEach(r => { if (!groups[r.customer]) groups[r.customer] = []; groups[r.customer].push(r); });
-      Object.entries(groups).forEach(([cust, rs]) => {
-        const custKey = cust.replace(/ /g, '_');
-        const phone = (document.getElementById('phone-' + custKey) || {}).value || rs[0].phone || '';
-        const email = (document.getElementById('email-' + custKey) || {}).value || rs[0].email || '';
-        const total = rs.reduce((s, r) => s + r.mrp, 0);
-        const tests = rs.map((r, i) => `${i + 1}. ${r.testName}: ${r.result || 'Result pending'} — ₹${r.mrp}`).join('\n');
-        const msg = encodeURIComponent(`Hello ${cust},\n\nYour lab reports are ready:\n\n${tests}\n\nTotal: ₹${total.toLocaleString('en-IN')}\n\nView Reports: https://reminderme.app/reports/${Date.now()}\n\nThank you.\n— Reminder Me`);
-        if (sendChannel === 'wa') window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
-        else if (sendChannel === 'email') window.open(`mailto:${email}?subject=Your Lab Reports from Reminder Me&body=${decodeURIComponent(msg)}`, '_blank');
-        else if (sendChannel === 'sms') window.open(`sms:${phone}?&body=${decodeURIComponent(msg)}`, '_blank');
+      const selected = reports.filter(r => selectedIds.has(r.id));
+      const groups = groupByCustomer(selected);
+
+      Object.keys(groups).forEach(name => {
+        const lines = groups[name].map(r => `${r.testName} — ₹${r.mrp}`).join('\n');
+        window.open(`https://wa.me/?text=${encodeURIComponent(`${name}\n${lines}`)}`);
       });
-      selR.forEach(r => { r.status = 'Shared'; });
-      closeModal('sendModal'); clearSelection(); renderReports(); renderDashboard();
-      showToast(`Reports sent to ${Object.keys(groups).length} patient${Object.keys(groups).length !== 1 ? 's' : ''}!`);
+
+      showToast('Reports sent successfully');
     }
 
-    // ══════════ CREATE MODAL ══════════
-    let mTestData = null;
-    function filterModalTests() { const q = (document.getElementById('mTestInput').value || '').toLowerCase().trim(); const inner = document.getElementById('mTestDropInner'); if (!q) { inner.innerHTML = '<div class="px-4 py-3 text-xs text-gray-400 text-center">Type to search...</div>'; return; } const res = LAB_TESTS.filter(t => t[1].toLowerCase().includes(q)).slice(0, 15); inner.innerHTML = res.length ? res.map(t => `<div onclick="selectModalTest(${t[0]})" class="px-4 py-2.5 hover:bg-indigo-50 cursor-pointer flex items-center justify-between gap-2 border-b border-gray-50 last:border-0"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-800 truncate">${t[1]}</p><p class="text-[10px] text-gray-400">${t[4]}</p></div><p class="text-sm font-bold text-emerald-600 flex-shrink-0">₹${t[2]}</p></div>`).join('') : '<div class="px-4 py-3 text-xs text-gray-400 text-center">No tests found</div>'; }
-    function showModalDrop() { document.getElementById('mTestDrop').classList.remove('hidden'); filterModalTests(); }
-    function hideModalDrop() { document.getElementById('mTestDrop').classList.add('hidden'); }
-    function selectModalTest(id) { const t = LAB_TESTS.find(x => x[0] === id); if (!t) return; mTestData = t; document.getElementById('mTestInput').value = t[1]; document.getElementById('mTestId').value = id; document.getElementById('mTestDrop').classList.add('hidden'); document.getElementById('mTestInfo').classList.remove('hidden'); document.getElementById('mTestName').textContent = t[1]; document.getElementById('mTestSpec').textContent = `Specimen: ${t[4]}`; document.getElementById('mTestMrp').textContent = `₹${t[2].toLocaleString('en-IN')} (B2B: ₹${t[3]})`; document.getElementById('mTestTat').textContent = `TAT: ${t[5]}`; }
-    function saveReport(status) { const cust = document.getElementById('rCustomer').value; const testId = parseInt(document.getElementById('mTestId').value); const t = LAB_TESTS.find(x => x[0] === testId); if (!cust || !t) { alert('Please select a patient and test type.'); return; } const ex = reports.find(r => r.customer === cust); reports.unshift({ id: Date.now(), customer: cust, phone: ex?.phone || '', email: ex?.email || '', testId, testName: t[1], mrp: t[2], paid: document.getElementById('rPaid').checked, specimen: t[4], tat: t[5], date: todayStr, status, result: document.getElementById('rResult').value, notes: '' }); closeModal('createReportModal'); document.getElementById('rCustomer').value = ''; document.getElementById('mTestInput').value = ''; document.getElementById('mTestId').value = ''; document.getElementById('rResult').value = ''; document.getElementById('rPaid').checked = false; document.getElementById('mTestInfo').classList.add('hidden'); mTestData = null; buildCustFilter(); renderReports(); renderDashboard(); showToast(status === 'Draft' ? 'Saved as draft' : 'Report created!'); }
-    function quickDelete(id) { if (!confirm('Delete this report?')) return; reports = reports.filter(r => r.id !== id); selectedIds.delete(id); buildCustFilter(); renderReports(); renderDashboard(); updateSelectionBar(); showToast('Report deleted'); }
+    /* ── Helper: group items by customer name ── */
+    function groupByCustomer(items) {
+      return items.reduce((acc, r) => {
+        if (!acc[r.customer]) acc[r.customer] = [];
+        acc[r.customer].push(r);
+        return acc;
+      }, {});
+    }
 
-    // ══════════ HELPERS ══════════
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-    function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3500); }
-    function openMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(0)'; document.getElementById('mobileNavBg').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-    function closeMobileNav() { document.getElementById('mobileNavDrawer').style.transform = 'translateX(-100%)'; document.getElementById('mobileNavBg').classList.add('hidden'); document.body.style.overflow = ''; }
 
-    // Close test dropdown outside click
-    document.addEventListener('click', e => { const i = document.getElementById('mTestInput'); const d = document.getElementById('mTestDrop'); if (i && d && !i.contains(e.target) && !d.contains(e.target)) d.classList.add('hidden'); });
+    /* =============================================================
+       MODAL
+       ============================================================= */
+    function openModal(id) {
+      document.getElementById(id)?.classList.remove('hidden');
+    }
 
-    // INIT
-    initFromHash();
+    function closeModal(id) {
+      document.getElementById(id)?.classList.add('hidden');
+    }
+
+
+    /* =============================================================
+       TOAST
+       ============================================================= */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
   </script>
 </body>
 

@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.server.realsync.dto.ReportResponse;
 import com.server.realsync.entity.Account;
 import com.server.realsync.entity.AdminUser;
 import com.server.realsync.entity.Appointment;
 import com.server.realsync.entity.Customer;
 import com.server.realsync.entity.CatalogPlan;
 import com.server.realsync.entity.CatalogProduct;
+import com.server.realsync.entity.CatalogRTemplate;
 import com.server.realsync.entity.CustomerGroup;
 import com.server.realsync.entity.Greeting;
 import com.server.realsync.entity.Reminder;
@@ -31,6 +33,8 @@ import com.server.realsync.services.ReminderService;
 import com.server.realsync.services.GreetingService;
 import com.server.realsync.services.CustomerGroupService;
 import com.server.realsync.services.CatalogProductService;
+import com.server.realsync.services.CatalogRTemplateService;
+import com.server.realsync.services.ReportService;
 import com.server.realsync.services.AdminUserService;
 import com.server.realsync.services.AppointmentService;
 import com.server.realsync.services.SettingsPlanService;
@@ -65,11 +69,14 @@ public class HomeController {
 	@Autowired
 	private CatalogProductService catalogProductService;
 	@Autowired
+	private CatalogRTemplateService catalogRTemplateService;
+	@Autowired
 	private AdminUserService adminUserService;
 	@Autowired
 	private AppointmentService appointmentService;
 	@Autowired
-
+	private ReportService reportService;
+	@Autowired
 	private ReminderService reminderService;
 	@Autowired
 	private GreetingService greetingService;
@@ -417,8 +424,7 @@ public class HomeController {
 
 		model.addAttribute("appointment", appt);
 
-		
-		model.addAttribute("customer",appt.getCustomer() != null ? appt.getCustomer() : new Customer());
+		model.addAttribute("customer", appt.getCustomer() != null ? appt.getCustomer() : new Customer());
 
 		return "remindmeui/appointment-detail";
 	}
@@ -433,6 +439,16 @@ public class HomeController {
 		return "remindme/reports";
 	}
 
+	@GetMapping("/create-report.html")
+	public String createReportPage(Model model) {
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
+
+		Account account = accountService.getById(loggedIn.getId());
+		model.addAttribute("account", account);
+
+		return "remindmeui/create-report";
+	}
+
 	@GetMapping("/report-history")
 	public String reportHistory(Model model) {
 		Account loggedIn = SecurityUtil.getCurrentAccountId();
@@ -441,8 +457,32 @@ public class HomeController {
 
 		model.addAttribute("account", account);
 		model.addAttribute("activePage", "reports");
-		return "report-history";
+		return "remindmeui/report-history";
 	}
+
+	@GetMapping("/view-report.html")
+public String viewReportPage(@RequestParam Integer id, Model model) {
+
+    // 1. Get logged-in account
+    Integer accountId = SecurityUtil.getCurrentAccountId().getId();
+    Account account = accountService.getById(accountId);
+
+    // 2. Get report (DTO)
+    ReportResponse report = reportService.getReportById(id);
+
+    if (report == null) {
+        return "redirect:/reports.html"; // safety fallback
+    }
+
+    
+
+    // 4. Add all required data to UI
+    model.addAttribute("account", account);
+    model.addAttribute("report", report);
+    
+
+    return "remindmeui/report-detail";
+}
 
 	@GetMapping("/settings.html")
 	public String getSettings(Model model) {
