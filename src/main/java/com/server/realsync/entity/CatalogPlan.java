@@ -35,6 +35,9 @@ public class CatalogPlan {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(columnDefinition = "TEXT")
     private String features;
 
@@ -54,7 +57,8 @@ public class CatalogPlan {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        if (this.status == null) this.status = "active";
+        if (this.status == null)
+            this.status = "active";
     }
 
     @PreUpdate
@@ -64,37 +68,100 @@ public class CatalogPlan {
 
     // Getters & Setters
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Integer getAccountId() { return accountId; }
-    public void setAccountId(Integer accountId) { this.accountId = accountId; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Integer getAccountId() {
+        return accountId;
+    }
 
-    public String getBillingCycle() { return billingCycle; }
-    public void setBillingCycle(String billingCycle) { this.billingCycle = billingCycle; }
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
 
-    public String getCurrency() { return currency; }
-    public void setCurrency(String currency) { this.currency = currency; }
+    public String getName() {
+        return name;
+    }
 
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getBillingCycle() {
+        return billingCycle;
+    }
 
-    public String getFeatures() { return features; }
-    public void setFeatures(String features) { this.features = features; }
+    public void setBillingCycle(String billingCycle) {
+        this.billingCycle = billingCycle;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getCurrency() {
+        return currency;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
 }

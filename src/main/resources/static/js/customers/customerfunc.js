@@ -1,4 +1,21 @@
-/* ================= SAVE CUSTOMER ================= */
+
+/* =================  ================= */
+const phoneInput = document.getElementById("cPhone");
+
+phoneInput.addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 11);
+});
+function getFullPhone() {
+    const code = document.getElementById("countryCode").value;
+    const phone = document.getElementById("cPhone").value;
+
+    if (!phone) {
+        alert("Enter phone number");
+        return null;
+    }
+
+    return code + phone;
+}
 
 /* ================= SAVE CUSTOMER ================= */
 
@@ -9,10 +26,11 @@ function saveCustomer(e) {
 
     // IMPORTANT: Get the raw string from the hidden input (e.g., "1,5")
     const groupIdString = document.getElementById("cSegment").value;
-
+    const fullPhone = getFullPhone();
+    if (!fullPhone) return;
     const customer = {
         name: document.getElementById("cName").value,
-        mobile: document.getElementById("cPhone").value,
+        mobile: fullPhone,
         email: document.getElementById("cEmail").value,
         dob: document.getElementById("cBirthday").value || null,
         weddingDate: document.getElementById("cAnniversary").value || null,
@@ -42,7 +60,7 @@ function saveCustomer(e) {
         })
         .catch(err => {
             // Display ONLY the exact error message in the popup
-            alert(err.message); 
+            alert(err.message);
         });
 }
 
@@ -274,3 +292,13 @@ function clearSearch() {
     url.searchParams.set("page", "0");
     window.location.href = url.toString();
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const phoneInput = document.getElementById("cPhone");
+
+    if (phoneInput) {
+        phoneInput.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "").slice(0, 11);
+        });
+    }
+});

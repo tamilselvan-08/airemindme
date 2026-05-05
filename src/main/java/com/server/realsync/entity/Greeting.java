@@ -45,6 +45,9 @@ public class Greeting {
     @Column(name = "greeting_time")
     private LocalTime greetingTime;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "channels", length = 255)
     private String channels; // Stores "1,2" or "wa,sms"
 
@@ -126,6 +129,14 @@ public class Greeting {
 
     public void setGreetingTime(LocalTime greetingTime) {
         this.greetingTime = greetingTime;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getChannels() {

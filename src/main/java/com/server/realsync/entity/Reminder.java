@@ -33,6 +33,8 @@ public class Reminder {
 
     @Column(length = 1000)
     private String message;
+    @Column(name = "reminder_type")
+    private String reminderType;
 
     @Column(name = "recurring", nullable = false)
     private Boolean recurring = false;
@@ -112,6 +114,14 @@ public class Reminder {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getReminderType() {
+        return reminderType;
+    }
+
+    public void setReminderType(String reminderType) {
+        this.reminderType = reminderType;
     }
 
     public Boolean getRecurring() {

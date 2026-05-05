@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.server.realsync.entity.Greeting;
+import com.server.realsync.entity.Reminder;
 import com.server.realsync.repo.GreetingRepository;
 
 @Service
@@ -18,6 +19,10 @@ public class GreetingService {
     /** All greetings for an account, newest first */
     public List<Greeting> getByAccountId(Integer accountId) {
         return repo.findByAccountIdOrderByCreatedAtDesc(accountId);
+    }
+
+    public List<Greeting> getByCustomerId(Integer customerId, Integer accountId) {
+        return repo.findByCustomerIdAndAccountId(customerId, accountId);
     }
 
     /** Single greeting scoped to account */
@@ -34,7 +39,6 @@ public class GreetingService {
         return repo.save(greeting);
     }
 
-  
     public void delete(Integer id, Integer accountId) {
         repo.deleteByIdAndAccountId(id, accountId);
     }

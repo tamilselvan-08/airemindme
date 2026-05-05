@@ -16,7 +16,7 @@ const API = {
     rtemplates: '/api/catalog/rtemplates',
     summary: '/api/catalog/summary'
 };
-
+const FILE_BASE = "/doc/view?path=";
 const BILLING_LABELS = { monthly: 'Monthly', quarterly: 'Quarterly', yearly: 'Yearly', 'one-time': 'One-Time' };
 const CURRENCY_SYMBOLS = { INR: '₹', USD: '$', EUR: '€', GBP: '£', AED: 'AED ', SGD: 'S$' };
 
@@ -193,9 +193,11 @@ function renderPlans() {
     empty.classList.add('hidden');
 
     grid.innerHTML = filtered.map(p => `
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition relative group">
-      ${p.img ? `<img src="${p.img}" class="w-full h-24 object-cover rounded-xl mb-4 border border-gray-100">` : ''}
-      <div class="flex items-start justify-between mb-2">
+    <div class=" mb-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition relative group">
+     ${p.imageUrl ? `
+  <img src="${FILE_BASE}${p.imageUrl}" class="w-full h-40 object-cover rounded-xl mb-3 shadow-sm hover:shadow-lg transition ">` : `<img src="/assets/image.png" 
+       class="w-full h-40 object-cover rounded-xl mb-3">`}
+      <div class="flex items-start justify-between mb-3 mt-2"">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,11 +250,61 @@ function buildFeatureTags(features) {
 // ── Plan Modal ────────────────────────────────────────────────────────────────
 function openPlanModal(id) {
     editPlanId = id || null;
+
     clearPlanImg();
+
+    const previewBox = document.getElementById("planImgPreview");
+    const uploadBox = document.getElementById("planImgZone");
+    const img = document.getElementById("planImgThumb");
 
     if (editPlanId) {
         const p = plans.find(x => x.id === editPlanId);
         if (!p) return;
+
+        // 🔹 SET IMAGE PREVIEW
+        if (p.imageUrl) {
+            img.src = FILE_BASE + p.imageUrl;
+
+            previewBox.classList.remove("hidden");
+            uploadBox.classList.add("hidden");
+        } else {
+            previewBox.classList.add("hidden");
+            uploadBox.classList.remove("hidden");
+        }
+
+        // 🔹 SET FORM VALUES
+        document.getElementById('pm_name').value = p.name || '';
+        document.getElementById('pm_price').value = p.price || '';
+        document.getElementById('pm_desc').value = p.description || '';
+        document.getElementById('pm_currency').value = p.currency || 'INR';
+        document.getElementById('pm_features').value =
+            Array.isArray(p.features) ? p.features.join('\n') : (p.features || '');
+
+        selectBilling(p.billingCycle || 'monthly');
+
+        document.getElementById('planModalTitle').textContent = 'Edit Plan';
+        document.getElementById('planSaveLabel').textContent = 'Save Changes';
+
+    } else {
+        // 🔹 RESET FORM (CREATE MODE)
+        ['pm_name', 'pm_price', 'pm_desc', 'pm_features']
+            .forEach(i => document.getElementById(i).value = '');
+
+        document.getElementById('pm_currency').value = 'INR';
+        selectBilling('monthly');
+
+        previewBox.classList.add("hidden");
+        uploadBox.classList.remove("hidden");
+
+        document.getElementById('planModalTitle').textContent = 'New Plan';
+        document.getElementById('planSaveLabel').textContent = 'Create Plan';
+    }
+
+    document.getElementById('planModal').classList.remove('hidden');
+
+    if (editPlanId) {
+        const p = plans.find(x => x.id === editPlanId);
+
         document.getElementById('pm_name').value = p.name || '';
         document.getElementById('pm_price').value = p.price || '';
         document.getElementById('pm_desc').value = p.description || '';
@@ -304,28 +356,167 @@ function clearPlanImg() {
     document.getElementById('planImgPreview').classList.add('hidden');
     document.getElementById('planImgZone').classList.remove('hidden');
 }
+let isSavingPlan = false;
 
-function savePlan() {
-    const name = document.getElementById('pm_name').value.trim();
-    const price = document.getElementById('pm_price').value;
-    if (!name || !price) { showToast('Plan name and price are required', 'error'); return; }
+async function savePlan() {
+    if (isSavingPlan) return;
 
-    const payload = {
-        name,
-        billingCycle: currentBilling,
-        currency: document.getElementById('pm_currency').value,
-        price: parseFloat(price) || 0,
-        description: document.getElementById('pm_desc').value.trim(),
-        features: document.getElementById('pm_features').value.trim(),
-        status: 'active'
-    };
+    isSavingPlan = true;
 
-    const isEdit = editPlanId !== null;
-    api(isEdit ? `${API.plans}/${editPlanId}` : API.plans, isEdit ? 'PUT' : 'POST', payload)
-        .then(() => { showToast(isEdit ? 'Plan updated!' : 'Plan created!', 'success'); closePlanModal(); loadPlans(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
+    const btn = document.getElementById("planSaveBtn");
+
+    // 🔹 Safe button handling
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Saving...";
+    }
+
+    try {
+        const name = document.getElementById('pm_name').value.trim();
+        const price = document.getElementById('pm_price').value;
+
+        if (!name || !price) {
+            showToast('Plan name and price are required', 'error');
+            return;
+        }
+
+        const file = document.getElementById("planImgInput").files[0];
+
+        const payload = {
+            name,
+            billingCycle: currentBilling,
+            currency: document.getElementById('pm_currency').value,
+            price: parseFloat(price) || 0,
+            description: document.getElementById('pm_desc').value.trim(),
+            features: document.getElementById('pm_features').value.trim(),
+            status: 'active'
+        };
+
+        let res;
+
+        // 🔹 Create or Update
+        if (editPlanId) {
+            await api(`/api/catalog/plans/${editPlanId}`, 'PUT', payload);
+            res = { id: editPlanId };
+        } else {
+            res = await api(`/api/catalog/plans`, 'POST', payload);
+        }
+
+        const planId = res.id;
+
+        // 🔹 Upload Image
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const uploadRes = await fetch(`/doc/upload/plan/${planId}`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await uploadRes.json();
+
+            await api(`/api/catalog/plans/${planId}/image`, 'PUT', {
+                imageUrl: data.url
+            });
+        }
+
+        showToast(editPlanId ? 'Plan updated!' : 'Plan created!', 'success');
+        closePlanModal();
+        loadPlans();
+
+    } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+    } finally {
+        isSavingPlan = false;
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = editPlanId ? "Save Changes" : "Create Plan";
+        }
+    }
 }
 
+async function savePlan() {
+    if (isSavingPlan) return;
+
+    isSavingPlan = true;
+
+    const btn = document.getElementById("planSaveBtn");
+
+    // 🔹 Safe button handling
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Saving...";
+    }
+
+    try {
+        const name = document.getElementById('pm_name').value.trim();
+        const price = document.getElementById('pm_price').value;
+
+        if (!name || !price) {
+            showToast('Plan name and price are required', 'error');
+            return;
+        }
+
+        const file = document.getElementById("planImgInput").files[0];
+
+        const payload = {
+            name,
+            billingCycle: currentBilling,
+            currency: document.getElementById('pm_currency').value,
+            price: parseFloat(price) || 0,
+            description: document.getElementById('pm_desc').value.trim(),
+            features: document.getElementById('pm_features').value.trim(),
+            status: 'active'
+        };
+
+        let res;
+
+        // 🔹 Create or Update
+        if (editPlanId) {
+            await api(`/api/catalog/plans/${editPlanId}`, 'PUT', payload);
+            res = { id: editPlanId };
+        } else {
+            res = await api(`/api/catalog/plans`, 'POST', payload);
+        }
+
+        const planId = res.id;
+
+        // 🔹 Upload Image
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const uploadRes = await fetch(`/doc/upload/plan/${planId}`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await uploadRes.json();
+
+            await api(`/api/catalog/plans/${planId}/image`, 'PUT', {
+                imageUrl: data.url
+            });
+        }
+
+        showToast(editPlanId ? 'Plan updated!' : 'Plan created!', 'success');
+        closePlanModal();
+        loadPlans();
+
+    } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+    } finally {
+        isSavingPlan = false;
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = editPlanId ? "Save Changes" : "Create Plan";
+        }
+    }
+}
 function togglePlanStatus(id) {
     api(`${API.plans}/${id}/toggle-status`, 'PATCH')
         .then(() => { showToast('Plan status updated', 'success'); loadPlans(); })
@@ -380,9 +571,14 @@ function renderProducts() {
 
     grid.innerHTML = filtered.map(p => {
         const catCls = catColors[p.category] || 'bg-gray-100 text-gray-600';
+        const imgSrc = p.imageUrl ? FILE_BASE + p.imageUrl : "/assets/image.png"; // fallback
         return `
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition relative group">
-      ${p.img ? `<img src="${p.img}" class="w-full h-24 object-cover rounded-xl mb-4 border border-gray-100">` : ''}
+    <img 
+  src="${p.imageUrl ? FILE_BASE + p.imageUrl : '/assets/image.png'}"
+  class="w-full h-40 object-cover"
+  onerror="this.src='/assets/image.png'"
+>
       <div class="flex justify-end gap-1.5 absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition">
         <button onclick="openProductModal(${p.id})" title="Edit"
           class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50">
@@ -423,6 +619,16 @@ function openProductModal(id) {
     clearProdImg();
     if (editProductId) {
         const p = products.find(x => x.id === editProductId);
+        const previewBox = document.getElementById("prodImgPreview");
+        const uploadBox = document.getElementById("prodImgZone");
+        const img = document.getElementById("prodImgThumb");
+
+        if (p.imageUrl) {
+            img.src = FILE_BASE + p.imageUrl;
+
+            previewBox.classList.remove("hidden");
+            uploadBox.classList.add("hidden");
+        }
         if (!p) return;
         document.getElementById('prd_name').value = p.name || '';
         document.getElementById('prd_sku').value = p.sku || '';
@@ -460,30 +666,75 @@ function clearProdImg() {
     document.getElementById('prodImgPreview')?.classList.add('hidden');
     document.getElementById('prodImgZone')?.classList.remove('hidden');
 }
+let isSavingProduct = false;
+async function saveProduct() {
 
-function saveProduct() {
-    const name = document.getElementById('prd_name').value.trim();
-    const sku = document.getElementById('prd_sku').value.trim();
-    if (!name || !sku) { showToast('Product name and SKU are required', 'error'); return; }
+    if (isSavingProduct) return;
 
-    const imgPreview = document.getElementById('prodImgPreview');
-    const imgThumb = document.getElementById('prodImgThumb');
-    const img = (imgPreview && !imgPreview.classList.contains('hidden')) ? imgThumb.src : null;
+    isSavingProduct = true;
 
-    const payload = {
-        name, sku,
-        category: document.getElementById('prd_category').value,
-        currency: document.getElementById('prd_currency').value,
-        price: parseFloat(document.getElementById('prd_price').value) || 0,
-        description: document.getElementById('prd_desc').value.trim(),
-        img,
-        status: 'active'
-    };
+    try {
+        const name = document.getElementById('prd_name').value.trim();
+        const sku = document.getElementById('prd_sku').value.trim();
 
-    const isEdit = editProductId !== null;
-    api(isEdit ? `${API.products}/${editProductId}` : API.products, isEdit ? 'PUT' : 'POST', payload)
-        .then(() => { showToast(isEdit ? 'Product updated!' : 'Product created!', 'success'); closeProductModal(); loadProducts(); })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
+        if (!name || !sku) {
+            showToast('Product name and SKU are required', 'error');
+
+            btn.disabled = false;
+            isSavingProduct = false;
+            btn.innerText = "Save Product";
+
+            return;
+        }
+        const file = document.getElementById("prodImgInput").files[0];
+
+        const payload = {
+            name,
+            sku,
+            category: document.getElementById('prd_category').value,
+            currency: document.getElementById('prd_currency').value,
+            price: parseFloat(document.getElementById('prd_price').value) || 0,
+            description: document.getElementById('prd_desc').value.trim(),
+            status: 'active'
+        };
+
+        let res;
+
+        // 🔹 Create or Update
+        if (editProductId) {
+            await api(`/api/catalog/products/${editProductId}`, 'PUT', payload);
+            res = { id: editProductId };
+        } else {
+            res = await api(`/api/catalog/products`, 'POST', payload);
+        }
+
+        const productId = res.id;
+
+        // 🔹 Upload image
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const uploadRes = await fetch(`/doc/upload/product/${productId}`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await uploadRes.json();
+
+            await api(`/api/catalog/products/${productId}/image`, 'PUT', {
+                imageUrl: data.url
+            });
+        }
+
+        showToast(editProductId ? 'Product updated!' : 'Product created!', 'success');
+        closeProductModal();
+        loadProducts();
+
+    } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+    } isSavingProduct = false;
 }
 
 function toggleProductStatus(id) {

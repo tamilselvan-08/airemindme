@@ -27,8 +27,8 @@ public class CatalogProduct {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String img;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @Column(nullable = false)
     private String status = "active";
@@ -110,12 +110,12 @@ public class CatalogProduct {
         this.description = description;
     }
 
-    public String getImg() {
-        return img;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {

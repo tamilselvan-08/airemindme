@@ -156,23 +156,61 @@
 
       <!-- MY LINKS PANEL -->
       <div id="pp-links" class="hidden">
-        <div class="flex items-center justify-between mb-5">
-          <div class="relative flex-1 mr-3">
+
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row md:items-center gap-3 mb-5">
+
+          <!-- 🔍 Search -->
+          <div class="relative flex-1">
             <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input type="text" placeholder="Search links..."
+
+            <input id="linkSearch" type="text" placeholder="Search promotions..." oninput="filterLinks(this.value)"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
+
+          <!-- 🎯 Filter -->
+          <div class="flex gap-2">
+            <button id="lf-all" onclick="setLinkFilter('all')"
+              class="px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold">All</button>
+
+            <button id="lf-active" onclick="setLinkFilter('active')"
+              class="px-3 py-2 rounded-lg border text-gray-600 text-xs">Active</button>
+
+            <button id="lf-inactive" onclick="setLinkFilter('inactive')"
+              class="px-3 py-2 rounded-lg border text-gray-600 text-xs">Paused</button>
+          </div>
+
+          <!-- ➕ Create -->
           <button onclick="openCreateLinkModal()"
-            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm flex-shrink-0"><svg
-              class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>Create Link</button>
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition shadow-sm">
+            ➕ Create Link
+          </button>
+
         </div>
+
+        <!-- 📊 QUICK STATS (optional but 🔥) -->
+        <div class="grid grid-cols-3 gap-3 mb-5 text-center">
+          <div class="bg-white border rounded-xl py-3">
+            <p class="text-xs text-gray-400">Total</p>
+            <p id="stat-total" class="text-sm font-bold">0</p>
+          </div>
+          <div class="bg-white border rounded-xl py-3">
+            <p class="text-xs text-gray-400">Active</p>
+            <p id="stat-active" class="text-sm font-bold text-green-600">0</p>
+          </div>
+          <div class="bg-white border rounded-xl py-3">
+            <p class="text-xs text-gray-400">Paused</p>
+            <p id="stat-paused" class="text-sm font-bold text-red-500">0</p>
+          </div>
+        </div>
+
+        <!-- 📦 LIST -->
         <div id="linksList"></div>
+
       </div>
 
       <!-- TEMPLATES PANEL -->
@@ -621,6 +659,7 @@
     let catalogSearch = '';
     let savedLinks = [];
     let currentRecipients = 0;
+    let selectedItems = [];
 
     // State for backend sync
     let state = {
@@ -655,7 +694,9 @@
           desc: p.description || '',
           // Splits the features string from DB into an array for the checkmarks
           features: p.features ? p.features.split(',') : [],
-          img: p.img || 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=80'
+          img: p.imageUrl
+            ? `/doc/view?path=${encodeURIComponent(p.imageUrl.replace(/^\/+/, ''))}`
+            : "/assets/image.png"
         }));
 
         // Normalizing Products: mapping DB fields like sku
@@ -666,7 +707,9 @@
           price: '₹' + (p.price || 0),
           code: p.sku || 'N/A', // Shows the SKU from your DB
           desc: p.description || '',
-          img: p.img || 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=400&q=80'
+          img: p.imageUrl
+            ? `/doc/view?path=${encodeURIComponent(p.imageUrl.replace(/^\/+/, ''))}`
+            : "/assets/image.png"
         }));
 
         renderCards();
@@ -683,16 +726,22 @@
 
         container.innerHTML = groups.map(g => `
       <label onclick="selectGroup(${g.id}, ${g.customerCount}, this)" 
-             class="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-indigo-300 cursor-pointer bg-white transition-all">
-        <div>
-          <p class="text-sm font-semibold text-gray-900">${g.name}</p>
-          <p class="text-xs text-gray-400">${g.description || 'No description'}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-semibold text-gray-700">${g.customerCount || 0}</span>
-          <div class="radio-indicator w-5 h-5 rounded-full border-2 border-gray-300"></div>
-        </div>
-      </label>
+class="group-item flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 cursor-pointer bg-white transition-all">
+
+  <div>
+    <p class="text-sm font-semibold text-gray-900">${g.name}</p>
+    <p class="text-xs text-gray-400">${g.customerCount || 0}</p>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <span class="text-sm font-semibold text-gray-700">${g.customerCount || 0}</span>
+
+    <!-- tick -->
+    <div class="tick hidden w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">
+      ✓
+    </div>
+  </div>
+</label>
     `).join('');
       } catch (e) {
         console.error("Failed to load groups", e);
@@ -747,6 +796,20 @@
       }
     }
 
+
+
+
+    function toggleItem(item) {
+      const exists = selectedItems.find(i => i.id === item.id);
+
+      if (exists) {
+        selectedItems = selectedItems.filter(i => i.id !== item.id);
+      } else {
+        selectedItems.push(item);
+      }
+
+      renderSelectedItems(); // 🔥 IMPORTANT
+    }
     async function createAndSendLink() {
       const selectedIds = Array.from(selected);
       const payload = {
@@ -797,7 +860,31 @@
       }
     }
 
+    function renderSelectedItems() {
+      const box = document.getElementById("selectedItemsList");
 
+      if (!selectedItems.length) {
+        box.innerHTML = `
+      <p class="text-xs text-gray-400">No items selected</p>
+    `;
+        return;
+      }
+
+      box.innerHTML = selectedItems.map(i => `
+    <div class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-xl">
+      <div>
+        <p class="text-sm font-medium text-gray-800">${i.name}</p>
+        <p class="text-xs text-gray-400">${i.type}</p>
+      </div>
+      <button onclick="removeItem('${i.id}')"
+        class="text-red-500 text-xs">Remove</button>
+    </div>
+  `).join('');
+    }
+    function removeItem(id) {
+      selectedItems = selectedItems.filter(i => i.id !== id);
+      renderSelectedItems();
+    }
     // =============================================================================
     // UI LOGIC
     // =============================================================================
@@ -884,73 +971,6 @@
       if (prodsSec) prodsSec.classList.toggle('hidden', fProds.length === 0);
     }
 
-    function renderLinks() {
-      const el = document.getElementById('linksList');
-      if (!el) return;
-
-      if (savedLinks.length === 0) {
-        el.innerHTML = `
-      <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
-        <p class="text-gray-400 text-sm font-medium">No promotion links created yet.</p>
-        <p class="text-gray-300 text-xs mt-1">Generated links will appear here for tracking.</p>
-      </div>`;
-        return;
-      }
-
-      el.innerHTML = savedLinks.map(l => {
-        const isActive = l.status === 'ACTIVE' || l.status === 'active';
-        const itemsArray = Array.isArray(l.items) ? l.items : [];
-
-        return `
-      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4 transition-all hover:shadow-md group">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-2xl ${isActive ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-400'} flex items-center justify-center flex-shrink-0 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-              </div>
-              <div class="min-w-0">
-                <p class="text-sm font-bold text-gray-900 truncate">${l.desc || 'Untitled Promotion'}</p>
-                <div class="flex items-center gap-2 mt-0.5">
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'}">
-                    ${l.status}
-                  </span>
-                  <p class="text-[11px] text-gray-400 font-medium">Created ${l.created} · <b class="text-gray-600">${l.recipients || 0}</b> recipients</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mb-4">
-              ${itemsArray.length > 0
-            ? itemsArray.map(name => `<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-semibold border border-indigo-100/50">${name}</span>`).join('')
-            : '<span class="text-[11px] text-gray-400 italic">No items attached</span>'
-          }
-            </div>
-            <div class="flex items-center gap-6 text-[11px] text-gray-400">
-              <span class="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                <b class="text-gray-600">${l.views || 0}</b> views
-              </span>
-              <span class="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <b class="text-gray-600">${l.enquiries || 0}</b> enquiries
-              </span>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-gray-50">
-            <button onclick="togglePromoStatus(${l.id}, '${l.status}')" class="p-2.5 rounded-xl border border-gray-200 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all" title="Change Status">
-              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636"/></svg>
-            </button>
-            <button onclick="deletePromotion(${l.id})" class="p-2.5 rounded-xl border border-red-100 text-red-400 hover:text-red-600 hover:bg-red-50 transition-all" title="Delete">
-              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-            </button>
-            <button onclick="copyToClipboard('${window.location.origin}/promo/${l.id}', this)" class="px-4 py-2.5 rounded-xl bg-gray-50 text-gray-700 text-xs font-bold hover:bg-gray-100 transition-all">Copy</button>
-            <a href="/promo/${l.id}" target="_blank" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-100">Preview</a>
-          </div>
-        </div>
-      </div>`;
-      }).join('');
-    }
-
     function updateSelectionUI() {
       const count = selected.size;
       const bar = document.getElementById('floatingBar');
@@ -1031,14 +1051,22 @@
     }
 
     function selectGroup(id, count, el) {
-      state.selectedGroupId = id;
-      state.selectedCustomerId = null;
-      currentRecipients = count;
-      document.getElementById('recipientsCount').textContent = count;
 
-      // UI highlight
-      document.querySelectorAll('#groupList label').forEach(l => l.classList.replace('border-indigo-500', 'border-gray-200'));
-      el.classList.replace('border-gray-200', 'border-indigo-500');
+      // remove previous selection
+      document.querySelectorAll(".group-item").forEach(e => {
+        e.classList.remove("border-indigo-500", "bg-indigo-50", "shadow-sm", "scale-[1.01]");
+        e.querySelector(".tick")?.classList.add("hidden");
+      });
+
+      // apply new selection
+      el.classList.add("border-indigo-500", "bg-indigo-50", "shadow-sm", "scale-[1.01]");
+      el.querySelector(".tick")?.classList.remove("hidden");
+
+      // update state
+      state.selectedGroupId = id;
+
+      // update recipients count
+      document.getElementById("recipientsCount").textContent = count || 0;
     }
 
     function setSendTo(m) {
@@ -1507,6 +1535,107 @@
       loadCustomers();
       renderCards();
     });
+  </script>
+  <script>
+    let linkFilter = 'all';
+    let linkSearch = '';
+
+    function filterLinks(q) {
+      linkSearch = q.toLowerCase();
+      renderLinks();
+    }
+
+    function setLinkFilter(f) {
+      linkFilter = f;
+
+      document.querySelectorAll('[id^="lf-"]').forEach(b => {
+        b.classList.remove('bg-indigo-600', 'text-white');
+        b.classList.add('border', 'text-gray-600');
+      });
+
+      document.getElementById('lf-' + f).classList.add('bg-indigo-600', 'text-white');
+
+      renderLinks();
+    }
+    function renderLinks() {
+      const el = document.getElementById("linksList");
+      if (!el) return;
+
+      const filtered = savedLinks.filter(l => {
+        const matchSearch = !linkSearch || l.desc.toLowerCase().includes(linkSearch);
+        const matchFilter =
+          linkFilter === 'all' ||
+          (linkFilter === 'active' && l.status === 'ACTIVE') ||
+          (linkFilter === 'inactive' && l.status !== 'ACTIVE');
+        return matchSearch && matchFilter;
+      });
+
+      // Update Stats
+      document.getElementById("stat-total").textContent = savedLinks.length;
+      document.getElementById("stat-active").textContent = savedLinks.filter(l => l.status === 'ACTIVE').length;
+      document.getElementById("stat-paused").textContent = savedLinks.filter(l => l.status !== 'ACTIVE').length;
+
+      if (!filtered.length) {
+        el.innerHTML = `<p class="text-center text-gray-400 py-10">No promotions found in database</p>`;
+        return;
+      }
+
+      el.innerHTML = filtered.map(l => {
+        const isActive = l.status === 'ACTIVE';
+        const items = l.items || []; // Dynamic items from DB
+
+        return `
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 group">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-11 h-11 rounded-2xl ${isActive ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-400'} flex items-center justify-center transition">
+                                🔗
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-gray-900 truncate group-hover:text-indigo-600 transition">
+                                    ${l.desc}
+                                </p>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}">
+                                        ${isActive ? 'Active' : 'Paused'}
+                                    </span>
+                                    <p class="text-[11px] text-gray-400 font-medium">${l.recipients} recipients</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${items.length > 0
+            ? items.map(name => `<span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-semibold border border-indigo-100">${name}</span>`).join('')
+            : '<span class="text-[11px] text-gray-400 italic">No items attached</span>'
+          }
+                        </div>
+
+                        <div class="flex items-center gap-6 text-[11px] text-gray-400">
+                            <span class="flex items-center gap-1.5">👁 <b class="text-gray-700">${l.views}</b></span>
+                            <span class="flex items-center gap-1.5">📩 <b class="text-gray-700">${l.enquiries}</b></span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full md:w-auto pt-3 md:pt-0 border-t md:border-0">
+                        <button onclick="copyToClipboard('${window.location.origin}/promo/${l.id}', this)" class="px-4 py-2.5 rounded-xl bg-gray-50 text-gray-700 text-xs font-semibold hover:bg-gray-100 transition">Copy</button>
+                        <a href="/promo/${l.id}" target="_blank" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-sm">Preview</a>
+                    </div>
+                </div>
+            </div>`;
+      }).join('');
+    }
+
+    function copyPromoLink(id) {
+      const link = `${window.location.origin}/promo/${id}`;
+      navigator.clipboard.writeText(link);
+      alert("Copied 🔥");
+    }
+
+    function toggleStatus(id) {
+      alert("connect backend here");
+    }
   </script>
 
 

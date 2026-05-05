@@ -1,10 +1,24 @@
+function formatCountry(option) {
+    if (!option.id) return option.text;
+
+    const flag = $(option.element).data("flag");
+
+    return $(`
+        <span style="display:flex; align-items:center; gap:8px; white-space:nowrap;">
+            <img src="https://flagcdn.com/w20/${flag}.png"
+                 style="width:18px;height:12px;border-radius:2px;" />
+           
+        </span>
+    `);
+}
+
 /* ================= CUSTOMER MODAL ================= */
 
 
 function toggleGroupSelection(groupId) {
     if (!groupId) return;
     groupId = groupId.toString();
-    
+
     const index = selectedGroupIds.indexOf(groupId);
     const btn = document.getElementById('sb-' + groupId);
 
@@ -49,11 +63,28 @@ function showAddCustomerModal() {
     document.getElementById("cBirthday").value = "";
     document.getElementById("cAnniversary").value = "";
 
-    resetGroupUI(); // Clear any previous selections
+    resetGroupUI();
 
     document.getElementById("modalTitle").innerText = "Add Customer";
     document.getElementById("saveCustomerBtn").innerText = "Add Customer";
+
+    // ✅ Show modal first
     document.getElementById("addCustomerModal").classList.remove("hidden");
+
+    // 🔥 THEN initialize Select2 (important)
+    setTimeout(() => {
+
+        $('#countryCode').select2({
+            templateResult: formatCountry,
+            templateSelection: formatCountry,
+            minimumResultsForSearch: 0,
+            width: '100%',
+            escapeMarkup: function (markup) {
+                return markup;
+            }
+        });
+
+    }, 100);
 }
 
 function hideAddCustomerModal() {
@@ -66,7 +97,24 @@ function openEditCustomer(id, name, phone, email, groupIds, channel) {
 
     document.getElementById("cId").value = id;
     document.getElementById("cName").value = name;
-    document.getElementById("cPhone").value = phone;
+    let fullPhone = phone || "";
+
+    // default
+    let countryCode = "+91";
+    let localPhone = fullPhone;
+
+    // split logic
+    if (fullPhone.startsWith("+91")) {
+        countryCode = "+91";
+        localPhone = fullPhone.substring(3);
+    } else if (fullPhone.startsWith("+1")) {
+        countryCode = "+1";
+        localPhone = fullPhone.substring(2);
+    }
+
+    // set values
+    document.getElementById("countryCode").value = countryCode;
+    document.getElementById("cPhone").value = localPhone;
     document.getElementById("cEmail").value = email;
 
     // FIX: Handle the comma-separated group string
@@ -74,7 +122,7 @@ function openEditCustomer(id, name, phone, email, groupIds, channel) {
         const ids = groupIds.toString().split(',');
         ids.forEach(gid => {
             // Use toggleGroupSelection to highlight each button
-            toggleGroupSelection(gid); 
+            toggleGroupSelection(gid);
         });
     }
 
@@ -160,16 +208,21 @@ function setView(view) {
     const cardBtn = document.getElementById("v-card");
     const listBtn = document.getElementById("v-list");
 
+    if (!grid || !list) return; // required
+
     if (view === "card") {
         grid.classList.remove("hidden");
         list.classList.add("hidden");
-        cardBtn.classList.add("bg-indigo-50", "text-indigo-600");
-        listBtn.classList.remove("bg-indigo-50", "text-indigo-600");
+
+        if (cardBtn) cardBtn.classList.add("bg-indigo-50", "text-indigo-600");
+        if (listBtn) listBtn.classList.remove("bg-indigo-50", "text-indigo-600");
+
     } else {
         grid.classList.add("hidden");
         list.classList.remove("hidden");
-        listBtn.classList.add("bg-indigo-50", "text-indigo-600");
-        cardBtn.classList.remove("bg-indigo-50", "text-indigo-600");
+
+        if (listBtn) listBtn.classList.add("bg-indigo-50", "text-indigo-600");
+        if (cardBtn) cardBtn.classList.remove("bg-indigo-50", "text-indigo-600");
     }
 }
 

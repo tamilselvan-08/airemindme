@@ -20,7 +20,6 @@ import com.server.realsync.util.SecurityUtil;
 
 //used for report templates
 
-
 @RestController
 @RequestMapping("/api/catalog")
 public class CatlogContoller {
@@ -36,8 +35,6 @@ public class CatlogContoller {
 
     @Autowired
     private CatalogRTemplateService rTemplateService;
-
-    
 
     // GET /api/catalog/plans
     @GetMapping("/plans")
@@ -93,6 +90,22 @@ public class CatlogContoller {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/plans/{id}/image")
+    public ResponseEntity<?> updatePlanImage(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return settingsPlanService.getById(id)
+                .filter(p -> p.getAccountId().equals(account.getId()))
+                .map(p -> {
+                    p.setImageUrl(body.get("imageUrl"));
+                    return ResponseEntity.ok(settingsPlanService.save(p));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/products")
     public List<CatalogProduct> getProducts() {
         Account account = SecurityUtil.getCurrentAccountId();
@@ -139,6 +152,20 @@ public class CatlogContoller {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/products/{id}/image")
+    public ResponseEntity<?> updateProductImage(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+
+        Account account = SecurityUtil.getCurrentAccountId();
+
+        return productService.getById(id, account.getId())
+                .map(p -> {
+                    p.setImageUrl(body.get("imageUrl"));
+                    return ResponseEntity.ok(productService.save(p));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
     // =====================================================================
     // TEMPLATES
     // =====================================================================
@@ -279,6 +306,5 @@ public class CatlogContoller {
                 "activeProducts", productService.countActiveByAccountId(accId),
                 "activeTemplates", templateService.countActiveByAccountId(accId)));
     }
-
 
 }

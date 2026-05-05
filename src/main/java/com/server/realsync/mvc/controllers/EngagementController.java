@@ -49,19 +49,46 @@ public class EngagementController {
         }
         return reminderService.save(reminder);
     }
+@PutMapping("/reminders/{id}")
+public ResponseEntity<?> updateReminder(
+        @PathVariable Integer id,
+        @RequestBody Reminder updatedReminder) {
 
-    @PutMapping("/reminders/{id}")
-    public Reminder updateReminder(@PathVariable Integer id, @RequestParam Integer accountId,
-            @RequestBody Reminder reminder) {
-        Optional<Reminder> existing = reminderService.getById(id, accountId);
-        if (existing.isEmpty()) {
-            throw new RuntimeException("Reminder not found or unauthorized");
-        }
-        reminder.setId(id);
-        reminder.setAccountId(accountId);
-        return reminderService.save(reminder);
+    Account account = SecurityUtil.getCurrentAccountId();
+
+    Optional<Reminder> optionalReminder =
+            reminderService.getById(id, account.getId());
+
+    if (optionalReminder.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", "Reminder not found"));
     }
 
+    Reminder existing = optionalReminder.get();
+
+    
+    existing.setTitle(updatedReminder.getTitle());
+    existing.setMessage(updatedReminder.getMessage());
+    existing.setReminderDate(updatedReminder.getReminderDate());
+    existing.setReminderTime(updatedReminder.getReminderTime());
+    existing.setCustomerId(updatedReminder.getCustomerId());
+    existing.setChannel(updatedReminder.getChannel());
+    existing.setStatus(updatedReminder.getStatus());
+
+    
+    existing.setReminderType(updatedReminder.getReminderType());   
+    existing.setFrequency(updatedReminder.getFrequency());         
+    existing.setTotalOccurrences(updatedReminder.getTotalOccurrences()); 
+    existing.setAmount(updatedReminder.getAmount());               
+
+   
+    existing.setAttachedItemId(updatedReminder.getAttachedItemId());
+    existing.setAttachedItemType(updatedReminder.getAttachedItemType());
+
+    Reminder saved = reminderService.save(existing);
+
+    return ResponseEntity.ok(saved);
+}
     @DeleteMapping("/reminders/{id}")
     public ResponseEntity<?> deleteReminder(@PathVariable Integer id) {
         Account account = SecurityUtil.getCurrentAccountId();
@@ -76,19 +103,51 @@ public class EngagementController {
     }
 
     @PostMapping("/greetings")
-    public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting) {
-        // Basic validation
+    public ResponseEntity<?> createGreeting(@RequestBody Greeting greeting) {
+
         if (greeting.getAccountId() == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(Map.of("error", "AccountId required"));
         }
 
-        // Set default status if not provided by frontend
         if (greeting.getStatus() == null) {
             greeting.setStatus("Scheduled");
         }
 
-        Greeting savedGreeting = greetingService.save(greeting);
-        return ResponseEntity.ok(savedGreeting);
+        Greeting saved = greetingService.save(greeting);
+
+        return ResponseEntity.ok(Map.of(
+                "id", saved.getId(),
+                "status", "created"));
+    }
+
+    @PutMapping("/greetings/{id}/image")
+    public ResponseEntity<?> updateGreetingImage(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+
+        try {
+            System.out.println("UPDATE IMAGE API HIT");
+
+            String imageUrl = body.get("imageUrl");
+
+            Account account = SecurityUtil.getCurrentAccountId();
+
+            Greeting greeting = greetingService.getById(id, account.getId())
+                    .orElseThrow(() -> new RuntimeException("Greeting not found"));
+
+            greeting.setImageUrl(imageUrl);
+
+            greetingService.save(greeting);
+
+            System.out.println("✅ Image saved to DB");
+
+            return ResponseEntity.ok(Map.of("message", "Image updated"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/greetings/{id}")
@@ -167,5 +226,4 @@ public class EngagementController {
         return ResponseEntity.ok(Map.of("message", "Converted to recurring"));
     }
 
-    
 }

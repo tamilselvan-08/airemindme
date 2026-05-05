@@ -1,8 +1,10 @@
 package com.server.realsync.mvc.controllers;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -170,6 +172,17 @@ public class HomeController {
 						account.getId(), pageable);
 			}
 		}
+		String selectedSegmentName = null;
+
+		if (segment != null && !segment.equalsIgnoreCase("all")) {
+			for (CustomerGroup g : accountGroups) {
+				if (g.getId().toString().equals(segment)) {
+					selectedSegmentName = g.getName();
+					break;
+				}
+			}
+		}
+
 		model.addAttribute("account", account);
 		model.addAttribute("customers", customers.getContent());
 		model.addAttribute("currentPage", page);
@@ -177,22 +190,39 @@ public class HomeController {
 		model.addAttribute("totalCustomers", totalCustomers);
 		model.addAttribute("search", search);
 		model.addAttribute("selectedSegment", segment);
-
+		model.addAttribute("selectedSegmentName", selectedSegmentName);
 		return "remindmeui/customers";
 	}
 
 	@GetMapping("/customer-detail.html")
 	public String getCustomerDetail(@RequestParam Integer id, Model model) {
-		Account loggedIn = SecurityUtil.getCurrentAccountId();
 
+		Account loggedIn = SecurityUtil.getCurrentAccountId();
 		Account account = accountService.getById(loggedIn.getId());
 
 		model.addAttribute("account", account);
-		Optional<Customer> customer = customerService.getById(account.getId(), id);
-		if (customer.isEmpty()) {
+
+		Optional<Customer> customerOpt = customerService.getById(account.getId(), id);
+		if (customerOpt.isEmpty()) {
 			return "redirect:/customers.html";
 		}
-		model.addAttribute("customer", customer.get());
+
+		Customer customer = customerOpt.get();
+		model.addAttribute("customer", customer);
+
+		List<CustomerGroup> groups = customerGroupService.getByAccountId(account.getId());
+		List<Reminder> reminders = reminderService.getByCustomerId(id, account.getId());
+		List<Greeting> greetings = greetingService.getByCustomerId(id, account.getId());
+
+		Map<Integer, String> groupMap = groups.stream()
+				.collect(Collectors.toMap(
+						CustomerGroup::getId,
+						CustomerGroup::getName));
+
+		model.addAttribute("groupMap", groupMap);
+        model.addAttribute("reminders", reminders);
+        model.addAttribute("greetings", greetings);
+
 		return "remindmeui/customer-detail";
 	}
 
@@ -461,28 +491,25 @@ public class HomeController {
 	}
 
 	@GetMapping("/view-report.html")
-public String viewReportPage(@RequestParam Integer id, Model model) {
+	public String viewReportPage(@RequestParam Integer id, Model model) {
 
-    // 1. Get logged-in account
-    Integer accountId = SecurityUtil.getCurrentAccountId().getId();
-    Account account = accountService.getById(accountId);
+		// 1. Get logged-in account
+		Integer accountId = SecurityUtil.getCurrentAccountId().getId();
+		Account account = accountService.getById(accountId);
 
-    // 2. Get report (DTO)
-    ReportResponse report = reportService.getReportById(id);
+		// 2. Get report (DTO)
+		ReportResponse report = reportService.getReportById(id);
 
-    if (report == null) {
-        return "redirect:/reports.html"; // safety fallback
-    }
+		if (report == null) {
+			return "redirect:/reports.html"; // safety fallback
+		}
 
-    
+		// 4. Add all required data to UI
+		model.addAttribute("account", account);
+		model.addAttribute("report", report);
 
-    // 4. Add all required data to UI
-    model.addAttribute("account", account);
-    model.addAttribute("report", report);
-    
-
-    return "remindmeui/report-detail";
-}
+		return "remindmeui/report-detail";
+	}
 
 	@GetMapping("/settings.html")
 	public String getSettings(Model model) {

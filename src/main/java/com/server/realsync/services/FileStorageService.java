@@ -79,6 +79,7 @@ public class FileStorageService {
 
 	public void uploadFile(String path, MultipartFile file, String fileName) throws IOException {
 		InputStream inputStream = file.getInputStream();
+		System.out.println("🔥 BUCKET NAME USED: " + bucketName);
 		if (useCloud) {
 			//ObjectMetadata metadata = new ObjectMetadata();
 			//metadata.setCacheControl("31536000");
@@ -196,6 +197,7 @@ public class FileStorageService {
 			}
 		}
 	}
+	
 
 	public AmazonS3 getAmazonS3() {
 		return amazonS3;

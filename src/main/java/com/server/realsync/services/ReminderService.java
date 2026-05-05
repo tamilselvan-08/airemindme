@@ -24,6 +24,10 @@ public class ReminderService {
         return repo.findByAccountIdOrderByCreatedAtDesc(accountId);
     }
 
+    public List<Reminder> getByCustomerId(Integer customerId, Integer accountId) {
+        return repo.findByCustomerIdAndAccountId(customerId, accountId);
+    }
+
     /** Single reminder scoped to account */
     public Optional<Reminder> getById(Integer id, Integer accountId) {
         return repo.findByIdAndAccountId(id, accountId);

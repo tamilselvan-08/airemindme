@@ -52,7 +52,6 @@
   </div>
 
   <!-- Top Header -->
-  <!-- Top Header -->
   <div class="bg-white border-b border-slate-100 px-4 py-3 md:px-6 sticky top-14 md:top-0 z-10">
     <div class="max-w-4xl mx-auto flex items-center gap-3">
 
@@ -79,19 +78,10 @@
 
 
           <!-- Segment Badge -->
-          <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold" th:text="
-            ${customer.customerGroupId == 1} ? 'VIP' :
-            (${customer.customerGroupId == 2} ? 'Regular' :
-            (${customer.customerGroupId == 3} ? 'New' : 'Inactive'))
-          " th:classappend="
-            ${customer.customerGroupId == 1} ? 'bg-yellow-100 text-yellow-700' :
-            (${customer.customerGroupId == 2} ? 'bg-blue-100 text-blue-700' :
-            (${customer.customerGroupId == 3} ? 'bg-green-100 text-green-700' :
-            'bg-gray-100 text-gray-500'))
-          ">
+          <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold"
+            th:text="${groupMap[T(java.lang.Integer).valueOf(customer.customerGroupId)]}"
+            th:classappend="'bg-gray-100 text-gray-700'">
           </span>
-
-
 
         </div>
 
@@ -99,7 +89,10 @@
 
 
       </div>
-
+      <!-- Edit button -->
+      <a th:href="@{/customers.html(editId=${customer.id})}"
+        class="text-xs px-3 py-1 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100">
+        Edit</a>
 
       <!-- Delete Button -->
       <button th:attr="onclick='deleteCustomer(' + ${customer.id} + ')'"
@@ -138,17 +131,9 @@
 
             <h2 class="text-sm font-bold text-slate-900" th:text="${customer.name}">Customer Name</h2>
 
-            <!-- Customer Segment Badge -->
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold" th:text="
-              ${customer.customerGroupId == 1} ? 'VIP' :
-              (${customer.customerGroupId == 2} ? 'Regular' :
-              (${customer.customerGroupId == 3} ? 'New' : 'Inactive'))
-            " th:classappend="
-              ${customer.customerGroupId == 1} ? 'bg-yellow-100 text-yellow-700' :
-              (${customer.customerGroupId == 2} ? 'bg-blue-100 text-blue-700' :
-              (${customer.customerGroupId == 3} ? 'bg-green-100 text-green-700' :
-              'bg-gray-100 text-gray-500'))
-            ">
+            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold"
+              th:text="${groupMap[T(java.lang.Integer).valueOf(customer.customerGroupId)]}"
+              th:classappend="'bg-gray-100 text-gray-700'">
             </span>
 
           </div>
@@ -280,6 +265,8 @@
         </div>
       </div>
 
+
+
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
           <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,20 +294,6 @@
           <p class="text-slate-400 text-[10px]">1 sent</p>
         </div>
       </div>
-
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-          <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-          </svg>
-        </div>
-        <div class="min-w-0">
-          <p class="text-slate-400 text-xs">Campaigns</p>
-          <p class="text-slate-900 text-lg font-bold leading-tight">5</p>
-          <p class="text-slate-400 text-[10px]">2 completed</p>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -341,7 +314,9 @@
             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
         Reminders
-        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">3</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold"
+          th:text="${reminders != null ? #lists.size(reminders) : 0}">
+        </span>
       </button>
       <button onclick="switchTab('greetings')" id="tab-greetings"
         class="flex items-center gap-2 px-4 py-3 text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex-shrink-0">
@@ -350,17 +325,11 @@
             d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
         </svg>
         Greetings
-        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">2</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold"
+          th:text="${greetings != null ? #lists.size(greetings) : 0}">
+        </span>
       </button>
-      <button onclick="switchTab('campaigns')" id="tab-campaigns"
-        class="flex items-center gap-2 px-4 py-3 text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex-shrink-0">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-        </svg>
-        Campaigns
-        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">5</span>
-      </button>
+
     </div>
   </div>
 
@@ -429,192 +398,203 @@
             </button>
           </div>
           <div class="space-y-2">
-            <div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
-              <span class="text-base flex-shrink-0">🎂</span>
-              <div class="flex-1 min-w-0">
-                <p class="text-slate-800 text-xs truncate font-medium">Birthday Greeting</p>
-                <p class="text-slate-400 text-[11px]">Mar 15, 2026</p>
+
+            <!-- ✅ If data exists -->
+            <div th:if="${greetings != null and !greetings.isEmpty()}">
+
+              <!-- show first 3 items -->
+              <div th:each="g,stat : ${greetings}" th:if="${stat.index < 3}"
+                class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
+
+                <!-- ICON -->
+                <span class="text-base flex-shrink-0">🎉</span>
+
+                <!-- CONTENT -->
+                <div class="flex-1 min-w-0">
+                  <p class="text-slate-800 text-xs truncate font-medium" th:text="${g.greetingType}">
+                  </p>
+
+                  <p class="text-slate-400 text-[11px]" th:if="${g.greetingDate != null}"
+                    th:text="${#temporals.format(g.greetingDate, 'MMM dd, yyyy')}">
+                  </p>
+                </div>
+
+                <!-- STATUS -->
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" th:text="${g.status}"
+                  th:classappend="${g.status == 'Scheduled'} ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'">
+                </span>
+
               </div>
-              <span
-                class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold">scheduled</span>
+
             </div>
+
+            <!-- ❌ Empty -->
+            <div th:if="${greetings == null or greetings.isEmpty()}" class="text-slate-400 text-xs py-2">
+              No upcoming greetings 🎉
+            </div>
+
           </div>
         </div>
       </div>
 
       <!-- Reminders Tab -->
       <div id="panel-reminders" class="tab-panel space-y-3">
-        <div class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
-          <div class="bg-emerald-50 border-b border-emerald-100 px-4 py-2 flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="text-emerald-700 text-xs font-semibold">Payment Received</span>
-            <span class="text-emerald-500 text-xs ml-auto">Mar 2</span>
-          </div>
-          <div class="p-4">
-            <div class="flex items-start gap-3">
-              <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-emerald-50">
-                <svg class="w-4.5 h-4.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 flex-wrap mb-1">
-                  <span class="text-slate-900 text-sm font-semibold">Loan EMI - March 2026</span>
-                  <span
-                    class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold">sent</span>
-                </div>
-                <p class="text-slate-500 text-xs leading-relaxed mb-2">Dear Rajesh, your monthly EMI of ₹25,000 is due
-                  on March 1st. Please ensure timely payment.</p>
-                <div class="flex items-center gap-3 flex-wrap">
-                  <span class="flex items-center gap-1 text-slate-400 text-xs">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Mar 1, 2026 9:00 AM
-                  </span>
-                  <span
-                    class="text-[10px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">WhatsApp</span>
-                </div>
-                <div class="mt-2 bg-emerald-50 rounded-xl px-3 py-2 border border-emerald-100">
-                  <p class="text-emerald-700 text-xs"><span class="font-semibold">Note:</span> Payment received via NEFT
-                  </p>
-                </div>
-              </div>
+
+        <div th:if="${reminders != null and !reminders.isEmpty()}">
+
+          <div th:each="r : ${reminders}"
+            class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+
+            <!-- TOP STATUS BAR -->
+            <div class="px-4 py-2 flex items-center gap-2"
+              th:classappend="${r.status == 'Paid'} ? 'bg-emerald-50 border-emerald-100' : 'bg-amber-50 border-amber-100'">
+
+              <span class="text-xs font-semibold" th:text="${r.status}"></span>
+
+              <span class="text-xs ml-auto text-slate-400"
+                th:text="${r.reminderDate != null ? #temporals.format(r.reminderDate,'MMM dd') : ''}">
+              </span>
             </div>
+
+            <!-- BODY -->
+            <div class="p-4">
+
+              <div class="flex items-start gap-3">
+
+                <!-- ICON -->
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-indigo-50">
+                  🔔
+                </div>
+
+                <!-- CONTENT -->
+                <div class="flex-1 min-w-0">
+
+                  <!-- TITLE + STATUS -->
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+
+                    <span class="text-slate-900 text-sm font-semibold" th:text="${r.title}"></span>
+
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" th:text="${r.status}"
+                      th:classappend="${r.status == 'Paid'} ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'">
+                    </span>
+
+                  </div>
+
+                  <!-- MESSAGE -->
+                  <p class="text-slate-500 text-xs leading-relaxed mb-2" th:text="${r.message}"></p>
+
+                  <!-- DATE + CHANNEL -->
+                  <div class="flex items-center gap-3 flex-wrap">
+
+                    <span class="text-xs text-slate-400" th:if="${r.reminderDate != null}"
+                      th:text="${#temporals.format(r.reminderDate, 'MMM dd, yyyy')}">
+                    </span>
+
+                    <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium"
+                      th:text="${r.channel}">
+                    </span>
+
+                  </div>
+
+                  <!-- OPTIONAL NOTE -->
+                  <div th:if="${r.status == 'Paid'}"
+                    class="mt-2 bg-emerald-50 rounded-xl px-3 py-2 border border-emerald-100">
+
+                    <p class="text-emerald-700 text-xs">
+                      <span class="font-semibold">Note:</span> Payment received
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-indigo-50">
-              <svg class="w-4.5 h-4.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 flex-wrap mb-1">
-                <span class="text-slate-900 text-sm font-semibold">Credit Card Due</span>
-                <span
-                  class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold">pending</span>
-              </div>
-              <p class="text-slate-500 text-xs leading-relaxed mb-2">Your credit card payment of ₹12,500 is due on March
-                15th.</p>
-              <div class="flex items-center gap-3 flex-wrap">
-                <span class="flex items-center gap-1 text-slate-400 text-xs">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Mar 15, 2026 10:00 AM
-                </span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium">SMS</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-3 pt-3 border-t border-slate-50">
-            <button onclick="markPaid()"
-              class="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-4 py-2 rounded-xl transition font-semibold">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              Mark Payment Received
-            </button>
-          </div>
+        <!-- EMPTY -->
+        <div th:if="${reminders == null or reminders.isEmpty()}" class="text-center py-10 text-slate-400 text-sm">
+          No reminders available 🔔
         </div>
+
       </div>
 
       <!-- Greetings Tab -->
       <div id="panel-greetings" class="tab-panel space-y-3">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-pink-50">
-              <svg class="w-4.5 h-4.5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-slate-900 text-sm font-semibold">Birthday Greeting</span>
-                <span
-                  class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold">scheduled</span>
+
+        <!-- ✅ IF DATA EXISTS -->
+        <div th:if="${greetings != null and !greetings.isEmpty()}">
+
+          <div th:each="g : ${greetings}" class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+
+            <div class="flex items-start gap-3">
+
+              <!-- ICON -->
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-pink-50">
+                🎉
               </div>
-              <p class="text-slate-500 text-xs leading-relaxed mb-2">🎉 Happy Birthday Rajesh! Wishing you a wonderful
-                year ahead filled with success and happiness!</p>
-              <div class="flex items-center gap-3 flex-wrap">
-                <span class="flex items-center gap-1 text-slate-400 text-xs">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Mar 15, 2026
-                </span>
-                <span
-                  class="text-[10px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">WhatsApp</span>
+
+              <!-- CONTENT -->
+              <div class="flex-1 min-w-0">
+
+                <!-- TITLE + STATUS -->
+                <div class="flex items-center gap-2 mb-1">
+
+                  <span class="text-slate-900 text-sm font-semibold" th:text="${g.greetingType}">
+                  </span>
+
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" th:text="${g.status}"
+                    th:classappend="${g.status == 'Scheduled'} ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'">
+                  </span>
+
+                </div>
+
+                <!-- MESSAGE -->
+                <p class="text-slate-500 text-xs leading-relaxed mb-2" th:text="${g.message}">
+                </p>
+
+                <!-- DATE + CHANNEL -->
+                <div class="flex items-center gap-3 flex-wrap">
+
+                  <!-- DATE -->
+                  <span class="flex items-center gap-1 text-slate-400 text-xs" th:if="${g.greetingDate != null}">
+
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+
+                    <span th:text="${#temporals.format(g.greetingDate, 'MMM dd, yyyy')}"></span>
+
+                  </span>
+
+                  <!-- CHANNEL -->
+                  <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium"
+                    th:text="${g.channels}">
+                  </span>
+
+                </div>
+
               </div>
+
             </div>
+
           </div>
+
         </div>
+
+        <!-- ❌ EMPTY STATE -->
+        <div th:if="${greetings == null or greetings.isEmpty()}" class="text-center py-10 text-slate-400 text-sm">
+          No greetings available 🎉
+        </div>
+
       </div>
 
-      <!-- Campaigns Tab -->
-      <div id="panel-campaigns" class="tab-panel space-y-3">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-          <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-orange-50">
-              <svg class="w-4.5 h-4.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <span class="text-slate-900 text-sm font-semibold">Special Loan Offers</span>
-                <span
-                  class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold">completed</span>
-                <span
-                  class="text-[10px] px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 font-medium capitalize">promotion</span>
-              </div>
-              <p class="text-slate-500 text-xs leading-relaxed mb-2">Special offer: Get personal loans at 9.5% interest
-                rate. Limited time offer for VIP customers!</p>
-              <div class="flex items-center gap-3 flex-wrap">
-                <span class="flex items-center gap-1 text-slate-400 text-xs">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Feb 15, 2026
-                </span>
-                <span
-                  class="text-[10px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">WhatsApp</span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium">SMS</span>
-              </div>
-              <div class="flex items-center gap-4 mt-2 pt-2 border-t border-slate-50">
-                <div class="text-center">
-                  <p class="text-slate-700 text-xs font-bold">1</p>
-                  <p class="text-slate-400 text-[10px]">Sent</p>
-                </div>
-                <div class="text-center">
-                  <p class="text-slate-700 text-xs font-bold">1</p>
-                  <p class="text-slate-400 text-[10px]">Delivered</p>
-                </div>
-                <div class="text-center">
-                  <p class="text-slate-700 text-xs font-bold">1</p>
-                  <p class="text-slate-400 text-[10px]">Read</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
     </div>
   </div>
@@ -695,13 +675,24 @@
       }
     }
 
-    function deleteCustomer() {
-      if (confirm('Delete customer Rajesh Kumar? This cannot be undone.')) {
-        window.location.href = 'customers.html';
-      }
+    function deleteCustomer(id, name) {
+
+      const confirmDelete = confirm(`Delete customer ? This cannot be undone.`);
+
+      if (!confirmDelete) return;
+
+      fetch(`/api/customers/${id}`, {
+        method: "DELETE"
+      })
+        .then(() => {
+          window.location.href = "/customers.html";
+        });
+
     }
   </script>
   <script th:src="@{/js/theme.js}"></script>
+
+
 </body>
 
 </html>
