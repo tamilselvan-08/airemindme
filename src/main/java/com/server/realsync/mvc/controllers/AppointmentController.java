@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.server.realsync.dto.AppointmentResponse;
 import com.server.realsync.entity.Account;
 import com.server.realsync.entity.Appointment;
 import com.server.realsync.services.AppointmentService;
@@ -20,7 +21,7 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public List<Appointment> getAll() {
+    public List<AppointmentResponse> getAll() {
         Integer accountId = SecurityUtil.getCurrentAccountId().getId();
         return service.getAll(accountId);
     }

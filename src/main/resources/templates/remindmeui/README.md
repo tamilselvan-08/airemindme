@@ -1,10 +1,10 @@
-# Reminder Me - HTML Export
+# Numen - HTML Export
 
-This directory contains standalone HTML versions of all pages from the **Reminder Me** SaaS application.
+This directory contains standalone HTML versions of all pages from the **Numen** SaaS application.
 
 ## 🎯 Overview
 
-Reminder Me is a multi-tenant B2B SaaS application that helps businesses manage and engage their B2C customers through automated reminders, greetings, and promotions sent via WhatsApp, SMS, and Email.
+Numen is a multi-tenant B2B SaaS application that helps businesses manage and engage their B2C customers through automated reminders, greetings, and promotions sent via WhatsApp, SMS, and Email.
 
 ## 📁 Page Structure
 
@@ -191,7 +191,7 @@ Tested and working on:
 
 ## 📝 License
 
-This HTML export is part of the Reminder Me project.
+This HTML export is part of the Numen project.
 
 ## 🤝 Support
 

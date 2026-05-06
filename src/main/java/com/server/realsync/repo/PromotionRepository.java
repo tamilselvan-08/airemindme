@@ -20,5 +20,6 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
     List<Promotion> findByAccountIdAndStatus(Integer accountId, String status);
 
     List<Promotion> findByAccountIdAndScheduledAtIsNotNull(Integer accountId);
+    long countByAccountId(Integer accountId);
 
 }

@@ -33,7 +33,7 @@ public class SecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/accounts/signup", "/mweb/login", "/signup.html","/register.html", "/login", "/privacy",
-								"/terms", "/css/**", "/js/**", "/img/**", "/realsync-assets/**")
+								"/terms", "/css/**", "/js/**", "/img/**",  "/assets/**","/realsync-assets/**")
 						.permitAll().requestMatchers("/").permitAll()
 						.requestMatchers(new AntPathRequestMatcher("/realsync-assets/**")).permitAll()
 						.requestMatchers("/realsync/**").permitAll().requestMatchers("/mweb/register").permitAll()

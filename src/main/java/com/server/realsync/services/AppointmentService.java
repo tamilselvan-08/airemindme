@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.server.realsync.dto.AppointmentResponse;
 import com.server.realsync.entity.Appointment;
 import com.server.realsync.entity.Customer;
 import com.server.realsync.repo.AppointmentRepository;
@@ -41,8 +42,39 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public List<Appointment> getAll(Integer accountId) {
-        return appointmentRepository.findByAccountId(accountId);
+    public List<AppointmentResponse> getAll(Integer accountId) {
+
+        List<Appointment> appointments = appointmentRepository.findAllWithCustomer(accountId);
+
+        return appointments.stream().map(appt -> {
+
+            AppointmentResponse dto = new AppointmentResponse();
+
+            dto.setId(appt.getId());
+
+            dto.setCustomerName(
+                    appt.getCustomer() != null
+                            ? appt.getCustomer().getName()
+                            : "");
+
+            dto.setServiceName(appt.getServiceName());
+            dto.setServiceType(appt.getServiceType());
+            dto.setAssignee(appt.getAssignee());
+
+            dto.setAppointmentDate(appt.getAppointmentDate());
+            dto.setAppointmentTime(appt.getAppointmentTime());
+
+            dto.setDurationMinutes(appt.getDurationMinutes());
+
+            dto.setReminderType(appt.getReminderType());
+            dto.setChannel(appt.getChannel());
+            dto.setStatus(appt.getStatus());
+
+            dto.setNotes(appt.getNotes());
+
+            return dto;
+
+        }).toList();
     }
 
     public Optional<Appointment> getById(Long id, Integer accountId) {

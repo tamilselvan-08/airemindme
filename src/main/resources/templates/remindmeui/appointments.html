@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointments - Reminder Me</title>
+    <title>Appointments - Numen</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -360,6 +360,39 @@
 
         let apptFilter = 'all', apptSearchTerm = '', apptPage = 1;
         const APPT_PER_PAGE = 6;
+        function updateStats() {
+
+            const todayStr = fmt(today);
+
+            const todayCount = appointments.filter(a =>
+                a.date === todayStr &&
+                a.status !== 'Cancelled'
+            ).length;
+
+            const upcomingCount = appointments.filter(a =>
+                a.status === 'Upcoming'
+            ).length;
+
+            const completedCount = appointments.filter(a =>
+                a.status === 'Completed'
+            ).length;
+
+            const cancelledCount = appointments.filter(a =>
+                a.status === 'Cancelled'
+            ).length;
+
+            document.getElementById('stat-today').textContent =
+                todayCount;
+
+            document.getElementById('stat-upcoming').textContent =
+                upcomingCount;
+
+            document.getElementById('stat-completed').textContent =
+                completedCount;
+
+            document.getElementById('stat-cancelled').textContent =
+                cancelledCount;
+        }
 
         async function loadAppointments() {
             try {
@@ -368,7 +401,7 @@
 
                 appointments = data.map(a => ({
                     id: a.id,
-                    customer: a.customer?.name || 'Unknown',
+                    customer: a.customerName || 'Unknown',
                     service: a.serviceName,
                     type: a.serviceType,
                     date: formatDate(a.appointmentDate),
@@ -379,7 +412,7 @@
                     notes: a.notes,
                     assignee: a.assignee
                 }));
-
+                updateStats();
                 renderAppts();
 
             } catch (err) {

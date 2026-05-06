@@ -176,7 +176,7 @@ Each remaining page should follow this structure:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[Page Title] - Reminder Me</title>
+  <title>[Page Title] - Numen</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }

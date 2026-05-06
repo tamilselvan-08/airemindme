@@ -3,6 +3,7 @@ package com.server.realsync.mvc.controllers;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.server.realsync.dto.ReportResponse;
 import com.server.realsync.entity.Account;
@@ -33,6 +35,7 @@ import com.server.realsync.services.AccountService;
 import com.server.realsync.services.CustomerService;
 import com.server.realsync.services.ReminderService;
 import com.server.realsync.services.GreetingService;
+import com.server.realsync.services.PromotionService;
 import com.server.realsync.services.CustomerGroupService;
 import com.server.realsync.services.CatalogProductService;
 import com.server.realsync.services.CatalogRTemplateService;
@@ -84,6 +87,8 @@ public class HomeController {
 	@Autowired
 	private GreetingService greetingService;
 	@Autowired
+	private PromotionService promotionService;
+	@Autowired
 	GmailSender gmailSender;
 
 	@GetMapping
@@ -118,6 +123,29 @@ public class HomeController {
 
 		model.addAttribute("account", account);
 		return "remindmeui/home";
+	}
+
+	@ResponseBody
+	@GetMapping("/dashboard/stats")
+	public Map<String, Object> stats() {
+
+		Integer accountId = SecurityUtil.getCurrentAccountId().getId();
+
+		Map<String, Object> data = new HashMap<>();
+
+		data.put(
+				"customers",
+				customerService.getTotalCustomers(accountId));
+
+		data.put(
+				"reminders",
+				reminderService.countScheduledByAccountId(accountId));
+
+		data.put(
+				"promotions",
+				promotionService.getTotalPromotions(accountId));
+
+		return data;
 	}
 
 	@GetMapping("/customers.html")

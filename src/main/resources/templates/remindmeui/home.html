@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard - Reminder Me</title>
+	<title>Dashboard - Numen</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script>(function () { var t = localStorage.getItem('rm_theme') || 'light'; document.documentElement.setAttribute('data-theme', t); })()</script>
@@ -20,7 +20,7 @@
 
 	<!-- Mobile nav -->
 	<div th:replace="~{remindmeui/fragments/layout :: mobileNav(activePage='home')}"></div>
-	
+
 
 	<!-- Main Content -->
 	<div class="md:ml-56 min-h-screen pt-14 md:pt-0">
@@ -62,10 +62,12 @@
 										d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
 								</svg>
 							</div>
-							<span
-								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+12%</span>
+							<!-- <span
+								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+12%</span> -->
 						</div>
-						<p class="stat-number text-2xl font-bold text-gray-900" th:text="${totalCustomers}">17</p>
+						<p id="stat-customers" class="stat-number text-2xl font-bold text-gray-900">
+							0
+						</p>
 						<p class="text-xs text-gray-500 mt-0.5">Customers</p>
 					</div>
 					<!-- Sent Today -->
@@ -78,11 +80,13 @@
 										d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
 								</svg>
 							</div>
-							<span
-								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+8%</span>
+							<!-- <span
+								class="stat-badge-green text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">+8%</span> -->
 						</div>
-						<p class="stat-number text-2xl font-bold text-gray-900">47</p>
-						<p class="text-xs text-gray-500 mt-0.5">Sent Today</p>
+						<p id="stat-reminders" class="stat-number text-2xl font-bold text-gray-900">
+							0
+						</p>
+						<p class="text-xs text-gray-500 mt-0.5">No of Remainders</p>
 					</div>
 					<!-- Promotions -->
 					<div class="stat-card-3 rounded-2xl p-4 border border-gray-100 shadow-sm cursor-pointer"
@@ -95,11 +99,13 @@
 										d="M13 10V3L4 14h7v7l9-11h-7z" />
 								</svg>
 							</div>
-							<span
+							<!-- <span
 								class="stat-badge-orange text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full font-medium">3
-								active</span>
+								active</span> -->
 						</div>
-						<p class="stat-number text-2xl font-bold text-gray-900">5</p>
+						<p id="stat-promotions" class="stat-number text-2xl font-bold text-gray-900">
+							0
+						</p>
 						<p class="text-xs text-gray-500 mt-0.5">Promotions</p>
 					</div>
 					<!-- Reminders -->
@@ -113,11 +119,13 @@
 										d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
 								</svg>
 							</div>
-							<span
+							<!-- <span
 								class="stat-badge-violet text-xs text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full font-medium">9
-								greetings</span>
+								greetings</span> -->
 						</div>
-						<p class="stat-number text-2xl font-bold text-gray-900">11</p>
+						<p id="stat-engagement" class="stat-number text-2xl font-bold text-gray-900">
+							0%
+						</p>
 						<p class="text-xs text-gray-500 mt-0.5">Reminders</p>
 					</div>
 				</div>
@@ -382,7 +390,39 @@
 				options: getChartOptions(isDark)
 			});
 		}
+		async function loadDashboardStats() {
 
+			try {
+
+				const response =
+					await fetch('/dashboard/stats');
+
+				const data = await response.json();
+
+				document.getElementById('stat-customers')
+					.textContent = data.customers;
+
+				document.getElementById('stat-reminders')
+					.textContent = data.reminders;
+
+				document.getElementById('stat-promotions')
+					.textContent = data.promotions;
+
+				document.getElementById('stat-engagement')
+					.textContent = data.reminders;
+
+			} catch (err) {
+
+				console.error('Dashboard stats error:', err);
+
+			}
+		}
+
+		document.addEventListener('DOMContentLoaded', () => {
+
+			loadDashboardStats();
+
+		});
 		function updateChartTheme(theme) {
 			buildChart(theme === 'dark');
 		}

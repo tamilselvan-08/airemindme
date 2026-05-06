@@ -4,237 +4,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login - Reminder Me</title>
+	<title>Login - Numen</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 	<!-- Flash prevention — default DARK -->
 	<script>(function () { var t = localStorage.getItem('rm_theme') || 'dark'; document.documentElement.setAttribute('data-theme', t); })()</script>
 	<link rel="stylesheet" th:href="@{/css/theme.css}">
-	<style>
-		body {
-			font-family: 'Inter', sans-serif;
-		}
 
-		/* ── LOGIN PAGE SPECIFIC DARK MODE ── */
-		[data-theme="dark"] body {
-			background: #0d0d0d !important;
-		}
-
-		/* gradient blobs — dark versions */
-		[data-theme="dark"] .blob-1 {
-			background: #1a1040 !important;
-			opacity: 0.6 !important;
-		}
-
-		[data-theme="dark"] .blob-2 {
-			background: #0f2239 !important;
-			opacity: 0.6 !important;
-		}
-
-		/* card */
-		[data-theme="dark"] .login-card {
-			background: #161616 !important;
-			border-color: #2a2a2a !important;
-			box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
-		}
-
-		/* demo hint box */
-		[data-theme="dark"] .demo-box {
-			background: #0f2239 !important;
-			border-color: #1e3a5f !important;
-		}
-
-		[data-theme="dark"] .demo-box p {
-			color: #93c5fd !important;
-		}
-
-		/* logo icon */
-		[data-theme="dark"] .logo-icon {
-			background: #0f2239 !important;
-			border: 1px solid #1e3a5f !important;
-			box-shadow: 0 8px 24px rgba(96, 1, 210, 0.3) !important;
-		}
-
-		[data-theme="dark"] .logo-icon svg {
-			stroke: #93c5fd !important;
-		}
-
-		/* headings */
-		[data-theme="dark"] .login-title {
-			color: #ffffff !important;
-		}
-
-		[data-theme="dark"] .login-subtitle {
-			color: #888 !important;
-		}
-
-		/* labels */
-		[data-theme="dark"] label {
-			color: #d0d0d0 !important;
-		}
-
-		/* inputs */
-		[data-theme="dark"] input[type="email"],
-		[data-theme="dark"] input[type="password"],
-		[data-theme="dark"] input[type="text"] {
-			background: #1a1a1a !important;
-			border-color: #2d2d2d !important;
-			color: #f0f0f0 !important;
-		}
-
-		[data-theme="dark"] input::placeholder {
-			color: #444 !important;
-		}
-
-		[data-theme="dark"] input:focus {
-			border-color: #3b82f6 !important;
-			box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
-		}
-
-		/* input icons */
-		[data-theme="dark"] .input-icon {
-			color: #555 !important;
-			stroke: #555 !important;
-		}
-
-		/* remember me text */
-		[data-theme="dark"] .remember-text {
-			color: #888 !important;
-		}
-
-		/* forgot password */
-		[data-theme="dark"] .forgot-link {
-			color: #818cf8 !important;
-		}
-
-		[data-theme="dark"] .forgot-link:hover {
-			color: #a5b4fc !important;
-		}
-
-		/* submit button */
-		[data-theme="dark"] .login-btn {
-			background: #2563eb !important;
-			box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
-		}
-
-		[data-theme="dark"] .login-btn:hover {
-			background: #1d4ed8 !important;
-		}
-
-		/* dividers */
-		[data-theme="dark"] .divider {
-			border-color: #222 !important;
-		}
-
-		/* super admin / register links */
-		[data-theme="dark"] .soft-text {
-			color: #666 !important;
-		}
-
-		[data-theme="dark"] .accent-link {
-			color: #818cf8 !important;
-		}
-
-		[data-theme="dark"] .accent-link:hover {
-			color: #a5b4fc !important;
-		}
-
-		/* error box */
-		[data-theme="dark"] #loginError {
-			background: #1a0808 !important;
-			border-color: #7f1d1d !important;
-			color: #fca5a5 !important;
-		}
-
-		/* checkbox */
-		[data-theme="dark"] input[type="checkbox"] {
-			accent-color: #3b82f6;
-		}
-
-		/* toggle button */
-		.theme-toggle-btn {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 38px;
-			height: 38px;
-			border-radius: 12px;
-			border: 1px solid #e5e7eb;
-			background: #f3f4f6;
-			cursor: pointer;
-			transition: all 0.25s ease;
-			color: #6b7280;
-			flex-shrink: 0;
-		}
-
-		.theme-toggle-btn:hover {
-			transform: scale(1.1) rotate(15deg);
-			background: #e5e7eb;
-		}
-
-		[data-theme="dark"] .theme-toggle-btn {
-			background: #1e1e1e !important;
-			border-color: #2d2d2d !important;
-			color: #a0a0a0 !important;
-		}
-
-		[data-theme="dark"] .theme-toggle-btn:hover {
-			background: #252525 !important;
-			border-color: #6001d2 !important;
-			box-shadow: 0 0 12px rgba(96, 1, 210, 0.3) !important;
-		}
-
-		[data-theme="dark"] .theme-toggle-btn svg {
-			stroke: #a0a0a0 !important;
-		}
-
-		[data-theme="dark"] .theme-toggle-btn:hover svg {
-			stroke: #a78bfa !important;
-		}
-
-		/* sun/moon visibility */
-		[data-theme="light"] .icon-sun {
-			display: none;
-		}
-
-		[data-theme="light"] .icon-moon {
-			display: block;
-		}
-
-		[data-theme="dark"] .icon-sun {
-			display: block;
-		}
-
-		[data-theme="dark"] .icon-moon {
-			display: none;
-		}
-
-		/* light mode background gradient */
-		[data-theme="light"] body {
-			background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f5f3ff 100%) !important;
-		}
-
-		/* ── Animations ── */
-		@keyframes fadeSlideUp {
-			from {
-				opacity: 0;
-				transform: translateY(20px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		.login-card {
-			animation: fadeSlideUp 0.4s ease both;
-		}
-
-		.logo-wrap {
-			animation: fadeSlideUp 0.3s ease both;
-		}
-	</style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center px-4 relative">
@@ -245,35 +21,20 @@
 		<div class="blob-2 absolute -bottom-40 -left-40 w-80 h-80 bg-violet-100 rounded-full opacity-40 blur-3xl"></div>
 	</div>
 
-	<!-- Theme toggle — top right corner -->
-	<div class="fixed top-4 right-4 z-50">
-		<button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle dark/light mode">
-			<!-- Sun icon (shown in dark mode → click to go light) -->
-			<svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-			</svg>
-			<!-- Moon icon (shown in light mode → click to go dark) -->
-			<svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round"
-					d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-			</svg>
-		</button>
-	</div>
+
 
 	<div class="w-full max-w-md relative">
 
 		<!-- Logo -->
 		<div class="logo-wrap text-center mb-8">
 			<div
-				class="logo-icon inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-200 mb-4">
-				<svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round"
-						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-				</svg>
+				class="logo-icon inline-flex items-center justify-center w-16 h-16 rounded-3xl overflow-hidden shadow-lg shadow-indigo-200 mb-4 bg-white">
+
+				<img src="/assets/logo.jpeg" alt="Numen Logo" class="w-full h-full object-cover">
+
 			</div>
 			<h1 class="login-title text-2xl font-bold text-gray-900">Welcome back</h1>
-			<p class="login-subtitle text-sm text-gray-500 mt-1">Sign in to Reminder Me</p>
+			<p class="login-subtitle text-sm text-gray-500 mt-1">Sign in to Numen</p>
 		</div>
 
 		<!-- Card -->
@@ -365,7 +126,7 @@
 			</div>
 		</div>
 
-		
+
 
 	</div>
 

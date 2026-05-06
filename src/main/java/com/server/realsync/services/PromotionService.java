@@ -40,6 +40,10 @@ public class PromotionService {
         return promotionRepository.findByAccountIdAndScheduledAtIsNotNull(accountId);
     }
 
+    public long getTotalPromotions(Integer accountId) {
+        return promotionRepository.countByAccountId(accountId);
+    }
+
     public void delete(Long id) {
         promotionRepository.deleteById(id);
     }

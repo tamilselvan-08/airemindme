@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Reminder Me</title>
+  <title>Dashboard - Numen</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
@@ -41,12 +41,12 @@
     <div id="sidebar" class="hidden md:hidden">
       <div class="flex items-center justify-center h-16 px-4 border-b border-gray-200">
         <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5z" />
-            </svg>
+          <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-md">
+
+            <img src="/assets/logo.jpeg" alt="Numen Logo" class="w-full h-full object-cover" />
+
           </div>
-          <span class="text-xl font-bold text-brand-500">Reminder Me</span>
+          <span class="text-xl font-bold text-brand-500">Numen</span>
         </div>
       </div>
 
@@ -122,9 +122,7 @@
             </div>
             <div class="ml-4 md:ml-0">
               <div class="flex items-center">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Ffbb0194a6d774fff8617236e5030fdfd%2F1fcecd51551b45ae93d7ac08907a87a9?format=webp&width=400"
-                  alt="REMINDERme" class="w-[200px] h-[54px] object-contain" />
+                <img src="/assets/logo.jpeg" alt="Numen" class="h-12 w-auto object-contain" />
               </div>
             </div>
           </div>
@@ -1454,7 +1452,7 @@
               R</div>
             <div class="ml-3">
               <p class="font-medium text-gray-900" id="whatsapp-preview-title">
-                Reminder Me</p>
+                Numen</p>
               <p class="text-xs text-gray-500">Business</p>
             </div>
           </div>
@@ -1576,7 +1574,7 @@
                     class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
                     R</div>
                   <div class="ml-3">
-                    <p class="font-medium text-gray-900">Reminder Me</p>
+                    <p class="font-medium text-gray-900">Numen</p>
                     <p class="text-xs text-gray-500">Business</p>
                   </div>
                 </div>
@@ -2792,7 +2790,66 @@ Regular service ensures:</textarea>
       document.querySelectorAll(".dashboard-section").forEach((section) => {
         section.classList.add("hidden");
       });
+      async function loadDashboardStats() {
 
+        try {
+
+          // CUSTOMERS
+          const customerRes = await fetch('/customers');
+          const customers = await customerRes.json();
+
+          // REMINDERS
+          const reminderRes = await fetch('/reminders');
+          const reminders = await reminderRes.json();
+
+          // PROMOTIONS
+          const promoRes = await fetch('/promotions');
+          const promotions = await promoRes.json();
+
+          // APPOINTMENTS / ENGAGEMENT
+          const engagementRes = await fetch('/appointments');
+          const appointments = await engagementRes.json();
+
+          // COUNTS
+          const totalCustomers = customers.length;
+
+          const activeReminders = reminders.filter(r =>
+            r.status?.toLowerCase() === 'active'
+          ).length;
+
+          const totalPromotions = promotions.length;
+
+          const completedAppointments = appointments.filter(a =>
+            a.status === 'COMPLETED'
+          ).length;
+
+          const engagementRate =
+            appointments.length > 0
+              ? Math.round(
+                (completedAppointments / appointments.length) * 100
+              )
+              : 0;
+
+          // UPDATE UI
+          document.getElementById('stat-customers').textContent =
+            totalCustomers;
+
+          document.getElementById('stat-reminders').textContent =
+            activeReminders;
+
+          document.getElementById('stat-promotions').textContent =
+            totalPromotions;
+
+          document.getElementById('stat-engagement').textContent =
+            engagementRate + '%';
+
+        } catch (err) {
+
+          console.error('Dashboard stats error:', err);
+
+        }
+      }
+      
       // Show target section
       document
         .getElementById(sectionName + "-section")
@@ -2834,7 +2891,7 @@ Regular service ensures:</textarea>
       }
 
       // Update page title
-      document.getElementById("page-title").textContent = "Reminder Me";
+      document.getElementById("page-title").textContent = "Numen";
 
       currentSection = sectionName;
 
@@ -4479,7 +4536,7 @@ Order your ${keywords} today and taste the difference quality makes!`,
       const content = document.getElementById("ai-whatsapp-content").value;
 
       document.getElementById("whatsapp-preview-title").textContent =
-        "Reminder Me";
+        "Numen";
       document.getElementById("whatsapp-preview-text").textContent = content;
 
       // Show image if available

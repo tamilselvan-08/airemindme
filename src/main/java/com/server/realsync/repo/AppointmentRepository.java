@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.server.realsync.entity.Appointment;
 
@@ -37,4 +38,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                         Integer accountId,
                         LocalDate appointmentDate,
                         java.time.LocalTime appointmentTime);
+
+        @Query("""
+                            SELECT a
+                            FROM Appointment a
+                            LEFT JOIN FETCH a.customer
+                            WHERE a.accountId = :accountId
+                        """)
+        List<Appointment> findAllWithCustomer(Integer accountId);
 }
