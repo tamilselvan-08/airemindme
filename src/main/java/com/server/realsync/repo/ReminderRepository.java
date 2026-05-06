@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.server.realsync.entity.Reminder;
+import com.server.realsync.entity.ScheduleEntryStatus;
 
 public interface ReminderRepository extends JpaRepository<Reminder, Integer> {
 
@@ -20,6 +21,7 @@ public interface ReminderRepository extends JpaRepository<Reminder, Integer> {
         long countByAccountIdAndStatus(Integer accountId, String status);
 
         long deleteByIdAndAccountId(Integer id, Integer accountId);
+
 
         // Filter by the Promotion Item (Plan or Product)
         List<Reminder> findByAccountIdAndAttachedItemTypeAndAttachedItemId(

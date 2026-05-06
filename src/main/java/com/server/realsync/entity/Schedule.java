@@ -168,4 +168,53 @@ public class Schedule {
     public void setSentWhatsapp(boolean sentWhatsapp) {
         this.sentWhatsapp = sentWhatsapp;
     }
+    // ===================== BASIC FIELDS =====================
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public LocalDateTime getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(LocalDateTime startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public ScheduleType getType() {
+        return type;
+    }
+
+    public void setType(ScheduleType type) {
+        this.type = type;
+    }
 }

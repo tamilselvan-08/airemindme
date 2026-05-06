@@ -75,7 +75,7 @@
 
         <!-- Customer + Date -->
         <p class="text-slate-400 text-xs">
-          <span th:text="${customer.name ?: 'Unknown'}"></span>
+          <span th:text="${customer.name ?: (customerGroupName ?: 'Group')}"></span>
           •
           <span th:text="${greeting.greetingDate}"></span>
         </p>
@@ -114,111 +114,255 @@
       </div>
 
       <!-- Greeting Details -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5" th:if="${greeting.customerId != null}">
-          <h3 class="text-slate-900 font-bold text-sm mb-4">Customer Details</h3>
-          <div class="space-y-3">
-            <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <span class="text-indigo-700 font-bold"
-                  th:text="${customer.name != null ? #strings.substring(customer.name,0,1) : 'U'}">R</span>
-              </div>
-              <div class="flex-1">
-                <p class="text-slate-900 text-sm font-semibold" th:text="${customer.name ?: 'Unknown'}">Name</p>
-                <p class="text-slate-500 text-xs" th:text="${customer.mobile ?: 'N/A'}">+91 98765 43210</p>
-                <p class="text-slate-500 text-xs" th:text="${customer.email ?: 'N/A'}">rajesh@example.com</p>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
-              </div>
+        <!-- LEFT PROFILE CARD -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+
+          <!-- Header -->
+          <div class="flex items-start justify-between mb-6">
+
+            <div>
+              <h3 class="text-[15px] font-semibold text-slate-900">
+                <span th:text="${customer != null and customer.id != null ? 'Customer Details' : 'Group Details'}">
+                  Customer Details
+                </span>
+              </h3>
+
+              <p class="text-xs text-slate-400 mt-1">
+                Contact information
+              </p>
             </div>
-            <div class="pt-3 border-t border-slate-100 flex items-start gap-3" th:if="${customer.dob != null}">
 
-              <svg class="w-5 h-5 text-pink-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
-              </svg>
+            <span
+              class="px-3 py-1 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-100">
+              VIP
+            </span>
+
+          </div>
+
+          <!-- Profile Row -->
+          <div class="flex items-center gap-4">
+
+            <!-- Avatar -->
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-100 to-indigo-50
+                  border border-indigo-100 flex items-center justify-center flex-shrink-0">
+
+              <!-- CUSTOMER -->
+              <span th:if="${customer != null and customer.id != null}" class="text-indigo-700 font-bold text-xl"
+                th:text="${#strings.substring(customer.name,0,1)}">
+                T
+              </span>
+
+              <!-- GROUP -->
+              <span th:if="${customer == null or customer.id == null}" class="text-indigo-700 font-bold text-sm"
+                th:text="${memberCount != null ? memberCount : 'G'}">
+                25
+              </span>
+
+            </div>
+
+            <!-- Info -->
+            <div class="min-w-0 flex-1">
+
+              <!-- CUSTOMER -->
+              <div th:if="${customer != null and customer.id != null}">
+
+                <h4 class="text-[18px] font-semibold text-slate-900" th:text="${customer.name}">
+                  Tamil Selvan
+                </h4>
+
+                <div class="mt-2 space-y-1">
+
+                  <p class="text-sm text-slate-600 flex items-center gap-2">
+                    <span>📞</span>
+
+                    <span th:text="${customer.mobile ?: 'No Mobile'}">
+                      9042529652
+                    </span>
+                  </p>
+
+                  <p class="text-sm text-slate-500 truncate flex items-center gap-2">
+                    <span>✉️</span>
+
+                    <span th:text="${customer.email ?: 'No Email'}">
+                      tamil@example.com
+                    </span>
+                  </p>
+
+                </div>
+
+              </div>
+
+              <!-- GROUP -->
+              <div th:if="${customer == null or customer.id == null}">
+
+                <h4 class="text-[18px] font-semibold text-slate-900" th:text="${customerGroupName ?: 'General Group'}">
+                  Regular
+                </h4>
+
+
+
+                <!-- GROUP -->
+                <div th:if="${customer == null or customer.id == null}" class="text-2xl">
+                  👥
+                </div>
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Footer Info -->
+          <div class="mt-6 pt-5 border-t border-slate-100">
+
+            <!-- CUSTOMER -->
+            <div th:if="${customer != null and customer.id != null}" class="flex items-center gap-3">
+
+              <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+                🎂
+              </div>
 
               <div>
-                <p class="text-slate-500 text-xs">Birthday</p>
 
-                <p class="text-slate-900 text-sm font-semibold"
-                  th:text="${#temporals.format(customer.dob, 'MMM dd, yyyy')}">
-                  March 15, 1985
+                <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">
+                  Birthday
                 </p>
+
+                <p class="text-sm font-semibold text-slate-800"
+                  th:text="${customer.dob != null ? #temporals.format(customer.dob, 'MMMM dd, yyyy') : 'No Birthday'}">
+                  May 06, 2007
+                </p>
+
               </div>
 
             </div>
+
+            <!-- GROUP -->
+            <div th:if="${customer == null or customer.id == null}" class="flex items-center gap-3">
+
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                📁
+              </div>
+
+              <div>
+
+                <p class="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">
+                  Group Name
+                </p>
+
+                <p class="text-sm font-semibold text-slate-800" th:text="${customerGroupName ?: 'General Group'}">
+                  Regular
+                </p>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <!-- DELIVERY CARD -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
 
-          <h3 class="text-slate-900 font-bold text-sm mb-4">Delivery Details</h3>
+          <!-- Header -->
+          <div class="mb-6">
 
-          <div class="space-y-3">
+            <h3 class="text-[15px] font-semibold text-slate-900">
+              Delivery Details
+            </h3>
 
-            <!-- 📅 Date & Time -->
-            <div class="flex items-start gap-3" th:if="${greeting.greetingDate != null}">
+            <p class="text-xs text-slate-400 mt-1">
+              Greeting delivery configuration
+            </p>
 
-              <svg class="w-5 h-5 text-slate-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+          </div>
 
-              <div class="flex-1">
-                <p class="text-slate-500 text-xs">Scheduled Date & Time</p>
+          <div class="space-y-6">
 
-                <p class="text-slate-900 text-sm font-semibold" th:text="${#temporals.format(greeting.greetingDate, 'MMM dd, yyyy')} 
-                    + ' at ' + (${greeting.greetingTime} ?: '')">
-                  March 15, 2026 at 9:00 AM
-                </p>
+            <!-- DATE -->
+            <div class="flex gap-4">
+
+              <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                📅
               </div>
+
+              <div>
+
+                <p class="text-[12px] text-slate-400 font-medium">
+                  Scheduled Date & Time
+                </p>
+
+                <p class="text-[15px] font-semibold text-slate-900 mt-1"
+                  th:text="${#temporals.format(greeting.greetingDate, 'MMMM dd, yyyy')} + ' at ' + (${greeting.greetingTime} ?: '09:00 AM')">
+                  May 23, 2026 at 09:00
+                </p>
+
+              </div>
+
             </div>
 
-            <!-- 📡 Channels -->
-            <div class="flex items-start gap-3" th:if="${greeting.channels != null}">
+            <!-- CHANNELS -->
+            <div class="flex gap-4">
 
-              <svg class="w-5 h-5 text-slate-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+              <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                💬
+              </div>
 
-              <div class="flex-1">
-                <p class="text-slate-500 text-xs">Channels</p>
+              <div>
 
-                <div class="flex gap-2 mt-1">
+                <p class="text-[12px] text-slate-400 font-medium mb-2">
+                  Channels
+                </p>
 
-                  <span th:each="ch : ${#strings.arraySplit(greeting.channels, ',')}" th:text="${ch}"
-                    class="text-[11px] px-2.5 py-1 rounded-full bg-green-50 text-green-700 font-medium">
+                <div class="flex flex-wrap gap-2">
+
+                  <span th:each="ch : ${#strings.arraySplit(greeting.channels, ',')}"
+                    class="px-3 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100"
+                    th:text="${#strings.capitalize(ch)}">
                     WhatsApp
                   </span>
 
                 </div>
+
               </div>
+
             </div>
 
-            <!-- 📊 Status -->
-            <div class="flex items-start gap-3" th:if="${greeting.status != null}">
+            <!-- STATUS -->
+            <div class="flex gap-4">
 
-              <svg class="w-5 h-5 text-slate-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                ⏱️
+              </div>
 
-              <div class="flex-1">
-                <p class="text-slate-500 text-xs">Status</p>
+              <div>
 
-                <p class="text-sm font-semibold" th:text="${greeting.status}" th:classappend="
-             ${greeting.status == 'Scheduled'} ? 'text-blue-700' :
-             (${greeting.status == 'Sent'} ? 'text-green-700' :
-             (${greeting.status == 'Failed'} ? 'text-red-600' : 'text-gray-600'))">
-                  Scheduled - Pending Delivery
+                <p class="text-[12px] text-slate-400 font-medium mb-2">
+                  Status
                 </p>
 
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100">
+
+                  <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+
+                  <span class="text-[12px] font-semibold text-blue-700" th:text="${greeting.status ?: 'Scheduled'}">
+                    Scheduled
+                  </span>
+
+                </div>
+
               </div>
+
             </div>
 
           </div>
+
         </div>
+
       </div>
 
       <!-- Actions -->
@@ -251,7 +395,103 @@
           </form>
         </div>
       </div>
+      <!-- ===== GREETING DELIVERY TRACKER ===== -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
 
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 pt-5 pb-4">
+
+          <div class="flex items-center gap-3">
+
+            <div class="w-10 h-10 rounded-2xl bg-pink-50 flex items-center justify-center">
+              <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4v-4z" />
+              </svg>
+            </div>
+
+            <div>
+              <h3 class="text-slate-900 font-bold text-sm">
+                Greeting Delivery Tracker
+              </h3>
+
+              <p class="text-xs text-slate-400">
+                Live delivery status for all customers
+              </p>
+            </div>
+          </div>
+
+          <span id="trackerCount" class="px-3 py-1 rounded-full bg-pink-50 text-pink-700 text-xs font-bold">
+            0 Entries
+          </span>
+
+        </div>
+
+        <!-- Summary Strip -->
+        <div class="grid grid-cols-3 border-y border-slate-100">
+
+          <div class="text-center py-3">
+            <p id="successCount" class="text-lg font-bold text-emerald-600">0</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Delivered</p>
+          </div>
+
+          <div class="text-center py-3 border-l border-slate-100">
+            <p id="pendingCount" class="text-lg font-bold text-amber-600">0</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Pending</p>
+          </div>
+
+          <div class="text-center py-3 border-l border-slate-100">
+            <p id="failedCount" class="text-lg font-bold text-red-500">0</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Failed</p>
+          </div>
+
+        </div>
+
+        <!-- Mobile Cards -->
+        <div id="mobileGreetingTracker" class="block md:hidden divide-y divide-slate-100">
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
+
+          <table class="w-full text-sm">
+
+            <thead>
+
+              <tr class="bg-slate-50 border-b border-slate-100">
+
+                <th class="text-left px-5 py-3 font-semibold text-slate-500">
+                  Customer
+                </th>
+
+                <th class="text-left px-5 py-3 font-semibold text-slate-500">
+                  Scheduled
+                </th>
+
+                <th class="text-left px-5 py-3 font-semibold text-slate-500">
+                  Status
+                </th>
+
+                <th class="text-left px-5 py-3 font-semibold text-slate-500">
+                  Delivery
+                </th>
+
+                <th class="text-left px-5 py-3 font-semibold text-slate-500">
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="greetingTrackerBody" class="divide-y divide-slate-50">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
       <!-- History -->
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 class="text-slate-900 font-bold text-sm mb-4">History</h3>
@@ -323,83 +563,200 @@
 
 
   <!--  EDIT GREETING MODAL -->
-  <div id="editModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <!-- EDIT GREETING MODAL -->
+  <div id="editModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
 
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 relative">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
 
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-slate-900">Edit Greeting</h2>
-        <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+      <!-- HEADER -->
+      <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">
+            Edit Greeting
+          </h2>
+
+          <p class="text-sm text-slate-400 mt-1">
+            Update reminder schedule and delivery settings
+          </p>
+        </div>
+
+        <button onclick="closeEditModal()"
+          class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition">
+          ✕
+        </button>
+
       </div>
 
       <!-- FORM -->
-      <form th:action="@{/greetings/edit/{id}(id=${greeting.id})}" method="post">
+      <form th:action="@{/greetings/edit/{id}(id=${greeting.id})}" method="post" class="p-6 space-y-6">
 
-        <!-- Greeting Type -->
-        <div class="mb-4">
-          <label class="text-xs text-gray-500">Greeting Type</label>
-          <select name="greetingType"
-            class="w-full mt-1 px-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500"
-            th:value="${greeting.greetingType}">
-            <option value="Birthday">🎂 Birthday</option>
-            <option value="Anniversary">💍 Anniversary</option>
-            <option value="Festival">🎊 Festival</option>
-          </select>
+        <!-- GREETING TYPE (LOCKED) -->
+        <div>
+
+          <label class="text-sm font-semibold text-slate-700 block mb-2">
+            Greeting Type
+          </label>
+
+          <div class="h-14 px-4 rounded-2xl border border-slate-200 bg-slate-50
+                    flex items-center justify-between">
+
+            <div class="flex items-center gap-3">
+
+              <div class="w-10 h-10 rounded-xl bg-pink-100
+                        flex items-center justify-center text-lg">
+
+                <span th:text="${greeting.greetingType == 'Birthday'} ? '🎂' :
+                              (${greeting.greetingType == 'Anniversary'} ? '💍' : '🎊')">
+                </span>
+
+              </div>
+
+              <div>
+
+                <p class="text-sm font-semibold text-slate-900" th:text="${greeting.greetingType}">
+                  Birthday
+                </p>
+
+                <p class="text-xs text-slate-400">
+                  Greeting type cannot be changed
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="text-xs px-2 py-1 rounded-full bg-slate-200 text-slate-600 font-medium">
+              Locked
+            </div>
+
+          </div>
+
         </div>
 
-        <!-- Date -->
-        <div class="mb-4">
-          <label class="text-xs text-gray-500">Date</label>
-          <input type="date" name="greetingDate" th:value="${greeting.greetingDate}"
-            class="w-full mt-1 px-3 py-2 rounded-xl border border-gray-200" />
-        </div>
+        <!-- DATE + TIME -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        <!-- Time -->
-        <div class="mb-4">
-          <label class="text-xs text-gray-500">Time</label>
-          <input type="time" name="greetingTime" th:value="${greeting.greetingTime}"
-            class="w-full mt-1 px-3 py-2 rounded-xl border border-gray-200" />
-        </div>
+          <!-- DATE -->
+          <div>
 
-        <!-- Channels -->
-        <div class="mb-4">
-          <label class="text-xs text-gray-500">Channels</label>
-          <div class="flex gap-3 mt-2">
-
-            <label class="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="channels" value="whatsapp"
-                th:checked="${#strings.contains(greeting.channels,'whatsapp')}">
-              WhatsApp
+            <label class="text-sm font-semibold text-slate-700 block mb-2">
+              Delivery Date
             </label>
 
-            <label class="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="channels" value="email"
+            <div class="relative">
+
+              <input type="date" name="greetingDate" th:value="${greeting.greetingDate}" class="w-full h-14 px-4 rounded-2xl border border-slate-200
+                          focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500
+                          outline-none transition text-slate-800 bg-white" />
+
+            </div>
+
+          </div>
+
+          <!-- TIME -->
+          <div>
+
+            <label class="text-sm font-semibold text-slate-700 block mb-2">
+              Delivery Time
+            </label>
+
+            <div class="relative">
+
+              <input type="time" name="greetingTime" th:value="${greeting.greetingTime}" class="w-full h-14 px-4 rounded-2xl border border-slate-200
+                          focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500
+                          outline-none transition text-slate-800 bg-white" />
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- CHANNELS -->
+        <div>
+
+          <label class="text-sm font-semibold text-slate-700 block mb-3">
+            Delivery Channels
+          </label>
+
+          <div class="flex flex-wrap gap-3">
+
+            <!-- WHATSAPP -->
+            <label class="cursor-pointer">
+
+              <input type="checkbox" name="channels" value="whatsapp" class="hidden peer"
+                th:checked="${#strings.contains(greeting.channels,'whatsapp')}">
+
+              <div class="px-4 py-3 rounded-2xl border border-slate-200
+                        peer-checked:border-emerald-500
+                        peer-checked:bg-emerald-50
+                        peer-checked:text-emerald-700
+                        flex items-center gap-2 text-sm font-medium
+                        transition">
+
+                <span>💬</span>
+                WhatsApp
+
+              </div>
+
+            </label>
+
+            <!-- EMAIL -->
+            <label class="cursor-pointer">
+
+              <input type="checkbox" name="channels" value="email" class="hidden peer"
                 th:checked="${#strings.contains(greeting.channels,'email')}">
-              Email
+
+              <div class="px-4 py-3 rounded-2xl border border-slate-200
+                        peer-checked:border-indigo-500
+                        peer-checked:bg-indigo-50
+                        peer-checked:text-indigo-700
+                        flex items-center gap-2 text-sm font-medium
+                        transition">
+
+                <span>✉️</span>
+                Email
+
+              </div>
+
             </label>
 
           </div>
+
         </div>
 
-        <!-- Message -->
-        <div class="mb-4">
-          <label class="text-xs text-gray-500">Message</label>
-          <textarea name="message" rows="4" class="w-full mt-1 px-3 py-2 rounded-xl border border-gray-200"
-            th:text="${greeting.message}">
-        </textarea>
+        <!-- MESSAGE -->
+        <div>
+
+          <label class="text-sm font-semibold text-slate-700 block mb-2">
+            Greeting Message
+          </label>
+
+          <textarea name="message" rows="5" th:text="${greeting.message}" class="w-full rounded-2xl border border-slate-200
+                         px-4 py-4 text-slate-800 leading-relaxed
+                         focus:ring-4 focus:ring-pink-100
+                         focus:border-pink-400 outline-none transition
+                         resize-none"></textarea>
+
         </div>
 
-        <!-- Buttons -->
-        <div class="flex justify-end gap-3 mt-6">
+        <!-- FOOTER -->
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
 
-          <button type="button" onclick="closeEditModal()"
-            class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50">
+          <button type="button" onclick="closeEditModal()" class="px-5 py-3 rounded-2xl border border-slate-200
+                       text-slate-600 font-medium hover:bg-slate-50 transition">
+
             Cancel
+
           </button>
 
-          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">
+          <button type="submit" class="px-6 py-3 rounded-2xl bg-indigo-600
+                       hover:bg-indigo-700 text-white font-semibold
+                       shadow-lg shadow-indigo-200 transition">
+
             Save Changes
+
           </button>
 
         </div>
@@ -410,6 +767,98 @@
   </div>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    async function loadGreetingTracker() {
+
+      const params = new URLSearchParams(window.location.search);
+
+      const greetingId = params.get("id");
+
+      const res = await fetch(
+        `/api/engagements/greetings/${greetingId}/tracker`
+      );
+
+      const entries = await res.json();
+
+      renderGreetingTable(entries);
+    }
+
+    function renderGreetingTable(entries) {
+
+      const tbody =
+        document.getElementById("greetingTrackerBody");
+
+      const delivered =
+        entries.filter(
+          e => e.executionStatus === 'SUCCESS'
+        ).length;
+
+      const pending =
+        entries.filter(
+          e => e.executionStatus === 'PENDING'
+        ).length;
+
+      const failed =
+        entries.filter(
+          e => e.executionStatus === 'FAILED'
+        ).length;
+
+      document.getElementById("successCount")
+        .innerText = delivered;
+
+      document.getElementById("pendingCount")
+        .innerText = pending;
+
+      document.getElementById("failedCount")
+        .innerText = failed;
+
+      document.getElementById("trackerCount")
+        .innerText = `${entries.length} Entries`;
+
+      tbody.innerHTML = entries.map(e => `
+
+        <tr class="border-b border-slate-50">
+
+            <td class="px-4 py-3">
+               ${e.customerName || ('Customer #' + e.customerId)}
+            </td>
+
+            <td class="px-4 py-3">
+                ${new Date(e.occurrenceDate)
+          .toLocaleString()}
+            </td>
+
+            <td class="px-4 py-3">
+                <span class="
+                    px-2 py-1 rounded-full text-[10px]
+                    ${e.executionStatus === 'SUCCESS'
+          ? 'bg-emerald-100 text-emerald-700'
+          : e.executionStatus === 'FAILED'
+            ? 'bg-red-100 text-red-700'
+            : 'bg-amber-100 text-amber-700'}
+                ">
+                    ${e.executionStatus}
+                </span>
+            </td>
+
+            <td class="px-4 py-3">
+                ${e.sentWhatsapp ? '✅' : '❌'}
+            </td>
+
+            <td class="px-4 py-3">
+                <button
+                    class="px-2 py-1 rounded bg-indigo-600 text-white text-xs">
+                    Retry
+                </button>
+            </td>
+
+        </tr>
+
+    `).join("");
+    }
+
+    loadGreetingTracker();
+  </script>
   <script>
 
     function openEditModal() {

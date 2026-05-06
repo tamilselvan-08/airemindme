@@ -21,10 +21,11 @@
       background: #e2e8f0;
       border-radius: 4px;
     }
+    
   </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="text-slate-100">
 
   <!-- Sidebar -->
   <div th:replace="~{remindmeui/fragments/layout :: sidebar(activePage='engagement')}"></div>
@@ -716,7 +717,6 @@
 
       try {
         await loadCustomers();
-        await loadCustomers();
         await loadCustomerGroups();
         await loadGreetings();
         loadReminders();
@@ -1018,20 +1018,20 @@
       let groupId = null;
 
       if (isGroupMode) {
-        const groupSelect = document.querySelector("#gwGrp select");
+
+        const groupSelect = document.querySelector("#gtGroup");
 
         if (!groupSelect) {
           console.error("❌ Group select not found");
           return;
         }
 
-        const groupId = groupSelect.value;
+        groupId = groupSelect.value;
 
         if (!groupId) {
           alert("Please select a group");
           return;
         }
-
       } else {
         customerId = document.getElementById("gtCustomer")?.value;
 
@@ -1065,7 +1065,8 @@
         customerGroupId: groupId ? parseInt(groupId) : null
       };
       console.log("📦 Payload:", greetingPayload);
-
+      console.log("Customer ID:", customerId);
+      console.log("Group ID:", groupId);
       try {
         // 5️⃣ Create greeting
         const res = await fetch(`${API_BASE}/engagements/greetings`, {

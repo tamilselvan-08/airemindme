@@ -64,6 +64,7 @@ public class HomeController {
 	CustomerMessageService customerMessageService;
 	@Autowired
 	private CustomerService customerService;
+
 	@Autowired
 	CustomerGroupService customerGroupService;
 	@Autowired
@@ -220,8 +221,8 @@ public class HomeController {
 						CustomerGroup::getName));
 
 		model.addAttribute("groupMap", groupMap);
-        model.addAttribute("reminders", reminders);
-        model.addAttribute("greetings", greetings);
+		model.addAttribute("reminders", reminders);
+		model.addAttribute("greetings", greetings);
 
 		return "remindmeui/customer-detail";
 	}
@@ -356,6 +357,25 @@ public class HomeController {
 		model.addAttribute("greeting", greeting);
 		model.addAttribute("customer", customerOpt.orElse(new Customer()));
 
+		// group details
+		if (greeting.getCustomerGroupId() != null) {
+
+			Optional<CustomerGroup> groupOpt = customerGroupService.getById(
+					greeting.getCustomerGroupId());
+
+			if (groupOpt.isPresent()) {
+
+				CustomerGroup group = groupOpt.get();
+
+				model.addAttribute(
+						"customerGroupName",
+						group.getName());
+
+				model.addAttribute(
+						"memberCount",
+						0);
+			}
+		}
 		return "remindmeui/greeting-detail";
 	}
 

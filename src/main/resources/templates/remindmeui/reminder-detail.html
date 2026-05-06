@@ -90,7 +90,7 @@
           <p class="text-amber-700 text-xs mt-0.5">This reminder is waiting for payment confirmation. Mark as paid when
             payment is received.</p>
         </div>
-        <button onclick="showMarkPaidModal()"
+        <button onclick="markPaid(${p.id})"
           class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-semibold whitespace-nowrap">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -207,7 +207,7 @@
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 class="text-slate-900 font-bold text-sm mb-4">Actions</h3>
         <div class="flex flex-wrap gap-3">
-          <button onclick="showMarkPaidModal()"
+          <button onclick="markLatestPaid()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-semibold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -215,7 +215,7 @@
             </svg>
             Mark as Paid
           </button>
-          <button
+          <button onclick="goToEdit()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -231,7 +231,7 @@
             </svg>
             Send Now
           </button>
-          <button
+          <button onclick="reschedule()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-sm font-semibold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -239,7 +239,7 @@
             </svg>
             Reschedule
           </button>
-          <button onclick="if(confirm('Delete this reminder?')) window.location.href='engagement.html'"
+          <button onclick="deleteReminder()"
             class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -411,39 +411,7 @@
       <!-- History -->
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 class="text-slate-900 font-bold text-sm mb-4">History & Activity</h3>
-        <div class="space-y-3">
-          <div class="flex gap-3">
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </div>
-              <div class="w-0.5 h-full bg-slate-100 mt-1"></div>
-            </div>
-            <div class="flex-1 pb-4">
-              <p class="text-slate-900 text-sm font-semibold">Reminder Sent</p>
-              <p class="text-slate-500 text-xs">SMS and Email sent to customer</p>
-              <p class="text-slate-400 text-xs mt-1">Mar 13, 2026 at 10:00 AM</p>
-            </div>
-          </div>
-
-          <div class="flex gap-3">
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-            </div>
-            <div class="flex-1">
-              <p class="text-slate-900 text-sm font-semibold">Reminder Created</p>
-              <p class="text-slate-500 text-xs">Recurring reminder set for 15th of every month</p>
-              <p class="text-slate-400 text-xs mt-1">Feb 1, 2026 at 3:15 PM</p>
-            </div>
-          </div>
-        </div>
+        <div id="historyContainer" class="space-y-3"></div>
       </div>
 
     </div>
@@ -534,7 +502,231 @@
       <span class="text-[10px] font-medium">Settings</span>
     </a>
   </div>
+  <script>
+    let payments = [];
+    let currentReminderId = null;
+    const reminderId = new URLSearchParams(window.location.search).get("id");
 
+    // 🚀 LOAD TRACKER
+    async function loadTracker() {
+      try {
+        currentReminderId = window.location.search.split("=")[1];
+
+        const res = await fetch(`/api/engagements/reminders/${currentReminderId}/tracker`);
+
+        if (!res.ok) {
+          alert("Failed to load tracker");
+          return;
+        }
+
+        const data = await res.json();
+
+        payments = data.map(e => ({
+          id: e.id,
+          status: mapStatus(e.status),
+          amount: e.amount || 0,
+          note: e.remarks || "",
+          date: e.occurrenceDate
+        }));
+
+        updateSummary();
+        renderPaymentTable();
+
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong");
+      }
+    }
+    async function loadHistory() {
+      const reminderId = window.location.search.split("=")[1];
+
+      const res = await fetch(`/api/engagements/reminders/${reminderId}/history`);
+      const data = await res.json();
+
+      renderHistory(data);
+    }
+    // 🔁 STATUS MAP
+    function mapStatus(status) {
+      if (status === "COMPLETED") return "paid";
+      if (status === "OVERDUE") return "overdue";
+      return "pending";
+    }
+
+    // 🎯 SUMMARY CALCULATION
+    function updateSummary() {
+      const total = payments.length;
+      const paid = payments.filter(p => p.status === "paid").length;
+      const pending = payments.filter(p => p.status === "pending").length;
+      const overdue = payments.filter(p => p.status === "overdue").length;
+
+      const collected = payments
+        .filter(p => p.status === "paid")
+        .reduce((sum, p) => sum + p.amount, 0);
+
+      const totalAmount = payments.reduce((sum, p) => sum + p.amount, 0);
+      const pendingAmount = totalAmount - collected;
+
+      const percent = totalAmount ? Math.round((collected / totalAmount) * 100) : 0;
+
+      // 🧠 UPDATE UI (no structure change)
+      document.querySelectorAll(".grid.grid-cols-4 p.text-xl")[0].textContent = total;
+      document.querySelectorAll(".grid.grid-cols-4 p.text-xl")[1].textContent = paid;
+      document.querySelectorAll(".grid.grid-cols-4 p.text-xl")[2].textContent = pending;
+      document.querySelectorAll(".grid.grid-cols-4 p.text-xl")[3].textContent = overdue;
+
+      document.querySelector(".text-emerald-600.text-sm.font-bold").textContent = `₹${collected}`;
+      document.querySelector(".text-amber-600.text-sm.font-bold").textContent = `₹${pendingAmount}`;
+
+      document.querySelector(".h-2.bg-emerald-400").style.width = percent + "%";
+      document.querySelector(".text-emerald-600.font-semibold").textContent = percent + "%";
+    }
+
+    // 🎨 TABLE RENDER
+    function renderPaymentTable() {
+      const tbody = document.getElementById("paymentTableBody");
+
+      const statusStyles = {
+        paid: "bg-emerald-100 text-emerald-700",
+        pending: "bg-amber-100 text-amber-700",
+        overdue: "bg-red-100 text-red-600"
+      };
+
+      tbody.innerHTML = payments.map((p, i) => {
+
+        const d = new Date(p.date);
+        const month = d.toLocaleString('default', { month: 'short', year: 'numeric' });
+        const due = d.toLocaleDateString();
+
+        return `
+      <tr>
+        <td class="px-4 py-3">${i + 1}</td>
+        <td class="px-4 py-3">${month}</td>
+        <td class="px-4 py-3">${due}</td>
+        <td class="px-4 py-3 font-bold">₹${p.amount}</td>
+        <td class="px-4 py-3">
+          <span class="px-2 py-1 rounded-full text-[10px] font-bold ${statusStyles[p.status]}">
+            ${p.status.toUpperCase()}
+          </span>
+        </td>
+        <td class="px-4 py-3">${p.note || '—'}</td>
+        <td class="px-4 py-3">
+          ${p.status !== "paid"
+            ? `<button onclick="markPaid(${p.id})" class="px-2 py-1 bg-green-600 text-white rounded">Mark Paid</button>`
+            : "-"
+          }
+        </td>
+      </tr>
+    `;
+      }).join("");
+    }
+    function renderHistory(entries) {
+      const container = document.getElementById("historyContainer");
+      container.innerHTML = "";
+
+      entries.forEach(e => {
+
+        const d = new Date(e.createdAt || e.occurrenceDate);
+        const dateStr = d.toLocaleString();
+
+        let title = "Reminder Scheduled";
+        let desc = "Scheduled for customer";
+
+        // 🔥 smart event detection
+        if (e.executionStatus === "SUCCESS") {
+          title = "Reminder Sent";
+          desc = "Message sent successfully";
+        }
+
+        if (e.executionStatus === "FAILED") {
+          title = "Reminder Failed";
+          desc = "Delivery failed";
+        }
+
+        if (e.status === "COMPLETED") {
+          title = "Payment Received";
+          desc = "Customer marked as paid";
+        }
+
+        container.innerHTML += `
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </div>
+          <div class="w-0.5 h-full bg-slate-100 mt-1"></div>
+        </div>
+
+        <div class="flex-1 pb-4">
+          <p class="text-slate-900 text-sm font-semibold">${title}</p>
+          <p class="text-slate-500 text-xs">${desc}</p>
+          <p class="text-slate-400 text-xs mt-1">${dateStr}</p>
+        </div>
+      </div>
+    `;
+      });
+    }
+    // 💸 MARK PAID
+    async function markPaid(id) {
+      try {
+        const res = await fetch(`/api/engagements/schedule-entry/${id}/mark-paid`, {
+          method: "POST"
+        });
+
+        if (!res.ok) {
+          alert("Failed to update");
+          return;
+        }
+
+        // 🔥 reload tracker after update
+        loadTracker();
+
+      } catch (err) {
+        console.error(err);
+        alert("Error updating payment");
+      }
+    }
+    async function markLatestPaid() {
+      try {
+        // get all entries
+        const res = await fetch(`/api/engagements/reminders/${reminderId}/tracker`);
+        const data = await res.json();
+
+        // find latest pending
+        const pending = data
+          .filter(e => e.status === "PENDING")
+          .sort((a, b) => new Date(b.occurrenceDate) - new Date(a.occurrenceDate));
+
+        if (pending.length === 0) {
+          alert("No pending payments");
+          return;
+        }
+
+        const latest = pending[0];
+
+        if (!confirm("Mark latest pending as paid?")) return;
+
+        await fetch(`/api/engagements/schedule-entry/${latest.id}/mark-paid`, {
+          method: "POST"
+        });
+
+        alert("Marked as paid ✔");
+        loadTracker(); // refresh UI
+
+      } catch (err) {
+        console.error(err);
+        alert("Error marking paid");
+      }
+    }
+    function goToEdit() {
+      window.location.href = `/engagement.html?id=${reminderId}`;
+    }
+    // 🚀 INIT
+    loadTracker();
+    loadHistory();
+  </script>
   <script>
     function showMarkPaidModal() {
       document.getElementById('markPaidModal').classList.remove('hidden');
@@ -549,50 +741,17 @@
     }
 
     // ===== RECURRING PAYMENT TRACKER =====
-    const monthNames = ['Apr 2025', 'May 2025', 'Jun 2025', 'Jul 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026'];
-    const dueDates = ['15 Apr 2025', '15 May 2025', '15 Jun 2025', '15 Jul 2025', '15 Aug 2025', '15 Sep 2025', '15 Oct 2025', '15 Nov 2025', '15 Dec 2025', '15 Jan 2026', '15 Feb 2026', '15 Mar 2026'];
-    let payments = [
-      { status: 'paid', amount: 500, note: 'Paid via UPI' },
-      { status: 'paid', amount: 500, note: 'Auto-debit' },
-      { status: 'paid', amount: 500, note: '' },
-      { status: 'paid', amount: 500, note: 'Paid via NEFT' },
-      { status: 'paid', amount: 500, note: '' },
-      { status: 'paid', amount: 500, note: 'Cheque deposit' },
-      { status: 'paid', amount: 500, note: '' },
-      { status: 'paid', amount: 500, note: 'UPI transfer' },
-      { status: 'pending', amount: 500, note: '' },
-      { status: 'pending', amount: 500, note: '' },
-      { status: 'overdue', amount: 500, note: 'Customer travelling' },
-      { status: 'pending', amount: 500, note: '' },
-    ];
 
+    function mapStatus(status) {
+      if (status === "COMPLETED") return "paid";
+      if (status === "OVERDUE") return "overdue";
+      return "pending";
+    }
     const statusStyles = {
       paid: { cls: 'bg-emerald-100 text-emerald-700', label: 'Paid ✓' },
       pending: { cls: 'bg-amber-100 text-amber-700', label: 'Pending' },
       overdue: { cls: 'bg-red-100 text-red-600', label: 'Overdue ⚠' },
     };
-
-    function renderPaymentTable() {
-      const tbody = document.getElementById('paymentTableBody');
-      tbody.innerHTML = payments.map((p, i) => {
-        const ss = statusStyles[p.status];
-        const isFuture = p.status === 'pending' || p.status === 'overdue';
-        return `<tr class="hover:bg-slate-50 transition">
-          <td class="px-4 py-3 font-semibold text-slate-600">${i + 1}</td>
-          <td class="px-4 py-3 font-medium text-slate-800">${monthNames[i]}</td>
-          <td class="px-4 py-3 text-slate-500">${dueDates[i]}</td>
-          <td class="px-4 py-3 font-bold text-slate-900">₹${p.amount}</td>
-          <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ss.cls}">${ss.label}</span></td>
-          <td class="px-4 py-3 text-slate-400 max-w-24 truncate">${p.note || '—'}</td>
-          <td class="px-4 py-3">
-            <div class="flex gap-1.5">
-              ${isFuture ? `<button onclick="quickMarkPaid(${i})" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-bold hover:bg-emerald-700 whitespace-nowrap">Mark Paid</button>` : ''}
-              <button onclick="openStatusUpdate(${i})" class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 text-[10px] font-bold hover:bg-slate-50 whitespace-nowrap">Update</button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
-    }
 
     let currentEditIdx = -1;
     let selectedUpdateStatus = 'paid';
@@ -600,7 +759,11 @@
     function openStatusUpdate(idx) {
       currentEditIdx = idx;
       selectedUpdateStatus = payments[idx].status;
-      document.getElementById('statusUpdateFor').textContent = `Month #${idx + 1} — ${monthNames[idx]}`;
+      const d = new Date(payments[idx].date);
+      const month = d.toLocaleString('default', { month: 'short', year: 'numeric' });
+
+      document.getElementById('statusUpdateFor').textContent =
+        `Month #${idx + 1} — ${month}`;
       document.getElementById('updateAmount').value = payments[idx].amount;
       document.getElementById('updateNote').value = payments[idx].note || '';
       selectUpdateStatus(payments[idx].status);
@@ -616,22 +779,37 @@
       });
     }
 
-    function quickMarkPaid(idx) {
-      payments[idx].status = 'paid';
-      payments[idx].note = payments[idx].note || 'Marked paid';
-      renderPaymentTable();
+    async function quickMarkPaid(idx) {
+      const entryId = payments[idx].id;
+
+      await fetch(`/api/engagements/schedule-entry/${entryId}/mark-paid`, {
+        method: "POST"
+      });
+
+      loadTracker(); // reload
     }
 
-    function saveStatusUpdate() {
+    async function saveStatusUpdate() {
       if (currentEditIdx < 0) return;
-      payments[currentEditIdx].status = selectedUpdateStatus;
-      payments[currentEditIdx].amount = parseInt(document.getElementById('updateAmount').value) || 500;
-      payments[currentEditIdx].note = document.getElementById('updateNote').value;
+
+      const entryId = payments[currentEditIdx].id;
+
+      await fetch(`/api/engagements/schedule-entry/${entryId}/update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: selectedUpdateStatus.toUpperCase(),
+          amount: parseInt(document.getElementById('updateAmount').value) || 0,
+          note: document.getElementById('updateNote').value
+        })
+      });
+
       document.getElementById('statusUpdateModal').classList.add('hidden');
-      renderPaymentTable();
+
+      loadTracker(); // reload from DB
     }
 
-    renderPaymentTable();
+    loadTracker(); 
   </script>
 
 </body>

@@ -1,23 +1,33 @@
 package com.server.realsync.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.server.realsync.entity.Reminder;
 import com.server.realsync.repo.ReminderRepository;
+import com.server.realsync.entity.ScheduleEntry;
+import com.server.realsync.entity.ScheduleEntryStatus;
+import com.server.realsync.repo.ScheduleEntryRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReminderService {
 
     @Autowired
     private ReminderRepository repo;
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private ScheduleEntryRepository scheduleEntryRepository;
 
     /** All reminders for an account, newest first */
     public List<Reminder> getByAccountId(Integer accountId) {
@@ -34,16 +44,91 @@ public class ReminderService {
     }
 
     /** Create or update */
+    @Transactional
     public Reminder save(Reminder reminder) {
+
         if (reminder.getStatus() == null) {
             reminder.setStatus("Scheduled");
         }
-        return repo.save(reminder);
+
+        Reminder saved = repo.save(reminder);
+        Long reminderId = saved.getId().longValue();
+        scheduleEntryRepository.deleteByReminderIdAndStatusNot(
+                reminderId,
+                ScheduleEntryStatus.COMPLETED);
+
+        // 🔥 CREATE NEW SCHEDULES
+        createSchedules(saved);
+
+        return saved;
+    }
+
+    private void createSchedules(Reminder r) {
+
+        LocalTime time = r.getReminderTime() != null
+                ? r.getReminderTime()
+                : LocalTime.of(9, 0);
+
+        LocalDateTime base = LocalDateTime.of(
+                r.getReminderDate(),
+                time);
+
+        // 🟢 One-time
+        if (!"recurring".equalsIgnoreCase(r.getReminderType())) {
+            createSchedule(r, base);
+            return;
+        }
+
+        int count = r.getTotalOccurrences() != null ? r.getTotalOccurrences() : 1;
+        String freq = r.getFrequency() != null ? r.getFrequency() : "none";
+
+        for (int i = 0; i < count; i++) {
+
+            LocalDateTime next = switch (freq) {
+                case "daily" -> base.plusDays(i);
+                case "weekly" -> base.plusWeeks(i);
+                case "monthly" -> base.plusMonths(i);
+                case "yearly" -> base.plusYears(i);
+                default -> base;
+            };
+
+            createSchedule(r, next);
+        }
+    }
+
+    private void createSchedule(Reminder r, LocalDateTime time) {
+
+        ScheduleEntry e = new ScheduleEntry();
+
+        e.setReminderId(r.getId().longValue());
+        e.setOccurrenceDate(time);
+        e.setStatus(ScheduleEntryStatus.PENDING);
+        e.setAmount(r.getAmount() != null ? BigDecimal.valueOf(r.getAmount()) : null);
+        e.setRemarks(r.getMessage());
+        
+
+        scheduleEntryRepository.save(e);
     }
 
     /** Hard delete */
+
     @Transactional
     public void delete(Integer id, Integer accountId) {
+
+        Optional<Reminder> opt = getById(id, accountId);
+
+        if (opt.isEmpty()) {
+            throw new RuntimeException("Reminder not found");
+        }
+
+        Long reminderId = opt.get().getId().longValue();
+
+        // 🔥 STEP 1: delete execution rows
+        scheduleEntryRepository.deleteByReminderIdAndStatusNot(
+                reminderId,
+                ScheduleEntryStatus.COMPLETED);
+
+        // 🔥 STEP 2: delete reminder
         repo.deleteByIdAndAccountId(id, accountId);
     }
 
@@ -77,4 +162,5 @@ public class ReminderService {
 
         save(reminder);
     }
+
 }

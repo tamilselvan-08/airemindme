@@ -11,11 +11,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.server.realsync.util.SecurityUtil;
+
+import jakarta.transaction.Transactional;
+
 import com.server.realsync.entity.Account;
+import com.server.realsync.entity.ExecutionStatus;
 import com.server.realsync.entity.Reminder;
+import com.server.realsync.repo.ScheduleEntryRepository;
+import com.server.realsync.entity.Customer;
+import com.server.realsync.services.CustomerService;
 import com.server.realsync.entity.Greeting;
 import com.server.realsync.services.ReminderService;
-import com.server.realsync.services.GreetingService; // Assuming you have this service
+import com.server.realsync.services.GreetingService;
+import com.server.realsync.entity.ScheduleEntry;
+import com.server.realsync.entity.ScheduleEntryStatus;
 
 @RestController
 @RequestMapping("/api/engagements")
@@ -27,6 +36,12 @@ public class EngagementController {
 
     @Autowired
     private GreetingService greetingService;
+
+    @Autowired
+    private ScheduleEntryRepository scheduleEntryRepository;
+
+    @Autowired
+    private CustomerService customerService;
 
     // 1. REMINDER APIS
 
@@ -49,52 +64,76 @@ public class EngagementController {
         }
         return reminderService.save(reminder);
     }
-@PutMapping("/reminders/{id}")
-public ResponseEntity<?> updateReminder(
-        @PathVariable Integer id,
-        @RequestBody Reminder updatedReminder) {
 
-    Account account = SecurityUtil.getCurrentAccountId();
+    @PutMapping("/reminders/{id}")
+    public ResponseEntity<?> updateReminder(
+            @PathVariable Integer id,
+            @RequestBody Reminder updatedReminder) {
 
-    Optional<Reminder> optionalReminder =
-            reminderService.getById(id, account.getId());
+        Account account = SecurityUtil.getCurrentAccountId();
 
-    if (optionalReminder.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", "Reminder not found"));
+        Optional<Reminder> optionalReminder = reminderService.getById(id, account.getId());
+
+        if (optionalReminder.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Reminder not found"));
+        }
+
+        Reminder existing = optionalReminder.get();
+
+        existing.setTitle(updatedReminder.getTitle());
+        existing.setMessage(updatedReminder.getMessage());
+        existing.setReminderDate(updatedReminder.getReminderDate());
+        existing.setReminderTime(updatedReminder.getReminderTime());
+        existing.setCustomerId(updatedReminder.getCustomerId());
+        existing.setChannel(updatedReminder.getChannel());
+        existing.setStatus(updatedReminder.getStatus());
+
+        existing.setReminderType(updatedReminder.getReminderType());
+        existing.setFrequency(updatedReminder.getFrequency());
+        existing.setTotalOccurrences(updatedReminder.getTotalOccurrences());
+        existing.setAmount(updatedReminder.getAmount());
+
+        existing.setAttachedItemId(updatedReminder.getAttachedItemId());
+        existing.setAttachedItemType(updatedReminder.getAttachedItemType());
+
+        Reminder saved = reminderService.save(existing);
+
+        return ResponseEntity.ok(saved);
     }
 
-    Reminder existing = optionalReminder.get();
-
-    
-    existing.setTitle(updatedReminder.getTitle());
-    existing.setMessage(updatedReminder.getMessage());
-    existing.setReminderDate(updatedReminder.getReminderDate());
-    existing.setReminderTime(updatedReminder.getReminderTime());
-    existing.setCustomerId(updatedReminder.getCustomerId());
-    existing.setChannel(updatedReminder.getChannel());
-    existing.setStatus(updatedReminder.getStatus());
-
-    
-    existing.setReminderType(updatedReminder.getReminderType());   
-    existing.setFrequency(updatedReminder.getFrequency());         
-    existing.setTotalOccurrences(updatedReminder.getTotalOccurrences()); 
-    existing.setAmount(updatedReminder.getAmount());               
-
-   
-    existing.setAttachedItemId(updatedReminder.getAttachedItemId());
-    existing.setAttachedItemType(updatedReminder.getAttachedItemType());
-
-    Reminder saved = reminderService.save(existing);
-
-    return ResponseEntity.ok(saved);
-}
     @DeleteMapping("/reminders/{id}")
     public ResponseEntity<?> deleteReminder(@PathVariable Integer id) {
         Account account = SecurityUtil.getCurrentAccountId();
         reminderService.delete(id, account.getId());
         return ResponseEntity.ok(Map.of("message", "Reminder deleted successfully"));
     }
+
+    @GetMapping("/reminders/{id}/tracker")
+    public List<ScheduleEntry> getTracker(@PathVariable Integer id) {
+        return scheduleEntryRepository.findByReminderIdOrderByOccurrenceDateAsc(id.longValue());
+    }
+
+    @PostMapping("/schedule-entry/{id}/mark-paid")
+    public ResponseEntity<?> markPaid(@PathVariable Long id) {
+
+        ScheduleEntry entry = scheduleEntryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Entry not found"));
+
+        entry.setStatus(ScheduleEntryStatus.COMPLETED);
+        entry.setExecutionStatus(ExecutionStatus.SUCCESS);
+
+        scheduleEntryRepository.save(entry);
+
+        return ResponseEntity.ok(Map.of("message", "Marked as paid"));
+    }
+
+    @GetMapping("/reminders/{id}/history")
+    public List<ScheduleEntry> getHistory(@PathVariable Long id) {
+        return scheduleEntryRepository
+                .findTop2ByReminderIdOrderByOccurrenceDateDesc(id);
+    }
+
     // 2. GREETING APIS (Added for completeness)
 
     @GetMapping("/greetings/account/{accountId}")
@@ -161,6 +200,40 @@ public ResponseEntity<?> updateReminder(
         }
     }
 
+    @GetMapping("/greetings/{id}/tracker")
+    public ResponseEntity<?> getGreetingTracker(
+            @PathVariable Integer id) {
+
+        List<ScheduleEntry> trackers = greetingService.getGreetingEntries(id);
+
+        List<Map<String, Object>> response = trackers.stream().map(t -> {
+
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("id", t.getId());
+
+            map.put("customerId",t.getCustomerId());
+
+            Customer customer = customerService  .getById(t.getCustomerId().intValue()).orElse(null);
+
+            map.put("customerName",customer != null? customer.getName() : "Unknown Customer");
+
+            String channel = Boolean.TRUE.equals(t.getSentWhatsapp())? "wa": Boolean.TRUE.equals(t.getSentEmail())
+                            ? "em"
+                            : "sms";
+
+            map.put("channel", channel);
+            map.put("executionStatus", t.getExecutionStatus());
+            map.put("occurrenceDate", t.getOccurrenceDate());
+            map.put("sentWhatsapp", t.getSentWhatsapp());
+            map.put("sentEmail", t.getSentEmail());
+
+            return map;
+
+        }).toList();
+
+        return ResponseEntity.ok(response);
+    }
     // 3. STATS APIS (Fixed Path Inconsistency)
 
     // GET /api/engagements/count/scheduled/1

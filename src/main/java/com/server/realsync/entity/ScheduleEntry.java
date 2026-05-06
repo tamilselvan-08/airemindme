@@ -3,7 +3,6 @@
  */
 package com.server.realsync.entity;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -22,57 +21,68 @@ import jakarta.persistence.Table;
  * 
  */
 
-
 @Entity
 @Table(name = "schedule_entry")
 public class ScheduleEntry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "schedule_id", nullable = false)
-    private Long scheduleId;
+	@Column(name = "schedule_id")
+	private Long scheduleId;
+	// ADD this
+	@Column(name = "reminder_id", nullable = true)
+	private Long reminderId;
 
-    @Column(name = "occurrence_date", nullable = false)
-    private LocalDateTime occurrenceDate;
+	@Column(name = "occurrence_date", nullable = false)
+	private LocalDateTime occurrenceDate;
 
-    private BigDecimal amount;
+	private BigDecimal amount;
 
-    @Column(length = 1000)
-    private String remarks;
+	@Column(length = 1000)
+	private String remarks;
 
-    @Enumerated(EnumType.STRING)
-    private ScheduleEntryStatus status = ScheduleEntryStatus.PENDING;
+	@Enumerated(EnumType.STRING)
+	private ScheduleEntryStatus status = ScheduleEntryStatus.PENDING;
 
-    @Column(name = "sent_sms")
-    private Boolean sentSms = false;
+	@Column(name = "source_type")
+	private String sourceType;
 
-    @Column(name = "sent_email")
-    private Boolean sentEmail = false;
+	@Column(name = "source_id")
+	private Long sourceId;
 
-    @Column(name = "sent_whatsapp")
-    private Boolean sentWhatsapp = false;
+	@Column(name = "customer_id")
+	private Long customerId;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+	@Column(name = "sent_sms")
+	private Boolean sentSms = false;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name = "execution_status")
-    private ExecutionStatus executionStatus = ExecutionStatus.PENDING;
+	@Column(name = "sent_email")
+	private Boolean sentEmail = false;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+	@Column(name = "sent_whatsapp")
+	private Boolean sentWhatsapp = false;
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "execution_status")
+	private ExecutionStatus executionStatus = ExecutionStatus.PENDING;
+
+	@PrePersist
+	protected void onCreate() {
+		createdAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
 
 	public Long getId() {
 		return id;
@@ -88,6 +98,14 @@ public class ScheduleEntry {
 
 	public void setScheduleId(Long scheduleId) {
 		this.scheduleId = scheduleId;
+	}
+
+	public Long getReminderId() {
+		return reminderId;
+	}
+
+	public void setReminderId(Long reminderId) {
+		this.reminderId = reminderId;
 	}
 
 	public LocalDateTime getOccurrenceDate() {
@@ -120,6 +138,30 @@ public class ScheduleEntry {
 
 	public void setStatus(ScheduleEntryStatus status) {
 		this.status = status;
+	}
+
+	public String getSourceType() {
+		return sourceType;
+	}
+
+	public void setSourceType(String sourceType) {
+		this.sourceType = sourceType;
+	}
+
+	public Long getSourceId() {
+		return sourceId;
+	}
+
+	public void setSourceId(Long sourceId) {
+		this.sourceId = sourceId;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 
 	public Boolean getSentSms() {
